@@ -1,0 +1,18 @@
+
+# For node js publish we ignore all the other 
+# Programming languages implementations
+
+/.git/
+*dist/
+*build/
+*egg-info/
+
+/junk/
+/test/
+
+*.zip
+*.tgz
+*.tar
+*.7z
+*.rar
+*.egg-info

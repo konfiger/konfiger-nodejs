@@ -1,0 +1,16 @@
+
+
+*.zip
+*.tgz
+*.tar
+*.7z
+*.rar
+*.egg-info
+*dist/
+*build/
+*egg-info/
+
+# NODEJS
+
+/nodejs/junk/
+
