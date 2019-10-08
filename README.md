@@ -77,6 +77,7 @@ for (var kvo of keyValueDB) {
 kvp  - Key Value Pair
 kvdb - Key value Database
 pss  - Possibly
+kvo  - Key Value Object
 ```
 
 ## API
@@ -105,20 +106,18 @@ var keyValueDB = new KeyValueDB.KeyValueDB(
 
 ### Inserting Data
 
-The only accepted type that can be inserted is a valid `KeyValueObject` and `String`
-
-The method `add` can be used to add a new kvp into the object.
+The only accepted type that can be inserted is a valid `KeyValueObject` and `String`. The method `add` can be used to add a new kvp into the object.
 
 Add a kvp with it key and value
 
 ```js
-keyValueDB.add("Greeting", "Hello world from thecarisma");
+keyValueDB.add("Greet", "Hello World");
 ```
 
 Add a kvp using the `KeyValueObject` class.
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Greeting", "Hello world from thecarisma");
+const keyValueObject = new KeyValueDB.KeyValueObject("Greet", "Hello World");
 keyValueDB.add(keyValueObject);
 ```
 
@@ -128,7 +127,29 @@ There are several way to find and get a value from the kvdb object. The value or
 
 #### Get KeyValue Object
 
+You can get the kvo using either the key or index. If the corresponding kvo is not found, an empty kvo is added to the db and then returned but not in the case when requested with the integer index. If a fallback kvo is sent as second parameter then when the request kvo is not found the fallback second parameter is added to the kvdb and then returned.
 
+Get the kvo using it integer index
+
+```js
+keyValueDB.getKeyValueObject(0);
+//KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
+```
+
+Get the kvo using it key 
+
+```js
+keyValueDB.getKeyValueObject("Greet");
+//KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
+```
+
+Get the kvo using it key with fallback kvo
+
+```js
+const keyValueObject = new KeyValueDB.KeyValueObject("Name", "Azeez Adewale");
+keyValueDB.getKeyValueObject("Name", keyValueObject);
+//KeyValueObject {hashcode: 765363576, key: "Name", value: "Azeez Adewale"}
+```
 
 #### Get Like KeyValue Object
 
