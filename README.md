@@ -174,7 +174,59 @@ keyValueDB.getKeyValueObject("Nam", keyValueObject);
 
 #### Get
 
-#### Get Like
+You can get a kvdb value using either the key or index. If the corresponding value is not found, an empty string is added to the db and then returned but not in the case when requested with the integer index. 
+
+If a fallback kvo is sent as second parameter then when the request key is not found the fallback second parameter is added to the kvdb and then value is returned. If a string value is sent as the second value it is returned if the key is not found in the kvdb.
+
+Get a value using it integer index
+
+```js
+keyValueDB.get(0);
+//"Hello World"
+```
+
+Get the value using it key 
+
+```js
+keyValueDB.get("Greet");
+//"Hello World"
+```
+
+Get the kvo using it key with fallback value
+
+```js
+keyValueDB.get("Licence", "The MIT Licence");
+//"The MIT Licence"
+```
+
+Get the kvo using it key with fallback kvo
+
+```js
+const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
+keyValueDB.get("Name", keyValueObject);
+//"The MIT Licence"
+```
+
+#### Get Like 
+
+Get a value by checking the kvdb for the kvo object that contains a part of the key. 
+
+If a fallback kvo is sent as second parameter then when the request key is not found the fallback second parameter is added to the kvdb and then value is returned.
+
+Get a value using it key part 
+
+```js
+keyValueDB.getLike("eet");
+//"Hello World"
+```
+
+Get a value using it key part with fallback kvo
+
+```js
+const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
+keyValueDB.getKeyValueObject("Li", keyValueObject);
+//"The MIT Licence"
+```
 
 ### Updating Data
 
