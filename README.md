@@ -6,6 +6,8 @@ ___
 
 ## Table of content
 - [Installation](#installation)
+- [Example](#example)
+- [Legends](#legends)
 - [API](#api)
 	- [Creating/loading a document](#creating/loading-a-document)
 	- [Inserting data](#inserting-data)
@@ -24,15 +26,109 @@ ___
 
 ## Installation
 
+Module name on npm and bower is @thecarisma/key-value-db.
+
+Using npm:
+
+```bash
+$ npm install @thecarisma/key-value-db
+```
+
+Using bower:
+
+```bash
+bower install @thecarisma/key-value-db
+```
+
+Using yarn:
+
+```bash
+yarn add @thecarisma/key-value-db
+```
+
+## Example
+
+The following example load, update, read and remove a simple key value object 
+
+```js
+const KeyValueDB = require("@thecarisma/key-value-db");
+
+//initialize the key-value 
+var keyValueDB = new KeyValueDB.KeyValueDB("Greet=Hello World,Project=KeyValueDB", true, '=', ',', false);
+
+//get an object
+console.log(keyValueDB.get("Greet"));
+
+//remove an object
+keyValueDB.remove("Greet");
+
+//add an object
+keyValueDB.add("What", "i don't know what to write here");
+
+//print all the objects
+for (var kvo of keyValueDB) {
+	console.log('$' + kvo);
+};
+```
+
+## Legends
+
+```
+kvp  - Key Value Pair
+kvdb - Key value Database
+pss  - Possibly
+```
+
 ## API
 
 ### Creating/loading a document
 
+You can use the package to update and create an existing key value database. This library does not read the database from a file which means you have to find a way to read a string from the file. 
+
+Create a new keyValueDB. The seperator between the key and value is `=` and the delimeter between the kvp is `\n`(newline).
+
+```js
+var keyValueDB = new KeyValueDB.KeyValueDB();
+```
+
+To load existing KeyValueDB  
+
+```js
+var keyValueDB = new KeyValueDB.KeyValueDB(
+        "Greet=Hello World,Project=KeyValueDB", //pss read string from file
+        true, //case sensitive is true
+        '=', //the seperator from key and value
+        ',', //the delimeter for the key-value-pair
+        false //error tolerance if true no exception is thrown
+        );
+```
+
 ### Inserting Data
+
+The only accepted type that can be inserted is a valid `KeyValueObject` and `String`
+
+The method `add` can be used to add a new kvp into the object.
+
+Add a kvp with it key and value
+
+```js
+keyValueDB.add("Greeting", "Hello world from thecarisma");
+```
+
+Add a kvp using the `KeyValueObject` class.
+
+```js
+const keyValueObject = new KeyValueDB.KeyValueObject("Greeting", "Hello world from thecarisma");
+keyValueDB.add(keyValueObject);
+```
 
 ### Finding Data
 
+There are several way to find and get a value from the kvdb object. The value or the KeyValueObject can be gotten using the methods below
+
 #### Get KeyValue Object
+
+
 
 #### Get Like KeyValue Object
 
