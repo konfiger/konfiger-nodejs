@@ -1,6 +1,6 @@
 {
   "name": "@thecarisma/key-value-db",
-  "version": "1.1.20",
+  "version": "1.1.3",
   "description": "Quick and easy manage, load, update and save key-value type database ",
   "main": "index.js",
   "scripts": {
@@ -20,5 +20,5 @@
     "simple"
   ],
   "author": "Azeez Adewale",
-  "license": "LGPL-3.0"
+  "license": "MIT"
 }
