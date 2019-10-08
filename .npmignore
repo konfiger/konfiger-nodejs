@@ -15,4 +15,5 @@
 *.tar
 *.7z
 *.rar
+*.db
 *.egg-info

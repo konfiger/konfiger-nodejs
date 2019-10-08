@@ -5,6 +5,7 @@
 *.tar
 *.7z
 *.rar
+*.db
 *.egg-info
 *dist/
 *build/
@@ -12,5 +13,5 @@
 
 # NODEJS
 
-/nodejs/junk/
+/junk/
 
