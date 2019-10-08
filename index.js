@@ -1,5 +1,5 @@
-const KeyValueObject_ = require("./src/com/azeezadewale/KeyValueObject.js");
-const KeyValueDB_ = require("./src/com/azeezadewale/KeyValueDB.js");
+const KeyValueObject_ = require("./src/dev/sourcerersproject/KeyValueObject.js");
+const KeyValueDB_ = require("./src/dev/sourcerersproject/KeyValueDB.js");
 
 module.exports = {
     KeyValueObject: KeyValueObject_,

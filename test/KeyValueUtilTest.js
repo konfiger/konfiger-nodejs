@@ -1,4 +1,4 @@
-const KeyValueUtil = require("../src/com/azeezadewale/KeyValueUtil.js");
+const KeyValueUtil = require("../src/dev/sourcerersproject/KeyValueUtil.js");
 
 const desperate = [ 'one' ];
 
