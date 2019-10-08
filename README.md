@@ -31,7 +31,7 @@ Module name on npm and bower is @thecarisma/key-value-db.
 Using npm:
 
 ```bash
-$ npm install @thecarisma/key-value-db
+npm install @thecarisma/key-value-db
 ```
 
 Using bower:
@@ -81,6 +81,8 @@ kvo  - Key Value Object
 ```
 
 ## API
+
+Even though JavaScript is weakly type the package does type checking to ensure wrong datatype is not passed into the method.
 
 ### Creating/loading a document
 
@@ -152,6 +154,23 @@ keyValueDB.getKeyValueObject("Name", keyValueObject);
 ```
 
 #### Get Like KeyValue Object
+
+Get a kvo by checking the kvdb for the kvo object that contains a part of the key. If a fallback kvo is sent as second parameter then when the request kvo is not found the fallback second parameter is added to the kvdb and then returned.
+
+Get a similar kvo using it key part 
+
+```js
+keyValueDB.getLikeKeyValueObject("eet");
+//KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
+```
+
+Get a similar kvo using it key part with fallback kvo
+
+```js
+const keyValueObject = new KeyValueDB.KeyValueObject("Name", "Azeez Adewale");
+keyValueDB.getKeyValueObject("Nam", keyValueObject);
+//KeyValueObject {hashcode: 765363576, key: "Name", value: "Azeez Adewale"}
+```
 
 #### Get
 
