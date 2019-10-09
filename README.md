@@ -2,6 +2,10 @@
 
 <p style="text-align: center;" align="center">Light weight package to quickly and easily manage, load, update and save key-value type database </p>
 
+The sample use cases of this package is loading configuration file, language file, preference setting in an application. More uses cases can be seen [here](https://keyvaluedb.github.io/usecases/index.html).
+
+The package does not do any Input and Output operation as there are several way to read and write to file and the methods has their strength and weakness therefore the developer has to find the efficient way to load and save locally.
+
 ___
 
 ## Table of content
@@ -325,7 +329,7 @@ The KeyValueDB object can be iterated natively using the `for..of` loop expressi
 
 ```js
 for (var kvo of keyValueDB) {
-	//operate on the KeyValueObject
+    //operate on the KeyValueObject
 };
 ```
 
@@ -335,7 +339,7 @@ Before you begin contribution please read the contribution guide at [CONTRIBUTIN
 
 You can open issue or file a request that only address problems in this implementation on this repo, if the issue address the concepts of the package then create an issue or rfc [here](https://github.com/keyvaluedb/key-value-db/)
 
-**The world needs you**.
+**You can make big difference**.
 
 ## License
 
