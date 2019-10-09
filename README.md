@@ -224,7 +224,7 @@ Get a value using it key part with fallback kvo
 
 ```js
 const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
-keyValueDB.getKeyValueObject("Li", keyValueObject);
+keyValueDB.getLike("Li", keyValueObject);
 //"The MIT Licence"
 ```
 
@@ -236,7 +236,40 @@ keyValueDB.getKeyValueObject("Li", keyValueObject);
 
 ### Inserting Data
 
+A new kvp can be inserted by invoking the `add` method. The kvp can be added using it key and value or by directly adding the KeyValueObject to the kvdb. 
+
+Add a new kvp using the key and value
+
+```js
+keyValueDB.add("Key", "This is the value");
+```
+
+Add a new kvp using a new KeyValueObject
+
+```js
+const keyValueObject = new KeyValueDB.KeyValueObject("Key", "This is the value");
+keyValueDB.add(keyValueObject);
+```
+
 ### Removing Data
+
+Remove a kvp completely from the kvdb using either it key of the integer index. The kvp that was removed is returned from the method. If the index does not exist out of bound error occur and if a kvo with the key is not present nothing is done but an empty kvo is returned.
+
+Remove a kvp using integer index
+
+```js
+keyValueDB.remove(0);
+//removes the first kvp in the kvdb
+//KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
+```
+
+Remove a kvp using it key
+
+```js
+keyValueDB.remove("Greet");
+//removes the first kvp in the kvdb
+//KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
+```
 
 ## Contributing
 
