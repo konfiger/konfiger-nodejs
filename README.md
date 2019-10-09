@@ -21,6 +21,7 @@ ___
         - [Set KeyValue Object](#set-keyvalue-object)
 	- [Inserting data](#inserting-data)
 	- [Removing data](#removing-data)
+    - [Saving collection](#saving-collection)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -306,6 +307,15 @@ Remove a kvp using it key
 keyValueDB.remove("Greet");
 //removes the first kvp in the kvdb
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
+```
+
+## Saving collection
+
+The kvp collection kvdb can be inspected as a string using the `toString` method. The returned value can be saved locally by writing to a persistent storage or to a plain text file. The output of the `toString` method is determined by the kvos, the seperator and the delimeter.
+
+```js
+keyValueDB.toString();
+// "Greet=Hello World,Project=KeyValueDB,What=i don't know what to write here,Project=KeyValueDB,Licence=The MIT Licence"
 ```
 
 ## Contributing
