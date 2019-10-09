@@ -1,4 +1,4 @@
-# <p style="text-align: center;" align="center"><img src="https://github.com/keyvaluedb/key-value-db/raw/master/icons/key-value-db-nodejs.png" alt="key-value-db-nodejs" style="width:300px;height:200px;" width="300" height="200" /><br /> key-value-db-nodejs</p>
+# <p style="text-align: center;" align="center"><img src="https://github.com/keyvaluedb/key-value-db/raw/master/icons/key-value-db-nodejs.png" alt="key-value-db-nodejs" style="width:180px;height:160px;" width="180" height="160" /><br /> key-value-db-nodejs</p>
 
 <p style="text-align: center;" align="center">Light weight package to quickly and easily manage, load, update and save key-value type database </p>
 
