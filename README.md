@@ -230,9 +230,46 @@ keyValueDB.getLike("Li", keyValueObject);
 
 ### Updating Data
 
+There are various way to update a kvp in the kvdb, the value can be changed directly or set to a new KeyValueObject. If you try to set a kvo that does not exist in the kvdb using it key, it is added to the kvdb.
+
 #### Set
 
+The `set` method is used to change the value of the kvo using the index of the kvo or a kvo key. 
+
+Set a kvo value using it index
+
+```js
+keyValueDB.set(0, "Hello World from thecarisma");
+//KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World from thecarisma"}
+```
+
+Set a kvo value using it key
+
+```js
+keyValueDB.set("Greet", "Hello World from thecarisma");
+//KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World from thecarisma"}
+```
+
 #### Set KeyValue Object
+
+Completly change a KeyValueObject in the kvdb using either it index or it key. The kvo is completly replaced which means unique fields like the hashcode of the kvo changes. When the kvo is set using it key if the corresponding kvo does not exist it is added into the kvdb.
+Note that this method completly changes the kvo so it can be used to replace a kvo.
+
+Set a kvo using it index
+
+```js
+const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
+keyValueDB.setKeyValueObject(0, keyValueObject);
+//KeyValueObject {hashcode: 566565, key: "Licence", value: "The MIT Licence"}
+```
+
+Set a kvo value using it key
+
+```js
+const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
+keyValueDB.setKeyValueObject("Greet", keyValueObject);
+//KeyValueObject {hashcode: 566565, key: "Licence", value: "The MIT Licence"}
+```
 
 ### Inserting Data
 
