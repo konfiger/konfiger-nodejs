@@ -2,6 +2,8 @@
 
 <p style="text-align: center;" align="center">Light weight package to quickly and easily manage, load, update and save key-value type database </p>
 
+This package is a glorified and better HashTable.
+
 The sample use cases of this package is loading configuration file, language file, preference setting in an application. More use cases can be seen [here](https://keyvaluedb.github.io/usecases/index.html).
 
 The package does not do any Input and Output operation as there are several way to read and write to file and the methods has their strength and weakness therefore the developer has to find the efficient way to load and save locally.
@@ -28,6 +30,7 @@ ___
     - [Saving collection](#saving-collection)
     - [Iterating collection](#iterating-collection)
 - [Contributing](#contributing)
+- [Support](#support)
 - [License](#license)
 
 ## Installation
@@ -338,6 +341,15 @@ for (var kvo of keyValueDB) {
 Before you begin contribution please read the contribution guide at [CONTRIBUTING GUIDE](https://keyvaluedb.github.io/contributing.html)
 
 You can open issue or file a request that only address problems in this implementation on this repo, if the issue address the concepts of the package then create an issue or rfc [here](https://github.com/keyvaluedb/key-value-db/)
+
+## Support
+
+You can support some of this community as they make big impact in the developement of people to get started with software engineering and open source.
+
+- https://www.patreon.com/devcareer
+- https://opencollective.com/osca
+
+Or if you want to buy me a drink > https://patreon.com/thecarisma. Thanks!🤗
 
 **You can make big difference**.
 
