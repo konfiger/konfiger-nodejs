@@ -22,6 +22,7 @@ ___
 	- [Inserting data](#inserting-data)
 	- [Removing data](#removing-data)
     - [Saving collection](#saving-collection)
+    - [Iterating collection](#iterating-collection)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -315,7 +316,17 @@ The kvp collection kvdb can be inspected as a string using the `toString` method
 
 ```js
 keyValueDB.toString();
-// "Greet=Hello World,Project=KeyValueDB,What=i don't know what to write here,Project=KeyValueDB,Licence=The MIT Licence"
+// "Greet=Hello World,Project=KeyValueDB,Project=KeyValueDB,Licence=The MIT Licence"
+```
+
+## Iterating collection
+
+The KeyValueDB object can be iterated natively using the `for..of` loop expression. 
+
+```js
+for (var kvo of keyValueDB) {
+	//operate on the KeyValueObject
+};
 ```
 
 ## Contributing
