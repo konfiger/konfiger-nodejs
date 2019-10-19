@@ -99,7 +99,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 
 You can use the package to update and create an existing key value database. This library does not read the database from a file which means you have to find a way to read a string from the file. 
 
-Create a new keyValueDB. The seperator between the key and value is `=` and the delimeter between the kvp is `\n`(newline).
+Create a new keyValueDB. The default seperator between the key and value is `=` and the delimeter between the kvp is `\n`(newline).
 
 ```js
 var keyValueDB = new KeyValueDB.KeyValueDB();
@@ -380,7 +380,7 @@ You can support some of this community as they make big impact in the developeme
 - https://www.patreon.com/devcareer
 - https://opencollective.com/osca
 
-Or if you want to buy me a drink > https://patreon.com/thecarisma. Thanks!🤗
+Or you can support me continue making awesome open source projects > https://patreon.com/thecarisma. Thanks!🤗
 
 **You can make big difference**.
 
