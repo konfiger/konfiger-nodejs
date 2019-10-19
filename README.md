@@ -27,6 +27,10 @@ ___
         - [Set KeyValue Object](#set-keyvalue-object)
 	- [Inserting data](#inserting-data)
 	- [Removing data](#removing-data)
+	- [Size, Clear, isEmpty](#size,-clear,-isempty)
+        - [Size](#size)
+        - [Clear](#clear)
+        - [isEmpty](#isempty)
     - [Saving collection](#saving-collection)
     - [Iterating collection](#iterating-collection)
 - [Contributing](#contributing)
@@ -315,6 +319,35 @@ Remove a kvp using it key
 keyValueDB.remove("Greet");
 //removes the first kvp in the kvdb
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
+```
+
+## Size, Clear, isEmpty
+
+### Size
+
+Get the size of the kvo in the kvdb.
+
+```js
+keyValueDB.size();
+//4
+```
+
+### Clear
+
+Remove all the elements and kvo from the kvdb
+
+```js
+keyValueDB.clear();
+//keyValueDB.size() = 0
+```
+
+### isEmpty
+
+Check whether the kvdb contains any kvo in it.
+
+```js
+keyValueDB.isEmpty();
+//false
 ```
 
 ## Saving collection

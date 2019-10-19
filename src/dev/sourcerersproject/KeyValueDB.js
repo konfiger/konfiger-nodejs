@@ -446,13 +446,6 @@ KeyValueDB.prototype.isEmpty = function() {
 /**
 
 */
-KeyValueDB.prototype.keyValueObjects = function() {
-	return this.keyValueObjects;
-};
-
-/**
-
-*/
 KeyValueDB.prototype.hashCode = function() {
 	if (this.hashcode !== 0) return this.hashcode ;
 	var i, chr;
