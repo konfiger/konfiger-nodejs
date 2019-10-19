@@ -380,7 +380,7 @@ You can support some of this community as they make big impact in the developeme
 - https://www.patreon.com/devcareer
 - https://opencollective.com/osca
 
-Or you can support me continue making awesome open source projects > https://patreon.com/thecarisma. Thanks!🤗
+Or you can support me to continue making awesome open source projects > https://patreon.com/thecarisma. Thanks!🤗
 
 **You can make big difference**.
 
