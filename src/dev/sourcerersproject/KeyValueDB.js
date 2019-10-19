@@ -425,6 +425,34 @@ KeyValueDB.prototype.toString = function() {
 /**
 
 */
+KeyValueDB.prototype.size = function() {
+	return this.keyValueObjects.length;
+};
+
+/**
+
+*/
+KeyValueDB.prototype.clear = function() {
+	this.keyValueObjects = [];
+};
+
+/**
+
+*/
+KeyValueDB.prototype.isEmpty = function() {
+	return this.keyValueObjects.length === 0;
+};
+
+/**
+
+*/
+KeyValueDB.prototype.keyValueObjects = function() {
+	return this.keyValueObjects;
+};
+
+/**
+
+*/
 KeyValueDB.prototype.hashCode = function() {
 	if (this.hashcode !== 0) return this.hashcode ;
 	var i, chr;
