@@ -3,7 +3,9 @@
 <span style="display:block;text-align:center"> [![npm](https://img.shields.io/npm/v/@thecarisma/key-value-db)](https://www.npmjs.com/package/@thecarisma/key-value-db) [![npm](https://img.shields.io/npm/dw/@thecarisma/key-value-db)](https://www.npmjs.com/package/@thecarisma/key-value-db) ![GitHub repo size](https://img.shields.io/github/repo-size/keyvaluedb/key-value-db-nodejs)	![GitHub contributors](https://img.shields.io/github/contributors/keyvaluedb/key-value-db-nodejs) [![Twitter Follow](https://img.shields.io/twitter/follow/iamthecarisma?style=social)](https://twitter.com/iamthecarisma) [![Support on Patreon](https://img.shields.io/static/v1?label=Support%20on%20Patreon&message=$5&color=brightgreen)](https://www.patreon.com/join/thecarisma/checkout?rid=3556842)</span>
 
 <p style="text-align: center;" align="center">Light weight package to quickly and easily manage, load, update and save key-value type database </p>
-____
+
+---
+
 The sample use cases of this package is loading configuration file, language file, preference setting in an application. More use cases can be seen [here](https://keyvaluedb.github.io/usecases/index.html).
 
 The package does not do any Input and Output operation as there are several way to read and write to file and the methods has their strength and weakness therefore the developer has to find the efficient way to load and save locally.
