@@ -1,4 +1,4 @@
-# <p style="text-align: center;" align="center"><img src="https://github.com/keyvaluedb/key-value-db/raw/master/icons/key-value-db-nodejs.png" alt="key-value-db-nodejs" style="width:180px;height:160px;" width="180" height="160" /><br /> key-value-db-nodejs</p>
+# <p style="text-align: center;" align="center"><img src="https://github.com/keyvaluedb/keyvaluedb.github.io/raw/master/icons/key-value-db-nodejs.png" alt="key-value-db-nodejs" style="width:180px;height:160px;" width="180" height="160" /><br /> key-value-db-nodejs</p>
 
 <span style="display:block;text-align:center"> [![npm](https://img.shields.io/npm/v/@thecarisma/key-value-db)](https://www.npmjs.com/package/@thecarisma/key-value-db) [![npm](https://img.shields.io/npm/dw/@thecarisma/key-value-db)](https://www.npmjs.com/package/@thecarisma/key-value-db) ![GitHub repo size](https://img.shields.io/github/repo-size/keyvaluedb/key-value-db-nodejs)	![GitHub contributors](https://img.shields.io/github/contributors/keyvaluedb/key-value-db-nodejs) [![Twitter Follow](https://img.shields.io/twitter/follow/iamthecarisma?style=social)](https://twitter.com/iamthecarisma) [![Support on Patreon](https://img.shields.io/static/v1?label=Support%20on%20Patreon&message=$5&color=brightgreen)](https://www.patreon.com/join/thecarisma/checkout?rid=3556842)</span>
 
@@ -163,9 +163,9 @@ keyValueDB.getKeyValueObject("Greet");
 Get the kvo using it key with fallback kvo
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Name", "Azeez Adewale");
+const keyValueObject = new KeyValueDB.KeyValueObject("Name", "Adewale Azeez");
 keyValueDB.getKeyValueObject("Name", keyValueObject);
-//KeyValueObject {hashcode: 765363576, key: "Name", value: "Azeez Adewale"}
+//KeyValueObject {hashcode: 765363576, key: "Name", value: "Adewale Azeez"}
 ```
 
 #### Get Like KeyValue Object
@@ -182,9 +182,9 @@ keyValueDB.getLikeKeyValueObject("eet");
 Get a similar kvo using it key part with fallback kvo
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Name", "Azeez Adewale");
+const keyValueObject = new KeyValueDB.KeyValueObject("Name", "Adewale Azeez");
 keyValueDB.getKeyValueObject("Nam", keyValueObject);
-//KeyValueObject {hashcode: 765363576, key: "Name", value: "Azeez Adewale"}
+//KeyValueObject {hashcode: 765363576, key: "Name", value: "Adewale Azeez"}
 ```
 
 #### Get
@@ -375,7 +375,7 @@ for (var kvo of keyValueDB) {
 
 Before you begin contribution please read the contribution guide at [CONTRIBUTING GUIDE](https://keyvaluedb.github.io/contributing.html)
 
-You can open issue or file a request that only address problems in this implementation on this repo, if the issue address the concepts of the package then create an issue or rfc [here](https://github.com/keyvaluedb/key-value-db/)
+You can open issue or file a request that only address problems in this implementation on this repo, if the issue address the concepts of the package then create an issue or rfc [here](https://github.com/keyvaluedb/keyvaluedb.github.io/)
 
 ## Support
 
@@ -390,5 +390,5 @@ Or you can support me to continue making awesome open source projects > https://
 
 ## License
 
-MIT License Copyright (c) 2019 Azeez Adewale - keyvaluedb
+MIT License Copyright (c) 2019 Adewale Azeez - keyvaluedb
 

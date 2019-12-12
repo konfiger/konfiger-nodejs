@@ -8,7 +8,7 @@ for (var kvo of keyValueDB) {
 console.log();
 
 console.log('' + keyValueDB.get("Greeting"));
-keyValueDB.set("Greeting", "Hello from Azeez Adewale");
+keyValueDB.set("Greeting", "Hello from Adewale Azeez");
 keyValueDB.add("One", "Added another one element");
 keyValueDB.add("Null", "Remove this");
 console.log('' + keyValueDB.getLike("Three"));

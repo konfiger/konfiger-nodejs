@@ -2,7 +2,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Azeez Adewale <azeezadewale98@gmail.com>.
+ * Copyright 2019 Adewale Azeez <azeezadewale98@gmail.com>.
  *
  */
  
