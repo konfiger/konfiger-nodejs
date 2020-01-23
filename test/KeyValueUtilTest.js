@@ -1,4 +1,4 @@
-const KeyValueUtil = require("../src/dev/sourcerersproject/KeyValueUtil.js");
+const KeyValueUtil = require("../src/io/github/thecarisma/KeyValueUtil.js");
 
 const desperate = [ 'one' ];
 

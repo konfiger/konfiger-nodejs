@@ -1,5 +1,5 @@
-const KeyValueDB = require("../src/dev/sourcerersproject/KeyValueDB.js");
-const KeyValueObject = require("../src/dev/sourcerersproject/KeyValueObject.js");
+const KeyValueDB = require("../src/io/github/thecarisma/KeyValueDB.js");
+const KeyValueObject = require("../src/io/github/thecarisma/KeyValueObject.js");
 
 var keyValueDB = new KeyValueDB("One=Adewale\r\nThrees=3333\n", true, '=', '\n', false);
 for (var kvo of keyValueDB) {
