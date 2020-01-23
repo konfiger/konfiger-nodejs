@@ -1,6 +1,6 @@
 {
   "name": "@thecarisma/key-value-db",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Quick and easy manage, load, update and save key-value type database ",
   "main": "index.js",
   "scripts": {
