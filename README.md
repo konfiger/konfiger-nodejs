@@ -1,7 +1,5 @@
 # <p style="text-align: center;" align="center"><img src="https://github.com/keyvaluedb/keyvaluedb.github.io/raw/master/icons/key-value-db-nodejs.png" alt="key-value-db-nodejs" style="width:180px;height:160px;" width="180" height="160" /><br /> key-value-db-nodejs</p>
 
-<span style="display:block;text-align:center"> [![npm](https://img.shields.io/npm/v/@thecarisma/key-value-db)](https://www.npmjs.com/package/@thecarisma/key-value-db) [![npm](https://img.shields.io/npm/dy/@thecarisma/key-value-db)](https://www.npmjs.com/package/@thecarisma/key-value-db) ![GitHub repo size](https://img.shields.io/github/repo-size/keyvaluedb/key-value-db-nodejs)	![GitHub contributors](https://img.shields.io/github/contributors/keyvaluedb/key-value-db-nodejs) [![Twitter Follow](https://img.shields.io/twitter/follow/opensourceprojs?style=social)](https://twitter.com/opensourceprojs) [![Support on Patreon](https://img.shields.io/static/v1?label=Support%20on%20Patreon&message=$5&color=brightgreen)](https://www.patreon.com/join/thecarisma/checkout?rid=3556842)</span>
-
 <p style="text-align: center;" align="center">Light weight package to quickly and easily manage, load, update and save key-value type database </p>
 
 ---
@@ -391,14 +389,9 @@ You can open issue or file a request that only address problems in this implemen
 
 ## Support
 
-You can support some of this community as they make big impact in the developement of people to get started with software engineering and open source.
+You can support some of this community as they make big impact in the developement of people to get started with software engineering.
 
 - https://www.patreon.com/devcareer
-- https://opencollective.com/osca
-
-Or you can support me to continue making awesome open source projects > https://patreon.com/thecarisma. Thanks!🤗
-
-**You can make big difference**.
 
 ## License
 
