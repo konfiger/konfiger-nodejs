@@ -1,4 +1,3 @@
-const KonfigerObject = require("../src/io/github/thecarisma/KonfigerObject.js");
+const KonfigerListener = require("../src/io/github/thecarisma/KonfigerListener.js");
 
-var ko = new KonfigerObject("Greetings ", "Hello world from thecarisma")
-console.log('' + ko)
+var konfigerListener = new KonfigerListener()

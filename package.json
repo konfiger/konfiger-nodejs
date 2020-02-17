@@ -4,7 +4,7 @@
   "description": "Light weight package to easily manage, load, update, save configuration and data files",
   "main": "index.js",
   "scripts": {
-	"test": "node test/KonfigerUtilTest.js && node test/KonfigerObjectTest.js && node test/konfigerTest.js && node test/konfiger-test.js"
+	"test": "node test/KonfigerObjectTest.js && node test/KonfigerListener.js"
   },
   "repository": {
     "type": "git",
