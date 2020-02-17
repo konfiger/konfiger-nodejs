@@ -1,7 +1,11 @@
-const KeyValueObject_ = require("./src/io/github/thecarisma/KeyValueObject.js");
-const KeyValueDB_ = require("./src/io/github/thecarisma/KeyValueDB.js");
+const KonfigerObject_ = require("./src/io/github/thecarisma/KonfigerObject.js");
+const Konfiger_ = require("./src/io/github/thecarisma/Konfiger.js");
+const KonfigerStream_ = require("./src/io/github/thecarisma/KonfigerStream.js");
+const KonfigerListener = require("./src/io/github/thecarisma/KonfigerListener.js");
 
 module.exports = {
-    KeyValueObject: KeyValueObject_,
-    KeyValueDB: KeyValueDB_
+    KonfigerObject: KonfigerObject_,
+    Konfiger: Konfiger_,
+    KonfigerStream: KonfigerStream_,
+    KonfigerListener: KonfigerListener_
 };

@@ -1,10 +1,10 @@
-# <p style="text-align: center;" align="center"><img src="https://github.com/keyvaluedb/keyvaluedb.github.io/raw/master/icons/key-value-db-nodejs.png" alt="key-value-db-nodejs" style="width:180px;height:160px;" width="180" height="160" /><br /> key-value-db-nodejs</p>
+# <p style="text-align: center;" align="center"><img src="https://github.com/konfiger/konfiger.github.io/raw/master/icons/konfiger-nodejs.png" alt="konfiger-nodejs" style="width:180px;height:160px;" width="180" height="160" /><br /> konfiger-nodejs</p>
 
-<p style="text-align: center;" align="center">Light weight package to quickly and easily manage, load, update and save key-value type database </p>
+<p style="text-align: center;" align="center">Light weight package to easily manage, load, update, save configuration and data files.</p>
 
 ---
 
-The sample use cases of this package is loading configuration file, language file, preference setting in an application. More use cases can be seen [here](https://keyvaluedb.github.io/usecases/index.html).
+The sample use cases of this package is loading configuration file, language file, preference setting in an application. More use cases can be seen [here](https://konfiger.github.io/usecases/index.html).
 
 The package does not do any Input and Output operation as there are several way to read and write to file and the methods has their strength and weakness therefore the developer has to find the efficient way to load and save locally.
 
@@ -40,24 +40,24 @@ ___
 
 ## Installation
 
-Module name on npm and bower is @thecarisma/key-value-db.
+Module name on npm and bower is @thecarisma/konfiger.
 
 Using npm:
 
 ```bash
-npm install @thecarisma/key-value-db
+npm install @thecarisma/konfiger
 ```
 
 Using bower:
 
 ```bash
-bower install @thecarisma/key-value-db
+bower install @thecarisma/konfiger
 ```
 
 Using yarn:
 
 ```bash
-yarn add @thecarisma/key-value-db
+yarn add @thecarisma/konfiger
 ```
 
 ## Example
@@ -65,22 +65,22 @@ yarn add @thecarisma/key-value-db
 The following example load, update, read and remove a simple key value object 
 
 ```js
-const KeyValueDB = require("@thecarisma/key-value-db");
+const konfiger = require("@thecarisma/konfiger");
 
 //initialize the key-value 
-var keyValueDB = new KeyValueDB.KeyValueDB("Greet=Hello World,Project=KeyValueDB", true, '=', ',', false);
+var konfiger = new konfiger.konfiger("Greet=Hello World,Project=konfiger", true, '=', ',', false);
 
 //get an object
-console.log(keyValueDB.get("Greet"));
+console.log(konfiger.get("Greet"));
 
 //remove an object
-keyValueDB.remove("Greet");
+konfiger.remove("Greet");
 
 //add an object
-keyValueDB.add("What", "i don't know what to write here");
+konfiger.add("What", "i don't know what to write here");
 
 //print all the objects
-for (var kvo of keyValueDB) {
+for (var kvo of konfiger) {
 	console.log('$' + kvo);
 };
 ```
@@ -102,17 +102,17 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 
 You can use the package to update and create an existing key value database. This library does not read the database from a file which means you have to find a way to read a string from the file. 
 
-Create a new keyValueDB. The default seperator between the key and value is `=` and the delimeter between the kvp is `\n`(newline).
+Create a new konfiger. The default seperator between the key and value is `=` and the delimeter between the kvp is `\n`(newline).
 
 ```js
-var keyValueDB = new KeyValueDB.KeyValueDB();
+var konfiger = new konfiger.konfiger();
 ```
 
-To load existing KeyValueDB  
+To load existing konfiger  
 
 ```js
-var keyValueDB = new KeyValueDB.KeyValueDB(
-        "Greet=Hello World,Project=KeyValueDB", //pss read string from file
+var konfiger = new konfiger.konfiger(
+        "Greet=Hello World,Project=konfiger", //pss read string from file
         true, //case sensitive is true
         '=', //the seperator from key and value
         ',', //the delimeter for the key-value-pair
@@ -127,14 +127,14 @@ The only accepted type that can be inserted is a valid `KeyValueObject` and `Str
 Add a kvp with it key and value
 
 ```js
-keyValueDB.add("Greet", "Hello World");
+konfiger.add("Greet", "Hello World");
 ```
 
 Add a kvp using the `KeyValueObject` class.
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Greet", "Hello World");
-keyValueDB.add(keyValueObject);
+const keyValueObject = new konfiger.KeyValueObject("Greet", "Hello World");
+konfiger.add(keyValueObject);
 ```
 
 ### Finding Data
@@ -148,22 +148,22 @@ You can get the kvo using either the key or index. If the corresponding kvo is n
 Get the kvo using it integer index
 
 ```js
-keyValueDB.getKeyValueObject(0);
+konfiger.getKeyValueObject(0);
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
 ```
 
 Get the kvo using it key 
 
 ```js
-keyValueDB.getKeyValueObject("Greet");
+konfiger.getKeyValueObject("Greet");
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
 ```
 
 Get the kvo using it key with fallback kvo
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Name", "Adewale Azeez");
-keyValueDB.getKeyValueObject("Name", keyValueObject);
+const keyValueObject = new konfiger.KeyValueObject("Name", "Adewale Azeez");
+konfiger.getKeyValueObject("Name", keyValueObject);
 //KeyValueObject {hashcode: 765363576, key: "Name", value: "Adewale Azeez"}
 ```
 
@@ -174,15 +174,15 @@ Get a kvo by checking the kvdb for the kvo object that contains a part of the ke
 Get a similar kvo using it key part 
 
 ```js
-keyValueDB.getLikeKeyValueObject("eet");
+konfiger.getLikeKeyValueObject("eet");
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
 ```
 
 Get a similar kvo using it key part with fallback kvo
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Name", "Adewale Azeez");
-keyValueDB.getKeyValueObject("Nam", keyValueObject);
+const keyValueObject = new konfiger.KeyValueObject("Name", "Adewale Azeez");
+konfiger.getKeyValueObject("Nam", keyValueObject);
 //KeyValueObject {hashcode: 765363576, key: "Name", value: "Adewale Azeez"}
 ```
 
@@ -195,29 +195,29 @@ If a fallback kvo is sent as second parameter then when the request key is not f
 Get a value using it integer index
 
 ```js
-keyValueDB.get(0);
+konfiger.get(0);
 //"Hello World"
 ```
 
 Get the value using it key 
 
 ```js
-keyValueDB.get("Greet");
+konfiger.get("Greet");
 //"Hello World"
 ```
 
 Get the kvo using it key with fallback value
 
 ```js
-keyValueDB.get("Licence", "The MIT Licence");
+konfiger.get("Licence", "The MIT Licence");
 //"The MIT Licence"
 ```
 
 Get the kvo using it key with fallback kvo
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
-keyValueDB.get("Name", keyValueObject);
+const keyValueObject = new konfiger.KeyValueObject("Licence", "The MIT Licence");
+konfiger.get("Name", keyValueObject);
 //"The MIT Licence"
 ```
 
@@ -230,15 +230,15 @@ If a fallback kvo is sent as second parameter then when the request key is not f
 Get a value using it key part 
 
 ```js
-keyValueDB.getLike("eet");
+konfiger.getLike("eet");
 //"Hello World"
 ```
 
 Get a value using it key part with fallback kvo
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
-keyValueDB.getLike("Li", keyValueObject);
+const keyValueObject = new konfiger.KeyValueObject("Licence", "The MIT Licence");
+konfiger.getLike("Li", keyValueObject);
 //"The MIT Licence"
 ```
 
@@ -253,14 +253,14 @@ The `set` method is used to change the value of the kvo using the index of the k
 Set a kvo value using it index
 
 ```js
-keyValueDB.set(0, "Hello World from thecarisma");
+konfiger.set(0, "Hello World from thecarisma");
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World from thecarisma"}
 ```
 
 Set a kvo value using it key
 
 ```js
-keyValueDB.set("Greet", "Hello World from thecarisma");
+konfiger.set("Greet", "Hello World from thecarisma");
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World from thecarisma"}
 ```
 
@@ -272,16 +272,16 @@ Note that this method completly changes the kvo so it can be used to replace a k
 Set a kvo using it index
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
-keyValueDB.setKeyValueObject(0, keyValueObject);
+const keyValueObject = new konfiger.KeyValueObject("Licence", "The MIT Licence");
+konfiger.setKeyValueObject(0, keyValueObject);
 //KeyValueObject {hashcode: 566565, key: "Licence", value: "The MIT Licence"}
 ```
 
 Set a kvo value using it key
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Licence", "The MIT Licence");
-keyValueDB.setKeyValueObject("Greet", keyValueObject);
+const keyValueObject = new konfiger.KeyValueObject("Licence", "The MIT Licence");
+konfiger.setKeyValueObject("Greet", keyValueObject);
 //KeyValueObject {hashcode: 566565, key: "Licence", value: "The MIT Licence"}
 ```
 
@@ -292,14 +292,14 @@ A new kvp can be inserted by invoking the `add` method. The kvp can be added usi
 Add a new kvp using the key and value
 
 ```js
-keyValueDB.add("Key", "This is the value");
+konfiger.add("Key", "This is the value");
 ```
 
 Add a new kvp using a new KeyValueObject
 
 ```js
-const keyValueObject = new KeyValueDB.KeyValueObject("Key", "This is the value");
-keyValueDB.add(keyValueObject);
+const keyValueObject = new konfiger.KeyValueObject("Key", "This is the value");
+konfiger.add(keyValueObject);
 ```
 
 ### Removing Data
@@ -309,7 +309,7 @@ Remove a kvp completely from the kvdb using either it key of the integer index. 
 Remove a kvp using integer index
 
 ```js
-keyValueDB.remove(0);
+konfiger.remove(0);
 //removes the first kvp in the kvdb
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
 ```
@@ -317,7 +317,7 @@ keyValueDB.remove(0);
 Remove a kvp using it key
 
 ```js
-keyValueDB.remove("Greet");
+konfiger.remove("Greet");
 //removes the first kvp in the kvdb
 //KeyValueObject {hashcode: 69066473, key: "Greet", value: "Hello World"}
 ```
@@ -329,7 +329,7 @@ keyValueDB.remove("Greet");
 Get the size of the kvo in the kvdb.
 
 ```js
-keyValueDB.size();
+konfiger.size();
 //4
 ```
 
@@ -338,8 +338,8 @@ keyValueDB.size();
 Remove all the elements and kvo from the kvdb
 
 ```js
-keyValueDB.clear();
-//keyValueDB.size() = 0
+konfiger.clear();
+//konfiger.size() = 0
 ```
 
 ### isEmpty
@@ -347,7 +347,7 @@ keyValueDB.clear();
 Check whether the kvdb contains any kvo in it.
 
 ```js
-keyValueDB.isEmpty();
+konfiger.isEmpty();
 //false
 ```
 
@@ -356,16 +356,16 @@ keyValueDB.isEmpty();
 The kvp collection kvdb can be inspected as a string using the `toString` method. The returned value can be saved locally by writing to a persistent storage or to a plain text file. The output of the `toString` method is determined by the kvos, the seperator and the delimeter.
 
 ```js
-keyValueDB.toString();
-// "Greet=Hello World,Project=KeyValueDB,Project=KeyValueDB,Licence=The MIT Licence"
+konfiger.toString();
+// "Greet=Hello World,Project=konfiger,Project=konfiger,Licence=The MIT Licence"
 ```
 
 ## Iterating collection
 
-The KeyValueDB object can be iterated natively using the `for..of` loop expression. 
+The konfiger object can be iterated natively using the `for..of` loop expression. 
 
 ```js
-for (var kvo of keyValueDB) {
+for (var kvo of konfiger) {
     //operate on the KeyValueObject
 };
 ```
@@ -373,9 +373,9 @@ for (var kvo of keyValueDB) {
 ## How it works
 
 KeyValueObject class contains the key and value field and the fields setter and getter. 
-The KeyValueObject is the main internal type used in the KeyValueDB class.
+The KeyValueObject is the main internal type used in the konfiger class.
  
-In KeyValueDB the key value pair is stored in `Array[]` type, all search, 
+In konfiger the key value pair is stored in `Array[]` type, all search, 
 updating and removal is done on the `keyValueObjects` in the class. The string sent as 
 first parameter if parsed into valid key value using the separator and delimiter fields. The 
 `toString` method also parse the `keyValueObjects` content into a valid string with regards to the 
@@ -383,9 +383,9 @@ separator and delimeter.
 
 ## Contributing
 
-Before you begin contribution please read the contribution guide at [CONTRIBUTING GUIDE](https://keyvaluedb.github.io/contributing.html)
+Before you begin contribution please read the contribution guide at [CONTRIBUTING GUIDE](https://konfiger.github.io/contributing.html)
 
-You can open issue or file a request that only address problems in this implementation on this repo, if the issue address the concepts of the package then create an issue or rfc [here](https://github.com/keyvaluedb/keyvaluedb.github.io/)
+You can open issue or file a request that only address problems in this implementation on this repo, if the issue address the concepts of the package then create an issue or rfc [here](https://github.com/konfiger/konfiger.github.io/)
 
 ## Support
 
@@ -395,5 +395,5 @@ You can support some of this community as they make big impact in the developeme
 
 ## License
 
-MIT License Copyright (c) 2019 Adewale Azeez - keyvaluedb
+MIT License Copyright (c) 2020 Adewale Azeez - konfiger
 
