@@ -41,7 +41,24 @@ KonfigerStream.prototype.validateFileExistence = function(filePath) {
 }
 
 KonfigerStream.prototype.hasNext = function() {
-     
+    fs.open(this.filePath, 'r', function(err, fd) {
+      if (err)
+        throw err;
+      var buffer = new Buffer(1);
+      while (true)
+      {   
+        var num = fs.readSync(fd, buffer, 0, 1, null);
+        if (num === 0)
+          break;
+        
+        console.log('byte read-', buffer.toString('utf-8', 0, buffer[0]));
+      }
+    });
+    return false
+}
+
+KonfigerStream.prototype.next = function() {
+    return ""
 }
 
 module.exports = KonfigerStream
