@@ -44,6 +44,53 @@ function throwError(title, error) {
     throw new Error(title + ": " + error)
 }
 
+function escapeString(value) {
+    var finalValue = ""
+    for (var c of value) {
+        switch (c) {
+            case '\t':
+                finalValue += "\\t"
+                break
+            case '\n':
+                finalValue += "\\n"
+                break
+            case '\v':
+                finalValue += "\\v"
+                break
+            case '\r':
+                finalValue += "\\r"
+                break
+            case '\f':
+                finalValue += "\\f"
+                break
+            case '\a':
+                finalValue += "\\a"
+                break
+            case '\b':
+                finalValue += "\\b"
+                break
+            case '\\':
+                finalValue += "\\\\"
+                break
+            case '\?':
+                finalValue += "\\?"
+                break
+            case '\'':
+                finalValue += "\\i"
+                break
+            case '\"':
+                finalValue += "\\\""
+                break
+            case '\000':
+                finalValue += "\\000"
+                break
+            default:
+                finalValue += c
+        }
+    }
+    return finalValue
+}
+
 module.exports = { 
 	typeOf,
 	isDefined,
@@ -52,5 +99,6 @@ module.exports = {
 	isObject,
 	isChar,
 	isBoolean,
-    throwError
+    throwError,
+    escapeString
 }

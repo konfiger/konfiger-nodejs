@@ -21,14 +21,20 @@ function fromString(filePath, delimeter, seperator) {
 }
 
 function fromStream(konfigerStream) {
-    const konfiger = new Konfiger()
+    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator)
     konfiger.createdFromStream = true
     konfiger.stream = konfigerStream
     return konfiger
 }
 
-function Konfiger() {
-    this.text = "testing"
+function Konfiger(delimeter, seperator) {
+    this.stream = null
+    this.createdFromStream = false
+    this.konfigerObjects = []
+    this.delimeter = delimeter
+    this.seperator = seperator
+    this.errTolerance = false
+    this.caseSensitive = true
 }
 
 module.exports = { 

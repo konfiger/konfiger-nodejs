@@ -1,0 +1,29 @@
+		Hello World
+		Hello World
+
+typeOf:    undefined
+typeOf:    string
+typeOf:    object
+typeOf:    string
+typeOf:    number
+typeOf:    boolean
+typeOf:    char
+
+isDefined: false
+isDefined: true
+
+isString:  true
+isString:  false
+
+isNumber:  false
+isNumber:  true
+
+isObject:  false
+isObject:  true
+
+isChar:    false
+isChar:    true
+
+isBoolean: true
+isBoolean: true
+isBoolean: false
