@@ -15,45 +15,27 @@ function typeOf(arg) {
 	}
 	return typeof arg 
 }
- 
-/**
 
-*/
 function isDefined(arg) {
 	return typeof arg !== "undefined"
 }
- 
-/**
 
-*/
 function isString(arg) {
 	return typeof arg === "string"
 }
- 
-/**
 
-*/
 function isNumber(arg) {
 	return typeof arg === "number"
 }
- 
-/**
 
-*/
 function isObject(arg) {
 	return typeof arg === "object"
 }
- 
-/**
 
-*/
 function isChar(arg) {
 	return typeof arg === "string" && arg.length === 1
 }
- 
-/**
 
-*/
 function isBoolean(arg) {
 	return typeof arg === "boolean"
 }
