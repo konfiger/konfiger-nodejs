@@ -44,7 +44,7 @@ function throwError(title, error) {
     throw new Error(title + ": " + error)
 }
 
-function escapeString(value) {
+function unEscapeString(value) {
     var finalValue = ""
     for (var c of value) {
         switch (c) {
@@ -91,6 +91,27 @@ function escapeString(value) {
     return finalValue
 }
 
+function escapeString(value) {
+    var finalValue = ""
+    for (var i = 0; i < value.length; ++i) {
+        var c = value[i]
+        if (c==='\\') {
+            if (c===value.length) {
+                break
+            }
+            d = ++i
+            if (value[d]=='t') {
+                finalValue += '\t'
+            } else {
+                finalValue += value[d]+c
+            }
+            continue
+        }
+        finalValue += c
+    }
+    return finalValue
+}
+
 module.exports = { 
 	typeOf,
 	isDefined,
@@ -100,5 +121,6 @@ module.exports = {
 	isChar,
 	isBoolean,
     throwError,
+    unEscapeString,
     escapeString
 }
