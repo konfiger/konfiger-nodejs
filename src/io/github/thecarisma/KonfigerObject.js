@@ -7,9 +7,10 @@
  */
 
 function KonfigerObject(key, value) {
-	this.key = key.trim();
+	this.key = key.trim();//validate key is not empty
 	this.value = value;
 	this.hashcode = 0 ;
+    this.hashCode()
 }
 
 KonfigerObject.prototype.getKey = function() {

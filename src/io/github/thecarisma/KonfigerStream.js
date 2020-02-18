@@ -7,6 +7,7 @@
  */
  
 const konfigerUtil = require("./KonfigerUtil.js")
+const KonfigerObject = require("./KonfigerObject.js")
 const fs = require("fs")
  
 function KonfigerStream(filePath, delimeter, seperator) {
@@ -26,6 +27,11 @@ function KonfigerStream(filePath, delimeter, seperator) {
             konfigerUtil.throwError("io.github.thecarisma.KonfigerStream", "invalid argument for seperator expecting char found " + konfigerUtil.typeOf(seperator)) 
         }
     }    
+    
+    this.readPosition = 0
+    this.hasNext_ = false
+    this.doneReading_ = false
+    this.buffer = new Buffer.alloc(1)
 }
 
 KonfigerStream.prototype.validateFileExistence = function(filePath) {
@@ -41,24 +47,58 @@ KonfigerStream.prototype.validateFileExistence = function(filePath) {
 }
 
 KonfigerStream.prototype.hasNext = function() {
-    fs.open(this.filePath, 'r', function(err, fd) {
-      if (err)
-        throw err;
-      var buffer = new Buffer(1);
-      while (true)
-      {   
-        var num = fs.readSync(fd, buffer, 0, 1, null);
-        if (num === 0)
-          break;
-        
-        console.log('byte read-', buffer.toString('utf-8', 0, buffer[0]));
-      }
-    });
-    return false
+    if (!this.hasNext_ && !this.doneReading_) {
+        var fd = fs.openSync(this.filePath, 'r')
+        if (!fd) {
+            this.doneReading()
+            throw fd
+        }
+        var num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
+        if (num === 0) {
+            this.doneReading()
+            return
+        }
+        this.hasNext_ = true
+    }
+    return this.hasNext_
 }
 
 KonfigerStream.prototype.next = function() {
-    return ""
+    var fd = fs.openSync(this.filePath, 'r')
+    if (!fd) {
+        this.doneReading()
+        throw fd
+    }
+    var key = ""
+    var value = ""
+    var parseKey = true
+    while (true) {
+        var num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
+        if (num === 0) {
+            this.doneReading()
+            break
+        }
+        this.readPosition++
+        var char_ = this.buffer.toString('utf-8', 0, this.buffer[0])
+        if (char_ === this.delimeter) {
+            parseKey = false
+            continue
+        }
+        if (char_ === this.seperator) {
+            break
+        }
+        if (parseKey === true) {
+            key += char_
+        } else {
+            value += char_
+        }
+    }
+    return (new KonfigerObject(key, value))
+}
+
+KonfigerStream.prototype.doneReading = function() {
+    this.hasNext_ = false
+    this.doneReading_ = true
 }
 
 module.exports = KonfigerStream
