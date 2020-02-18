@@ -44,9 +44,6 @@ function throwError(title, error) {
     throw new Error(title + ": " + error)
 }
 
-/**
-
-*/
 module.exports = { 
 	typeOf,
 	isDefined,

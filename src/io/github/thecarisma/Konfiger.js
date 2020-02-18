@@ -6,4 +6,8 @@
  *
  */
  
-let MAX_CAPACITY = 12909
+const MAX_CAPACITY = Number.MAX_SAFE_INTEGER - 1
+
+module.exports = { 
+    MAX_CAPACITY
+}
