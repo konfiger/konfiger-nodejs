@@ -1,7 +1,7 @@
 const KonfigerUtil = require("../src/io/github/thecarisma/KonfigerUtil.js");
 
 const desperate = [ 'one' ];
-var t1 = KonfigerUtil.unEscapeString("\t\tHello World")
+var t1 = KonfigerUtil.unEscapeString("\t\tHello World\b\'\rnd")
 
 console.log(t1)
 console.log(KonfigerUtil.escapeString(t1))

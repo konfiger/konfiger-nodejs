@@ -76,6 +76,9 @@ function unEscapeString(value) {
                 finalValue += "\\?"
                 break
             case '\'':
+                finalValue += "\\'"
+                break
+            case '\i':
                 finalValue += "\\i"
                 break
             case '\"':
@@ -100,10 +103,48 @@ function escapeString(value) {
                 break
             }
             d = ++i
-            if (value[d]=='t') {
-                finalValue += '\t'
-            } else {
-                finalValue += value[d]+c
+            switch (value[d]) {
+                case 't':
+                    finalValue += "\t"
+                    break
+                case 'n':
+                    finalValue += "\n"
+                    break
+                case 'v':
+                    finalValue += "\v"
+                    break
+                case 'r':
+                    finalValue += "\r"
+                    break
+                case 'f':
+                    finalValue += "\f"
+                    break
+                case 'a':
+                    finalValue += "\a"
+                    break
+                case 'b':
+                    finalValue += "\b"
+                    break
+                case '\\':
+                    finalValue += "\\"
+                    break
+                case '?':
+                    finalValue += "\?"
+                    break
+                case "'":
+                    finalValue += "\'"
+                    break
+                case "i":
+                    finalValue += "\i"
+                    break
+                case '\"':
+                    finalValue += "\""
+                    break
+                case '000':
+                    finalValue += "\000"
+                    break
+                default:
+                    finalValue += value[d]+c
             }
             continue
         }
