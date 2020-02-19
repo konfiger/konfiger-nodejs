@@ -68,7 +68,7 @@ Konfiger.prototype.forEach = function() {
 Konfiger.prototype.put = function(key, value) {
     if (konfigerUtil.isString(key)) {
         if (konfigerUtil.isString(value)) {
-            this.putString(key, value)
+            this.konfigerObjects.set(key, value)
             
         } else if (konfigerUtil.isBoolean(value)) {
             this.putBoolean(key, value)
@@ -78,15 +78,35 @@ Konfiger.prototype.put = function(key, value) {
             
         } else {
             this.konfigerObjects.set(key, JSON.stringify(value))
-            this.dbChanged = true
-            if (this.enableCache_) {
-                this.shiftCache(key, value)
-            }
+        }
+        this.dbChanged = true
+        if (this.enableCache_) {
+            this.shiftCache(key, value)
         }
         
     } else {
         konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, key must be a string")
     }
+}
+
+Konfiger.prototype.putString = function(key, value) {
+    this.put(key, value)
+}
+
+Konfiger.prototype.putBoolean = function(key, value) {
+    this.put(key, value.toString())
+}
+
+Konfiger.prototype.putLong = function(key, value) {
+    this.put(key, value)
+}
+
+Konfiger.prototype.putInt = function(key, value) {
+    this.put(key, value)
+}
+
+Konfiger.prototype.putFloat = function(key, value) {
+    this.put(key, value)
 }
 
 Konfiger.prototype.get = function(key) {
