@@ -40,6 +40,10 @@ function isBoolean(arg) {
 	return typeof arg === "boolean"
 }
 
+function isFloat(arg) {
+    return Number(arg) === arg && arg % 1 !== 0
+}
+
 function throwError(title, error) {
     throw new Error(title + ": " + error)
 }
@@ -163,5 +167,6 @@ module.exports = {
 	isBoolean,
     throwError,
     unEscapeString,
-    escapeString
+    escapeString,
+    isFloat
 }

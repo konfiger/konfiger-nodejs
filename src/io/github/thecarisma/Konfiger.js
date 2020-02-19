@@ -68,7 +68,7 @@ Konfiger.prototype.forEach = function() {
 Konfiger.prototype.put = function(key, value) {
     if (konfigerUtil.isString(key)) {
         if (konfigerUtil.isString(value)) {
-            this.konfigerObjects.set(key, value)
+            this.putString(key, value)
             
         } else if (konfigerUtil.isBoolean(value)) {
             this.putBoolean(key, value)
@@ -77,12 +77,9 @@ Konfiger.prototype.put = function(key, value) {
             this.putLong(key, value)
             
         } else {
-            this.konfigerObjects.set(key, JSON.stringify(value))
+            this.putString(key, JSON.stringify(value))
         }
-        this.dbChanged = true
-        if (this.enableCache_) {
-            this.shiftCache(key, value)
-        }
+        
         
     } else {
         konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, key must be a string")
@@ -90,23 +87,39 @@ Konfiger.prototype.put = function(key, value) {
 }
 
 Konfiger.prototype.putString = function(key, value) {
-    this.put(key, value)
+    if (!konfigerUtil.isString(value)) {
+        throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting String found " + konfigerUtil.typeOf(value))
+    }
+    this.konfigerObjects.set(key, value)
+    this.dbChanged = true
+    if (this.enableCache_) {
+        this.shiftCache(key, value)
+    }
 }
 
 Konfiger.prototype.putBoolean = function(key, value) {
-    this.put(key, value.toString())
+    if (!konfigerUtil.isBoolean(value)) {
+        throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting Boolean found " + konfigerUtil.typeOf(value))
+    }
+    this.putString(key, value.toString())
 }
 
 Konfiger.prototype.putLong = function(key, value) {
-    this.put(key, value)
+    if (!konfigerUtil.isNumber(value)) {
+        throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting Number found " + konfigerUtil.typeOf(value))
+    }
+    this.putString(key, value.toString())
 }
 
 Konfiger.prototype.putInt = function(key, value) {
-    this.put(key, value)
+    this.putLong(key, value)
 }
 
 Konfiger.prototype.putFloat = function(key, value) {
-    this.put(key, value)
+    if (!konfigerUtil.isFloat(value)) {
+        throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting Float found " + konfigerUtil.typeOf(value))
+    }
+    this.putString(key, value.toString())
 }
 
 Konfiger.prototype.get = function(key) {
@@ -115,12 +128,12 @@ Konfiger.prototype.get = function(key) {
             return this.currentCachedObject.cvalue
         }
         if (this.prevCachedObject.ckey === key) {
-            return this.prevCachedObject
+            return this.prevCachedObject.cvalue
         }
         //TODO: maybe make the map value currentCache if not 
         //performance cost
     }
-    return this.prevCachedObject.cvalue
+    return this.konfigerObjects.get(key)
 }
 
 Konfiger.prototype.shiftCache = function(key, value) {
