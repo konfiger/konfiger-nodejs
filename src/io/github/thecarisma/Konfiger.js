@@ -39,9 +39,8 @@ function Konfiger(delimeter, seperator) {
     this.dbChanged = true
     
     this.enableCache_ = true
-    this.nextCachedObject = { ckey : "", cindex : -1 }
-    this.prevCachedObject = { ckey : "", cindex : -1 }
-    this.currentCachedObject = { ckey : "", cindex : -1 }
+    this.prevCachedObject = { ckey : "", cvalue : null }
+    this.currentCachedObject = { ckey : "", cvalue : null }
 }
 
 Konfiger.prototype[Symbol.iterator] = function() {
@@ -84,8 +83,8 @@ Konfiger.prototype.put = function(key, value) {
 }
 
 Konfiger.prototype.shiftCache = function(key, value) {
-	this.prevCachedObject = this.currentCachedObject
-    this.currentCachedObject = value
+	this.prevCachedObject =  { ckey : "", cvalue : this.currentCachedObject }
+    this.currentCachedObject = { ckey : "", cvalue : value }
 }
 
 Konfiger.prototype.enableCache = function(enableCache_) {
@@ -93,8 +92,8 @@ Konfiger.prototype.enableCache = function(enableCache_) {
         konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, expecting boolean found " 
                                 + konfigerUtil.typeOf(enableCache_))
     }
-    this.prevCachedObject = { key : "", cindex : -1 }
-    this.currentCachedObject = { key : "", cindex : -1 }
+    this.prevCachedObject = { ckey : "", cvalue : null }
+    this.currentCachedObject = { ckey : "", cvalue : null }
     this.enableCache_ = enableCache_
 }
 
