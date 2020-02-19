@@ -5,6 +5,7 @@
  * Copyright 2020 Adewale Azeez <azeezadewale98@gmail.com>.
  *
  */
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
  
 const konfigerUtil = require("./KonfigerUtil.js")
 const KonfigerObject = require("./KonfigerObject.js")
@@ -13,7 +14,7 @@ const KonfigerStream = require("./KonfigerStream.js")
 const MAX_CAPACITY = Number.MAX_SAFE_INTEGER - 1
 
 function fromFile(filePath, delimeter, seperator) {
-    return fromStream((new KonfigerStream('test/test.config.ini', delimeter, seperator)))
+    return fromStream((new KonfigerStream(filePath, delimeter, seperator)))
 }
 
 function fromString(filePath, delimeter, seperator) {
@@ -30,11 +31,75 @@ function fromStream(konfigerStream) {
 function Konfiger(delimeter, seperator) {
     this.stream = null
     this.createdFromStream = false
-    this.konfigerObjects = []
+    this.konfigerObjects = new Map()
     this.delimeter = delimeter
     this.seperator = seperator
     this.errTolerance = false
     this.caseSensitive = true
+    this.dbChanged = true
+    
+    this.enableCache_ = true
+    this.nextCachedObject = { ckey : "", cindex : -1 }
+    this.prevCachedObject = { ckey : "", cindex : -1 }
+    this.currentCachedObject = { ckey : "", cindex : -1 }
+}
+
+Konfiger.prototype[Symbol.iterator] = function() {
+	var index = 0
+	var data  = this.konfigerObjects
+
+	return {
+		next: function() {
+			return { value: data[index++], done: index > data.length }
+		}
+	}
+}
+
+Konfiger.prototype.forEach = function() {
+	var index = 0
+	var data  = this.konfigerObjects
+
+	return {
+		next: function() {
+			return { value: data[index++], done: index > data.length }
+		}
+	}
+}
+
+Konfiger.prototype.put = function(key, value) {
+    if (!this.contains(key)) {
+        if (konfigerUtil.isString(key)) {
+            this.konfigerObjects.set(key, value)
+            this.dbChanged = true
+            if (this.enableCache_) {
+                this.shiftCache(key, value)
+            }
+        } else {
+            konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, key must be a string")
+        }
+        
+    } else {
+        console.log("change value")
+    }
+}
+
+Konfiger.prototype.shiftCache = function(key, value) {
+	this.prevCachedObject = this.currentCachedObject
+    this.currentCachedObject = value
+}
+
+Konfiger.prototype.enableCache = function(enableCache_) {
+	if (!konfigerUtil.isBoolean(enableCache_)) {
+        konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, expecting boolean found " 
+                                + konfigerUtil.typeOf(enableCache_))
+    }
+    this.prevCachedObject = { key : "", cindex : -1 }
+    this.currentCachedObject = { key : "", cindex : -1 }
+    this.enableCache_ = enableCache_
+}
+
+Konfiger.prototype.contains = function(key) {
+    
 }
 
 module.exports = { 
