@@ -7,7 +7,11 @@ console.log(Konfiger.MAX_CAPACITY)
 var konfiger = Konfiger.fromFile('test/test.config.ini')
 konfiger.put("One", konfiger)
 konfiger.put("Two", new KonfigerObject("hello", "world"))
+konfiger.put("Two", new KonfigerObject("hello", "world"))
+konfiger.put("Three", 3)
 
-for (var o of konfiger) {
-    console.log(o.value)
-}
+console.log(konfiger.get("One"))
+console.log(konfiger.get("Two"))
+/*for (var o of konfiger) {
+    
+}*/

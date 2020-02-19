@@ -43,7 +43,7 @@ function Konfiger(delimeter, seperator) {
     this.currentCachedObject = { ckey : "", cvalue : null }
 }
 
-Konfiger.prototype[Symbol.iterator] = function() {
+/*Konfiger.prototype[Symbol.iterator] = function() {
 	var index = 0
 	var data  = this.konfigerObjects
 
@@ -63,28 +63,49 @@ Konfiger.prototype.forEach = function() {
 			return { value: data[index++], done: index > data.length }
 		}
 	}
-}
+}*/
 
 Konfiger.prototype.put = function(key, value) {
-    if (!this.contains(key)) {
-        if (konfigerUtil.isString(key)) {
-            this.konfigerObjects.set(key, value)
+    if (konfigerUtil.isString(key)) {
+        if (konfigerUtil.isString(value)) {
+            this.putString(key, value)
+            
+        } else if (konfigerUtil.isBoolean(value)) {
+            this.putBoolean(key, value)
+            
+        } else if (konfigerUtil.isNumber(value)) {
+            this.putLong(key, value)
+            
+        } else {
+            this.konfigerObjects.set(key, JSON.stringify(value))
             this.dbChanged = true
             if (this.enableCache_) {
                 this.shiftCache(key, value)
             }
-        } else {
-            konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, key must be a string")
         }
         
     } else {
-        console.log("change value")
+        konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, key must be a string")
     }
 }
 
+Konfiger.prototype.get = function(key) {
+    if (this.enableCache_) {
+        if (this.currentCachedObject.ckey === key) {
+            return this.currentCachedObject.cvalue
+        }
+        if (this.prevCachedObject.ckey === key) {
+            return this.prevCachedObject
+        }
+        //TODO: maybe make the map value currentCache if not 
+        //performance cost
+    }
+    return this.prevCachedObject.cvalue
+}
+
 Konfiger.prototype.shiftCache = function(key, value) {
-	this.prevCachedObject =  { ckey : "", cvalue : this.currentCachedObject }
-    this.currentCachedObject = { ckey : "", cvalue : value }
+	this.prevCachedObject =  this.currentCachedObject
+    this.currentCachedObject = { ckey : key, cvalue : value }
 }
 
 Konfiger.prototype.enableCache = function(enableCache_) {
@@ -98,7 +119,7 @@ Konfiger.prototype.enableCache = function(enableCache_) {
 }
 
 Konfiger.prototype.contains = function(key) {
-    
+    return konfigerUtil.isDefined(this.konfigerObjects.get(key))
 }
 
 module.exports = { 
