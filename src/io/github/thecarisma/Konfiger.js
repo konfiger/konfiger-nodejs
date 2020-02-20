@@ -298,14 +298,14 @@ Konfiger.prototype.errorTolerance = function(errTolerance) {
 }
 
 Konfiger.prototype.hashCode = function() {
-	/*if (this.hashcode !== 0) return this.hashcode ;
+	if (this.hashcode !== 0) return this.hashcode ;
 	var i, chr;
 	if (this.stringValue.length === 0) return this.hashcode;
 	for (i = 0; i < this.stringValue.length; i++) {
 		chr   = this.stringValue.charCodeAt(i);
 		this.hashcode  = ((this.hashcode << 5) - this.hashcode) + chr;
 		this.hashcode |= 0; 
-	}*/
+	}
 	return this.hashcode;
 };
 
@@ -316,6 +316,7 @@ Konfiger.prototype.toString = function() {
         for (let entry of this.konfigerObjects.entries()) {
             this.stringValue += entry[0] + this.delimeter + konfigerUtil.unEscapeString(entry[1])
             if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
+            ++index
         }
 		this.changesOccur = false ;
 	}
