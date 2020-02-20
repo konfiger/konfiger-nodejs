@@ -2,7 +2,11 @@
 const Konfiger = require("../src/io/github/thecarisma/Konfiger.js")
 const KonfigerObject = require("../src/io/github/thecarisma/KonfigerObject.js")
 
-var konfiger = Konfiger.fromFile('test/test.config.ini', false)
+var konfiger = Konfiger.fromFile(`
+Name=Adewale Azeez
+Occupation=Software Engineer
+Location=Nigeria
+`, false)
 konfiger.putString("Greet", "\tHello \tWorld")
 konfiger.putLong("Long", 245134535524372)
 konfiger.putString("Last", "Hello every one \rStart again")
