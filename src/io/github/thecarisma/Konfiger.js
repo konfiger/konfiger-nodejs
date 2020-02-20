@@ -10,7 +10,7 @@
 const konfigerUtil = require("./KonfigerUtil.js")
 const KonfigerStream = require("./KonfigerStream.js")
  
-const MAX_CAPACITY = Number.MAX_SAFE_INTEGER - 1
+const MAX_CAPACITY = 10000000
 
 function fromFile(filePath, lazyLoad, delimeter, seperator) {
     return fromStream(new KonfigerStream(filePath, delimeter, seperator), lazyLoad)
@@ -54,6 +54,7 @@ function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream, raw
     this.caseSensitive = true
     this.changesOccur = true
     this.stringValue = ""
+    this.kArray = []
     
     if (!this.lazyLoad) {
         this.lazyLoader()
@@ -108,6 +109,9 @@ Konfiger.prototype.put = function(key, value) {
 }
 
 Konfiger.prototype.putString = function(key, value) {
+    if (this.konfigerObjects.size === MAX_CAPACITY) {
+        throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity " + MAX_CAPACITY)
+    }
     if (!konfigerUtil.isString(key)) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, key must be a string")
     }
