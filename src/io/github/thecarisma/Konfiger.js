@@ -18,22 +18,35 @@ function fromFile(filePath, lazyLoad, delimeter, seperator) {
 }
 
 function fromString(rawString, lazyLoad, delimeter, seperator) {
-    const konfiger = new Konfiger(delimeter, seperator, lazyLoad, false)
-    konfiger.rawString = rawString
+    if (!konfigerUtil.isBoolean(lazyLoad)) {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, the second parameter must be a Boolean")
+    }
+    if (delimeter) {
+        if (!konfigerUtil.isChar(delimeter)) {
+            throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character for the delimeter value")
+        }
+        if (!konfigerUtil.isChar(seperator)) {
+            throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character for the seperator value")
+        }
+    } else {
+        delimeter = '='
+        seperator = '\n'
+    }
+    const konfiger = new Konfiger(delimeter, seperator, lazyLoad, false, undefined, rawString)
     return konfiger
 }
 
 function fromStream(konfigerStream, lazyLoad) {
-    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, true, konfigerStream)
+    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, true, konfigerStream, undefined)
     return konfiger
 }
 
-function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream) {
+function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream, rawString) {
     this.hashcode = 0
     this.stream = stream
-    this.rawString = ""
+    this.rawString = rawString
     this.createdFromStream = createdFromStream
-    this.streamEnds = false
+    this.loadingEnds = false
     this.lazyLoad = (lazyLoad ? lazyLoad : false)
     this.konfigerObjects = new Map()
     this.delimeter = delimeter
@@ -145,19 +158,87 @@ Konfiger.prototype.get = function(key, defaultValue) {
         if (this.prevCachedObject.ckey === key) {
             return this.prevCachedObject.cvalue
         }
-        //TODO: maybe make the map value currentCache if no
-        //performance cost
     }
     if (!this.contains(key) && this.lazyLoad) {
-        if (this.createdFromStream && !this.streamEnds) {
-            while (this.stream.hasNext()) {
-                var obj = this.stream.next()
-                this.putString(obj.getKey(), obj.getValue())
-                if (obj.getKey() === key) {
-                    return obj.getValue()
+        if (!this.loadingEnds) {
+            if (this.createdFromStream) {
+                while (this.stream.hasNext()) {
+                    var obj = this.stream.next()
+                    this.putString(obj.getKey(), obj.getValue())
+                    if (obj.getKey() === key) {
+                        if (this.enableCache_) {
+                            this.shiftCache(key, obj.getValue())
+                        }
+                        return obj.getValue()
+                    }
+                }
+                this.loadingEnds = true
+            } else {
+                var subkey = ""
+                var value = ""
+                var parseKey = true;
+                var line = 1
+                var column = 0
+                var i = 0;
+                for (; i <= this.rawString.length; i++) {
+                    if (i == this.rawString.length) {
+                        this.rawString = ""
+                        if (subkey !== "") {
+                            if (subkey === "" && value === "") continue;
+                            if (parseKey === true && this.errTolerance === false) {
+                                this.loadingEnds = true
+                                throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
+                            }
+                            this.putString(subkey, value)
+                            if (subkey === key) {
+                                if (this.enableCache_) {
+                                    this.shiftCache(key, value)
+                                }
+                                return value
+                            }
+                        }
+                        this.loadingEnds = true
+                        break;
+                    }
+                    var character = this.rawString[i];
+                    column++;
+                    if (character === '\n') {
+                        line++;
+                        column = 0 ;
+                    }
+                    if (character === this.seperator) {
+                        if (subkey === "" && value ==="") continue;
+                        if (parseKey === true && this.errTolerance === false) {
+                            this.loadingEnds = true
+                            throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
+                        }
+                        this.putString(subkey, value)
+                        if (subkey === key) {
+                            if (this.enableCache_) {
+                                this.shiftCache(key, value)
+                            }
+                            return value
+                        }
+                        parseKey = true ;
+                        subkey = "";
+                        value = "";
+                        continue;
+                    }
+                    if (character === this.delimeter) {
+                        if (value !== "" && this.errTolerance !== false) {
+                            this.loadingEnds = true
+                            throw new Error("com.azeezadewale.konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
+                        }
+                        parseKey = false ;
+                        continue;
+                    }
+                    if (parseKey) {
+                        subkey += character
+                    } else {
+                        value += character
+                    }
                 }
             }
-            this.streamEnds = true
         }
     }
     if (defaultValue && !this.contains(key)) {
@@ -336,7 +417,7 @@ Konfiger.prototype.toString = function() {
         this.stringValue = ""
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
-            this.stringValue += entry[0] + this.delimeter + konfigerUtil.unEscapeString(entry[1]) //unescape the seperator too
+            this.stringValue += entry[0] + this.delimeter + konfigerUtil.unEscapeString(entry[1], [this.seperator]) //unescape the seperator too
             if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
             ++index
         }
@@ -346,14 +427,68 @@ Konfiger.prototype.toString = function() {
 }
 
 Konfiger.prototype.lazyLoader = function() {
-    if (this.createdFromStream && !this.streamEnds) {
+    if (this.loadingEnds) {
+        return
+    }
+    if (this.createdFromStream) {
         while (this.stream.hasNext()) {
             var obj = this.stream.next()
             this.putString(obj.getKey(), obj.getValue())
         }
-        this.streamEnds = true
+        this.loadingEnds = true
     } else {
-        //string
+        var key = ""
+        var value = ""
+        var parseKey = true;
+        var line = 1
+        var column = 0
+        var i = 0;
+        for (; i <= this.rawString.length; i++) {
+            if (i == this.rawString.length) {
+                this.rawString = ""
+                if (key !== "") {
+                    if (key === "" && value === "") continue;
+                    if (parseKey === true && this.errTolerance === false) {
+                        this.loadingEnds = true
+                        throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
+                    }
+                    this.putString(key, value)
+                }
+                this.loadingEnds = true
+                break;
+            }
+            var character = this.rawString[i];
+            column++;
+            if (character === '\n') {
+                line++;
+                column = 0 ;
+            }
+            if (character === this.seperator) {
+                if (key === "" && value ==="") continue;
+                if (parseKey === true && this.errTolerance === false) {
+                    this.loadingEnds = true
+                    throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
+                }
+                this.putString(key, value)
+                parseKey = true ;
+                key = "";
+                value = "";
+                continue;
+            }
+            if (character === this.delimeter) {
+                if (value !== "" && this.errTolerance !== false) {
+                    this.loadingEnds = true
+                    throw new Error("com.azeezadewale.konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
+                }
+                parseKey = false ;
+                continue;
+            }
+            if (parseKey) {
+                key += character
+            } else {
+                value += character
+            }
+        }
     }
 }
 
@@ -361,5 +496,7 @@ Konfiger.prototype.lazyLoader = function() {
 
 module.exports = { 
     MAX_CAPACITY,
-    fromFile
+    fromFile,
+    fromStream,
+    fromString
 }

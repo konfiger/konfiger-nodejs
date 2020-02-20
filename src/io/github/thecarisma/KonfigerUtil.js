@@ -48,7 +48,7 @@ function throwError(title, error) {
     throw new Error(title + ": " + error)
 }
 
-function unEscapeString(value) {
+function unEscapeString(value, extraEscape) {
     var finalValue = ""
     for (var c of value) {
         switch (c) {

@@ -6,7 +6,7 @@ var konfiger = Konfiger.fromString(`
 Name=Adewale Azeez
 Occupation=Software Engineer
 Location=Nigeria
-`, false)
+`, true)
 konfiger.putString("Greet", "\tHello \tWorld")
 konfiger.putLong("Long", 245134535524372)
 konfiger.putString("Last", "Hello every one \rStart again")
