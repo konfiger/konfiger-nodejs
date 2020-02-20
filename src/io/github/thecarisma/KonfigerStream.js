@@ -6,6 +6,7 @@
  *
  */
 
+const konfigerUtil = require("./KonfigerUtil.js")
 const fs = require("fs")
  
 function KonfigerStream(filePath, delimeter, seperator) {
@@ -91,7 +92,7 @@ KonfigerStream.prototype.next = function() {
             value += char_
         }
     }
-    return (new KonfigerStream(key, value))
+    return [key, value]
 }
 
 KonfigerStream.prototype.doneReading = function() {
