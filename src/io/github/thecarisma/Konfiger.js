@@ -206,6 +206,28 @@ Konfiger.prototype.clear = function() {
     this.konfigerObjects.clear()
 }
 
+Konfiger.prototype.remove = function(keyIndex) {
+    if (konfigerUtil.isString(keyIndex)) {
+        return this.konfigerObjects.delete(keyIndex)
+    } else if (konfigerUtil.isNumber(keyIndex)) {
+        if (keyIndex < this.konfigerObjects.size) {
+            var i = -1
+            for (let o of this.keys()) {
+                ++i
+                if (i === keyIndex) {
+                    return this.remove(o)
+                }
+            }
+            
+        }
+        var i = keyIndex
+        
+    } else {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry key(string) or index(Number) found " + 
+                        konfiger.typeOf(keyIndex))
+    }
+}
+
 Konfiger.prototype.size = function() {
     return this.konfigerObjects.size
 }
