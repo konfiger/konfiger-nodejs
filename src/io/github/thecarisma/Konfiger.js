@@ -29,6 +29,7 @@ function fromStream(konfigerStream) {
 }
 
 function Konfiger(delimeter, seperator) {
+    this.hashcode = 0
     this.stream = null
     this.createdFromStream = false
     this.konfigerObjects = new Map()
@@ -201,13 +202,15 @@ Konfiger.prototype.entries = function() {
 }
 
 Konfiger.prototype.clear = function() {
-    this.prevCachedObject = { ckey : "", cvalue : null }
-    this.currentCachedObject = { ckey : "", cvalue : null }
+    this.dbChanged = true
+    this.enableCache(this.enableCache_)
     this.konfigerObjects.clear()
 }
 
 Konfiger.prototype.remove = function(keyIndex) {
     if (konfigerUtil.isString(keyIndex)) {
+        this.dbChanged = true
+        this.enableCache(this.enableCache_)
         return this.konfigerObjects.delete(keyIndex)
     } else if (konfigerUtil.isNumber(keyIndex)) {
         if (keyIndex < this.konfigerObjects.size) {
@@ -215,16 +218,39 @@ Konfiger.prototype.remove = function(keyIndex) {
             for (let o of this.keys()) {
                 ++i
                 if (i === keyIndex) {
+                    this.dbChanged = true
+                    this.enableCache(this.enableCache_)
                     return this.remove(o)
                 }
             }
             
         }
-        var i = keyIndex
+        return false
         
     } else {
-        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry key(string) or index(Number) found " + 
-                        konfigerUtil.typeOf(keyIndex))
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry key(string) or index(Number) found " 
+                        + konfigerUtil.typeOf(keyIndex))
+    }
+}
+
+Konfiger.prototype.updateAt = function(index, value) {
+    if (konfigerUtil.isNumber(index) && konfigerUtil.isString(value)) {
+        if (index < this.konfigerObjects.size) {
+            var i = -1
+            for (let o of this.keys()) {
+                ++i
+                if (i === index) {
+                    this.dbChanged = true
+                    this.enableCache(this.enableCache_)
+                    return this.konfigerObjects.set(o, value)
+                }
+            }            
+        }
+        return undefined
+        
+    } else {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry (Number, String) found " 
+                        + konfigerUtil.typeOf(index))
     }
 }
 
@@ -245,6 +271,7 @@ Konfiger.prototype.setSeperator = function(seperator) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
                         konfigerUtil.typeOf(seperator))
     }
+    this.dbChanged = true
     this.seperator = seperator
 }
 
@@ -257,8 +284,41 @@ Konfiger.prototype.setDelimeter = function(delimeter) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
                         konfigerUtil.typeOf(delimeter))
     }
+    this.dbChanged = true
     this.delimeter = delimeter
 }
+
+Konfiger.prototype.errorTolerance = function(errTolerance) {
+	if (!konfigerUtil.isBoolean(enableCache_)) {
+        konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, expecting boolean found " 
+                                + konfigerUtil.typeOf(errTolerance))
+    }
+    this.errTolerance = errTolerance
+}
+
+konfiger.prototype.hashCode = function() {
+	/*if (this.hashcode !== 0) return this.hashcode ;
+	var i, chr;
+	if (this.stringValue.length === 0) return this.hashcode;
+	for (i = 0; i < this.stringValue.length; i++) {
+		chr   = this.stringValue.charCodeAt(i);
+		this.hashcode  = ((this.hashcode << 5) - this.hashcode) + chr;
+		this.hashcode |= 0; 
+	}*/
+	return this.hashcode;
+};
+
+konfiger.prototype.toString = function() {
+	if (this.changesOccur) {
+		this.stringValue = "" ;
+		for (var i = 0; i < this.keyValueObjects.length; i++) {
+			this.stringValue += this.keyValueObjects[i].getKey() + this.delimeter + this.keyValueObjects[i].getValue() ;
+			if (i != (this.keyValueObjects.length - 1)) this.stringValue += this.seperator;
+		}
+		this.changesOccur = false ;
+	}
+	return this.stringValue;
+};
 
 
 
