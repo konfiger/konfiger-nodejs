@@ -5,9 +5,7 @@
  * Copyright 2020 Adewale Azeez <azeezadewale98@gmail.com>.
  *
  */
- 
-const konfigerUtil = require("./KonfigerUtil.js")
-const KonfigerObject = require("./KonfigerObject.js")
+
 const fs = require("fs")
  
 function KonfigerStream(filePath, delimeter, seperator) {
@@ -17,14 +15,14 @@ function KonfigerStream(filePath, delimeter, seperator) {
     
     this.validateFileExistence(filePath)
     if (delimeter && !seperator) {
-        konfigerUtil.throwError("io.github.thecarisma.KonfigerStream", "Invalid length of argument, seperator parameter is missing")
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid length of argument, seperator parameter is missing")
     }
     if (delimeter && seperator) {
         if (!konfigerUtil.isChar(delimeter)) { 
-            konfigerUtil.throwError("io.github.thecarisma.KonfigerStream", "invalid argument for delimeter expecting char found " + konfigerUtil.typeOf(delimeter)) 
+            throw new Error("io.github.thecarisma.KonfigerStream: invalid argument for delimeter expecting char found " + konfigerUtil.typeOf(delimeter)) 
         }
         if (!konfigerUtil.isChar(seperator)) { 
-            konfigerUtil.throwError("io.github.thecarisma.KonfigerStream", "invalid argument for seperator expecting char found " + konfigerUtil.typeOf(seperator)) 
+            throw new Error("io.github.thecarisma.KonfigerStream: invalid argument for seperator expecting char found " + konfigerUtil.typeOf(seperator)) 
         }
     }    
     
@@ -36,13 +34,13 @@ function KonfigerStream(filePath, delimeter, seperator) {
 
 KonfigerStream.prototype.validateFileExistence = function(filePath) {
     if (!filePath) {
-        konfigerUtil.throwError("io.github.thecarisma.KonfigerStream", "The file path cannot be null")
+        throw new Error("io.github.thecarisma.KonfigerStream: The file path cannot be null")
     }
     if (!konfigerUtil.isString(filePath)) {
-        konfigerUtil.throwError("io.github.thecarisma.KonfigerStream", "Invalid argument expecting string found " + konfigerUtil.typeOf(filePath))
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument expecting string found " + konfigerUtil.typeOf(filePath))
     }
     if (!fs.existsSync(filePath)) {
-        konfigerUtil.throwError("io.github.thecarisma.KonfigerStream", "The file does not exists " + filePath)
+        throw new Error("io.github.thecarisma.KonfigerStream: The file does not exists " + filePath)
     }    
 }
 
@@ -93,7 +91,7 @@ KonfigerStream.prototype.next = function() {
             value += char_
         }
     }
-    return (new KonfigerObject(key, value))
+    return (new KonfigerStream(key, value))
 }
 
 KonfigerStream.prototype.doneReading = function() {

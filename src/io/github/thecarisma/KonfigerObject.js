@@ -5,11 +5,10 @@
  * Copyright 2020 Adewale Azeez <azeezadewale98@gmail.com>.
  *
  */
-const konfigerUtil = require("./KonfigerUtil.js")
 
 function KonfigerObject(key, value) {
     if (key.length === 0) {
-        konfigerUtil.throwError("io.github.thecarisma.KonfigerObject", "invalid argument, key cannot be empty") 
+        throw new Error("io.github.thecarisma.KonfigerObject: Invalid argument, key cannot be empty")
     }
 	this.key = key.trim();
 	this.value = value;

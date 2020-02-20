@@ -8,7 +8,6 @@
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
  
 const konfigerUtil = require("./KonfigerUtil.js")
-const KonfigerObject = require("./KonfigerObject.js")
 const KonfigerStream = require("./KonfigerStream.js")
  
 const MAX_CAPACITY = Number.MAX_SAFE_INTEGER - 1
@@ -180,7 +179,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
                 var line = 1
                 var column = 0
                 var i = 0
-                for (; i <= this.rawString.length i++) {
+                for (; i <= this.rawString.length; ++i) {
                     if (i == this.rawString.length) {
                         this.rawString = ""
                         if (subkey !== "") {
@@ -401,7 +400,7 @@ Konfiger.prototype.hashCode = function() {
 	if (this.hashcode !== 0) return this.hashcode
 	var i, chr
 	if (this.stringValue.length === 0) return this.hashcode
-	for (i = 0 i < this.stringValue.length i++) {
+	for (i = 0; i < this.stringValue.length; ++i) {
 		chr   = this.stringValue.charCodeAt(i)
 		this.hashcode  = ((this.hashcode << 5) - this.hashcode) + chr
 		this.hashcode |= 0
@@ -443,7 +442,7 @@ Konfiger.prototype.lazyLoader = function() {
         var line = 1
         var column = 0
         var i = 0
-        for (; i <= this.rawString.length i++) {
+        for (; i <= this.rawString.length; ++i) {
             if (i == this.rawString.length) {
                 this.rawString = ""
                 if (key !== "") {
