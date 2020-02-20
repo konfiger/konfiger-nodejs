@@ -87,6 +87,9 @@ Konfiger.prototype.put = function(key, value) {
 }
 
 Konfiger.prototype.putString = function(key, value) {
+    if (!konfigerUtil.isString(key)) {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, key must be a string")
+    }
     if (!konfigerUtil.isString(value)) {
         throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting String found " + konfigerUtil.typeOf(value))
     }
@@ -123,6 +126,9 @@ Konfiger.prototype.putFloat = function(key, value) {
 }
 
 Konfiger.prototype.get = function(key, defaultValue) {
+    if (!konfigerUtil.isString(key)) {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, key must be a string")
+    }
     if (this.enableCache_) {
         if (this.currentCachedObject.ckey === key) {
             return this.currentCachedObject.cvalue
@@ -137,6 +143,30 @@ Konfiger.prototype.get = function(key, defaultValue) {
         return defaultValue
     }
     return this.konfigerObjects.get(key)
+}
+
+Konfiger.prototype.getString = function(key, defaultValue) {
+    var value = this.get(key, defaultValue)
+    return this.konfigerObjects.get(key).toString()
+}
+
+Konfiger.prototype.getBoolean = function(key, defaultValue) {
+    var value = this.get(key, defaultValue)
+    return (value ? Boolean(value) : value)
+}
+
+Konfiger.prototype.getLong = function(key, defaultValue) {
+    var value = this.get(key, defaultValue)
+    return (value ? Number(value) : value)
+}
+
+Konfiger.prototype.getInt = function(key, defaultValue) {
+    return this.getLong(key, defaultValue)
+}
+
+Konfiger.prototype.getFloat = function(key, defaultValue) {
+    var value = this.get(key, defaultValue)
+    return (value ? parseFloat(value) : value)
 }
 
 Konfiger.prototype.shiftCache = function(key, value) {
@@ -171,7 +201,9 @@ Konfiger.prototype.entries = function() {
 }
 
 Konfiger.prototype.clear = function() {
-    return this.konfigerObjects.clear()
+    this.prevCachedObject = { ckey : "", cvalue : null }
+    this.currentCachedObject = { ckey : "", cvalue : null }
+    this.konfigerObjects.clear()
 }
 
 Konfiger.prototype.size = function() {
