@@ -13,25 +13,30 @@ const KonfigerStream = require("./KonfigerStream.js")
  
 const MAX_CAPACITY = Number.MAX_SAFE_INTEGER - 1
 
-function fromFile(filePath, delimeter, seperator) {
-    return fromStream((new KonfigerStream(filePath, delimeter, seperator)))
+function fromFile(filePath, delimeter, seperator, lazyLoad) {
+    return fromStream((new KonfigerStream(filePath, delimeter, seperator, lazyLoad)))
 }
 
-function fromString(filePath, delimeter, seperator) {
-    
+function fromString(rawString, delimeter, seperator, lazyLoad) {
+    const konfiger = new Konfiger(delimeter, seperator, lazyLoad)
+    konfiger.rawString = rawString
+    return konfiger
 }
 
-function fromStream(konfigerStream) {
-    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator)
+function fromStream(konfigerStream, lazyLoad) {
+    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad)
     konfiger.createdFromStream = true
     konfiger.stream = konfigerStream
     return konfiger
 }
 
-function Konfiger(delimeter, seperator) {
+function Konfiger(delimeter, seperator, lazyLoad) {
     this.hashcode = 0
     this.stream = null
+    this.rawString = null
     this.createdFromStream = false
+    this.streamEnds = false
+    this.lazyLoad = lazyLoad
     this.konfigerObjects = new Map()
     this.delimeter = delimeter
     this.seperator = seperator
@@ -39,6 +44,16 @@ function Konfiger(delimeter, seperator) {
     this.caseSensitive = true
     this.changesOccur = true
     this.stringValue = ""
+    
+    if (!this.lazyLoad) {
+        if (this.createdFromStream && !this.streamEnds) {
+            while (this.stream.hasNext()) {
+                var obj = this.stream.next()
+                this.putString(obj.getKey(), obj.getValue())
+            }
+            this.streamEnds = true
+        }
+    }
     
     this.enableCache_ = true
     this.prevCachedObject = { ckey : "", cvalue : null }
@@ -141,6 +156,18 @@ Konfiger.prototype.get = function(key, defaultValue) {
         //TODO: maybe make the map value currentCache if no
         //performance cost
     }
+    if (!this.contains(key) && this.lazyLoad) {
+        if (this.createdFromStream && !this.streamEnds) {
+            while (this.stream.hasNext()) {
+                var obj = this.stream.next()
+                this.putString(obj.getKey(), obj.getValue())
+                if (obj.getKey() === key) {
+                    return obj.getValue()
+                }
+            }
+            this.streamEnds = true
+        }
+    }
     if (defaultValue && !this.contains(key)) {
         return defaultValue
     }
@@ -149,7 +176,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
 
 Konfiger.prototype.getString = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
-    return this.konfigerObjects.get(key).toString()
+    return (value ? value.toString() : value)
 }
 
 Konfiger.prototype.getBoolean = function(key, defaultValue) {
@@ -314,7 +341,7 @@ Konfiger.prototype.toString = function() {
 		this.stringValue = ""
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
-            this.stringValue += entry[0] + this.delimeter + konfigerUtil.unEscapeString(entry[1])
+            this.stringValue += entry[0] + this.delimeter + konfigerUtil.unEscapeString(entry[1]) //unescape the seperator too
             if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
             ++index
         }
