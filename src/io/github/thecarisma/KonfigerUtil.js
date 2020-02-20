@@ -48,7 +48,7 @@ function throwError(title, error) {
     throw new Error(title + ": " + error)
 }
 
-function unEscapeString(value, extraEscape) {
+function escapeString(value, extraEscape) {
     var finalValue = ""
     for (var c of value) {
         switch (c) {
@@ -92,13 +92,21 @@ function unEscapeString(value, extraEscape) {
                 finalValue += "\\000"
                 break
             default:
+                if (extraEscape) {
+                    for (var extra of extraEscape) {
+                        if (c === extra) {
+                            finalValue += "\\"
+                            break
+                        }
+                    }
+                }
                 finalValue += c
         }
     }
     return finalValue
 }
 
-function escapeString(value) {
+function unEscapeString(value, extraEscape) {
     var finalValue = ""
     for (var i = 0; i < value.length; ++i) {
         var c = value[i]
@@ -148,6 +156,19 @@ function escapeString(value) {
                     finalValue += "\000"
                     break
                 default:
+                    if (extraEscape) {
+                        var continua = false
+                        for (var extra of extraEscape) {
+                            if (value[d] === extra) {
+                                finalValue += extra
+                                continua = true
+                                break
+                            }
+                        }
+                        if (continua) {
+                            continue
+                        }
+                    }
                     finalValue += value[d]+c
             }
             continue

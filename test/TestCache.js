@@ -3,7 +3,7 @@ const Konfiger = require("../src/io/github/thecarisma/Konfiger.js")
 const KonfigerUtil = require("../src/io/github/thecarisma/KonfigerUtil.js")
 const { performance } = require('perf_hooks');
 
-let times = 99999999
+let times = 99999999999
 
 console.log(`===================
 Without Cache

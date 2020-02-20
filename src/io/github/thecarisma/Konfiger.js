@@ -176,15 +176,15 @@ Konfiger.prototype.get = function(key, defaultValue) {
             } else {
                 var subkey = ""
                 var value = ""
-                var parseKey = true;
+                var parseKey = true
                 var line = 1
                 var column = 0
-                var i = 0;
-                for (; i <= this.rawString.length; i++) {
+                var i = 0
+                for (; i <= this.rawString.length i++) {
                     if (i == this.rawString.length) {
                         this.rawString = ""
                         if (subkey !== "") {
-                            if (subkey === "" && value === "") continue;
+                            if (subkey === "" && value === "") continue
                             if (parseKey === true && this.errTolerance === false) {
                                 this.loadingEnds = true
                                 throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
@@ -198,16 +198,16 @@ Konfiger.prototype.get = function(key, defaultValue) {
                             }
                         }
                         this.loadingEnds = true
-                        break;
+                        break
                     }
                     var character = this.rawString[i];
                     column++;
                     if (character === '\n') {
                         line++;
-                        column = 0 ;
+                        column = 0 
                     }
                     if (character === this.seperator) {
-                        if (subkey === "" && value ==="") continue;
+                        if (subkey === "" && value ==="") continue
                         if (parseKey === true && this.errTolerance === false) {
                             this.loadingEnds = true
                             throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
@@ -219,18 +219,18 @@ Konfiger.prototype.get = function(key, defaultValue) {
                             }
                             return value
                         }
-                        parseKey = true ;
+                        parseKey = true 
                         subkey = "";
                         value = "";
-                        continue;
+                        continue
                     }
                     if (character === this.delimeter) {
                         if (value !== "" && this.errTolerance !== false) {
                             this.loadingEnds = true
                             throw new Error("com.azeezadewale.konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
                         }
-                        parseKey = false ;
-                        continue;
+                        parseKey = false 
+                        continue
                     }
                     if (parseKey) {
                         subkey += character
@@ -401,7 +401,7 @@ Konfiger.prototype.hashCode = function() {
 	if (this.hashcode !== 0) return this.hashcode
 	var i, chr
 	if (this.stringValue.length === 0) return this.hashcode
-	for (i = 0; i < this.stringValue.length; i++) {
+	for (i = 0 i < this.stringValue.length i++) {
 		chr   = this.stringValue.charCodeAt(i)
 		this.hashcode  = ((this.hashcode << 5) - this.hashcode) + chr
 		this.hashcode |= 0
@@ -417,13 +417,13 @@ Konfiger.prototype.toString = function() {
         this.stringValue = ""
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
-            this.stringValue += entry[0] + this.delimeter + konfigerUtil.unEscapeString(entry[1], [this.seperator]) //unescape the seperator too
+            this.stringValue += entry[0] + this.delimeter + konfigerUtil.escapeString(entry[1], [this.seperator]) //unescape the seperator too
             if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
             ++index
         }
 		this.changesOccur = false
 	}
-	return this.stringValue;
+	return this.stringValue
 }
 
 Konfiger.prototype.lazyLoader = function() {
@@ -439,49 +439,49 @@ Konfiger.prototype.lazyLoader = function() {
     } else {
         var key = ""
         var value = ""
-        var parseKey = true;
+        var parseKey = true
         var line = 1
         var column = 0
-        var i = 0;
-        for (; i <= this.rawString.length; i++) {
+        var i = 0
+        for (; i <= this.rawString.length i++) {
             if (i == this.rawString.length) {
                 this.rawString = ""
                 if (key !== "") {
-                    if (key === "" && value === "") continue;
+                    if (key === "" && value === "") continue
                     if (parseKey === true && this.errTolerance === false) {
                         this.loadingEnds = true
                         throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
                     }
-                    this.putString(key, value)
+                    this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
                 }
                 this.loadingEnds = true
-                break;
+                break
             }
             var character = this.rawString[i];
             column++;
             if (character === '\n') {
                 line++;
-                column = 0 ;
+                column = 0 
             }
             if (character === this.seperator) {
-                if (key === "" && value ==="") continue;
+                if (key === "" && value ==="") continue
                 if (parseKey === true && this.errTolerance === false) {
                     this.loadingEnds = true
                     throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
                 }
-                this.putString(key, value)
-                parseKey = true ;
+                this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
+                parseKey = true 
                 key = "";
-                value = "";
-                continue;
+                value = ""
+                continue
             }
             if (character === this.delimeter) {
                 if (value !== "" && this.errTolerance !== false) {
                     this.loadingEnds = true
                     throw new Error("com.azeezadewale.konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
                 }
-                parseKey = false ;
-                continue;
+                parseKey = false 
+                continue
             }
             if (parseKey) {
                 key += character

@@ -1,10 +1,10 @@
 const KonfigerUtil = require("../src/io/github/thecarisma/KonfigerUtil.js");
 
 const desperate = [ 'one' ];
-var t1 = KonfigerUtil.unEscapeString("\t\tHello World\b\'\rnd")
+var t1 = KonfigerUtil.escapeString("\t\tHello World\b\'\rnd")
 
 console.log(t1)
-console.log(KonfigerUtil.escapeString(t1))
+console.log(KonfigerUtil.unEscapeString(t1))
 
 console.log()
 console.log("typeOf:    " + KonfigerUtil.typeOf(desperate[1]));
