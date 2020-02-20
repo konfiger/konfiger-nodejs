@@ -37,7 +37,8 @@ function Konfiger(delimeter, seperator) {
     this.seperator = seperator
     this.errTolerance = false
     this.caseSensitive = true
-    this.dbChanged = true
+    this.changesOccur = true
+    this.stringValue = ""
     
     this.enableCache_ = true
     this.prevCachedObject = { ckey : "", cvalue : null }
@@ -95,7 +96,7 @@ Konfiger.prototype.putString = function(key, value) {
         throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting String found " + konfigerUtil.typeOf(value))
     }
     this.konfigerObjects.set(key, value)
-    this.dbChanged = true
+    this.changesOccur = true
     if (this.enableCache_) {
         this.shiftCache(key, value)
     }
@@ -202,14 +203,14 @@ Konfiger.prototype.entries = function() {
 }
 
 Konfiger.prototype.clear = function() {
-    this.dbChanged = true
+    this.changesOccur = true
     this.enableCache(this.enableCache_)
     this.konfigerObjects.clear()
 }
 
 Konfiger.prototype.remove = function(keyIndex) {
     if (konfigerUtil.isString(keyIndex)) {
-        this.dbChanged = true
+        this.changesOccur = true
         this.enableCache(this.enableCache_)
         return this.konfigerObjects.delete(keyIndex)
     } else if (konfigerUtil.isNumber(keyIndex)) {
@@ -218,7 +219,7 @@ Konfiger.prototype.remove = function(keyIndex) {
             for (let o of this.keys()) {
                 ++i
                 if (i === keyIndex) {
-                    this.dbChanged = true
+                    this.changesOccur = true
                     this.enableCache(this.enableCache_)
                     return this.remove(o)
                 }
@@ -240,7 +241,7 @@ Konfiger.prototype.updateAt = function(index, value) {
             for (let o of this.keys()) {
                 ++i
                 if (i === index) {
-                    this.dbChanged = true
+                    this.changesOccur = true
                     this.enableCache(this.enableCache_)
                     return this.konfigerObjects.set(o, value)
                 }
@@ -271,7 +272,7 @@ Konfiger.prototype.setSeperator = function(seperator) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
                         konfigerUtil.typeOf(seperator))
     }
-    this.dbChanged = true
+    this.changesOccur = true
     this.seperator = seperator
 }
 
@@ -284,7 +285,7 @@ Konfiger.prototype.setDelimeter = function(delimeter) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
                         konfigerUtil.typeOf(delimeter))
     }
-    this.dbChanged = true
+    this.changesOccur = true
     this.delimeter = delimeter
 }
 
@@ -296,7 +297,7 @@ Konfiger.prototype.errorTolerance = function(errTolerance) {
     this.errTolerance = errTolerance
 }
 
-konfiger.prototype.hashCode = function() {
+Konfiger.prototype.hashCode = function() {
 	/*if (this.hashcode !== 0) return this.hashcode ;
 	var i, chr;
 	if (this.stringValue.length === 0) return this.hashcode;
@@ -308,13 +309,14 @@ konfiger.prototype.hashCode = function() {
 	return this.hashcode;
 };
 
-konfiger.prototype.toString = function() {
+Konfiger.prototype.toString = function() {
 	if (this.changesOccur) {
-		this.stringValue = "" ;
-		for (var i = 0; i < this.keyValueObjects.length; i++) {
-			this.stringValue += this.keyValueObjects[i].getKey() + this.delimeter + this.keyValueObjects[i].getValue() ;
-			if (i != (this.keyValueObjects.length - 1)) this.stringValue += this.seperator;
-		}
+		this.stringValue = ""
+        var index = 0
+        for (let entry of this.konfigerObjects.entries()) {
+            this.stringValue += entry[0] + this.delimeter + konfigerUtil.unEscapeString(entry[1])
+            if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
+        }
 		this.changesOccur = false ;
 	}
 	return this.stringValue;

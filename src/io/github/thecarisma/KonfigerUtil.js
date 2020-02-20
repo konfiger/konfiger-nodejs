@@ -67,9 +67,9 @@ function unEscapeString(value) {
             case '\f':
                 finalValue += "\\f"
                 break
-            case '\a':
+            /*case '\a':
                 finalValue += "\\a"
-                break
+                break*/
             case '\b':
                 finalValue += "\\b"
                 break
@@ -82,9 +82,9 @@ function unEscapeString(value) {
             case '\'':
                 finalValue += "\\'"
                 break
-            case '\i':
+            /*case '\i':
                 finalValue += "\\i"
-                break
+                break*/
             case '\"':
                 finalValue += "\\\""
                 break
@@ -123,9 +123,9 @@ function escapeString(value) {
                 case 'f':
                     finalValue += "\f"
                     break
-                case 'a':
+                /*case 'a':
                     finalValue += "\a"
-                    break
+                    break*/
                 case 'b':
                     finalValue += "\b"
                     break
@@ -138,9 +138,9 @@ function escapeString(value) {
                 case "'":
                     finalValue += "\'"
                     break
-                case "i":
+                /*case "i":
                     finalValue += "\i"
-                    break
+                    break*/
                 case '\"':
                     finalValue += "\""
                     break
