@@ -9,6 +9,7 @@
 
 /junk/
 /test/
+/docs/
 
 *.zip
 *.tgz
