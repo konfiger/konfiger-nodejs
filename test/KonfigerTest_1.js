@@ -2,7 +2,7 @@
 const Konfiger = require("../src/io/github/thecarisma/Konfiger.js")
 const KonfigerUtil = require("../src/io/github/thecarisma/KonfigerUtil.js")
 
-var konfiger = Konfiger.fromFile('test/test.config.ini')
+var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 konfiger.put("One", konfiger)
 konfiger.putLong("Two", 123456789)
 konfiger.putBoolean("Bool", true)

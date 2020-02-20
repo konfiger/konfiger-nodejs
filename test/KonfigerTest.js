@@ -4,7 +4,7 @@ const KonfigerObject = require("../src/io/github/thecarisma/KonfigerObject.js")
 
 console.log(Konfiger.MAX_CAPACITY)
 
-var konfiger = Konfiger.fromFile('test/test.config.ini')
+var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 konfiger.put("One", konfiger)
 konfiger.put("Two", new KonfigerObject("hello", "world"))
 konfiger.putString("Two", "hello world")

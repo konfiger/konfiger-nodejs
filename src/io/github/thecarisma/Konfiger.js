@@ -13,30 +13,28 @@ const KonfigerStream = require("./KonfigerStream.js")
  
 const MAX_CAPACITY = Number.MAX_SAFE_INTEGER - 1
 
-function fromFile(filePath, delimeter, seperator, lazyLoad) {
-    return fromStream((new KonfigerStream(filePath, delimeter, seperator, lazyLoad)))
+function fromFile(filePath, lazyLoad, delimeter, seperator) {
+    return fromStream(new KonfigerStream(filePath, delimeter, seperator), lazyLoad)
 }
 
-function fromString(rawString, delimeter, seperator, lazyLoad) {
-    const konfiger = new Konfiger(delimeter, seperator, lazyLoad)
+function fromString(rawString, lazyLoad, delimeter, seperator) {
+    const konfiger = new Konfiger(delimeter, seperator, lazyLoad, false)
     konfiger.rawString = rawString
     return konfiger
 }
 
 function fromStream(konfigerStream, lazyLoad) {
-    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad)
-    konfiger.createdFromStream = true
-    konfiger.stream = konfigerStream
+    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, true, konfigerStream)
     return konfiger
 }
 
-function Konfiger(delimeter, seperator, lazyLoad) {
+function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream) {
     this.hashcode = 0
-    this.stream = null
-    this.rawString = null
-    this.createdFromStream = false
+    this.stream = stream
+    this.rawString = ""
+    this.createdFromStream = createdFromStream
     this.streamEnds = false
-    this.lazyLoad = lazyLoad
+    this.lazyLoad = (lazyLoad ? lazyLoad : false)
     this.konfigerObjects = new Map()
     this.delimeter = delimeter
     this.seperator = seperator
@@ -46,13 +44,7 @@ function Konfiger(delimeter, seperator, lazyLoad) {
     this.stringValue = ""
     
     if (!this.lazyLoad) {
-        if (this.createdFromStream && !this.streamEnds) {
-            while (this.stream.hasNext()) {
-                var obj = this.stream.next()
-                this.putString(obj.getKey(), obj.getValue())
-            }
-            this.streamEnds = true
-        }
+        this.lazyLoader()
     }
     
     this.enableCache_ = true
@@ -325,30 +317,45 @@ Konfiger.prototype.errorTolerance = function(errTolerance) {
 }
 
 Konfiger.prototype.hashCode = function() {
-	if (this.hashcode !== 0) return this.hashcode ;
-	var i, chr;
-	if (this.stringValue.length === 0) return this.hashcode;
+	if (this.hashcode !== 0) return this.hashcode
+	var i, chr
+	if (this.stringValue.length === 0) return this.hashcode
 	for (i = 0; i < this.stringValue.length; i++) {
-		chr   = this.stringValue.charCodeAt(i);
-		this.hashcode  = ((this.hashcode << 5) - this.hashcode) + chr;
-		this.hashcode |= 0; 
+		chr   = this.stringValue.charCodeAt(i)
+		this.hashcode  = ((this.hashcode << 5) - this.hashcode) + chr
+		this.hashcode |= 0
 	}
-	return this.hashcode;
-};
+	return this.hashcode
+}
 
 Konfiger.prototype.toString = function() {
 	if (this.changesOccur) {
-		this.stringValue = ""
+        if (this.lazyLoad) {
+            this.lazyLoader()
+        }
+        this.stringValue = ""
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
             this.stringValue += entry[0] + this.delimeter + konfigerUtil.unEscapeString(entry[1]) //unescape the seperator too
             if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
             ++index
         }
-		this.changesOccur = false ;
+		this.changesOccur = false
 	}
 	return this.stringValue;
-};
+}
+
+Konfiger.prototype.lazyLoader = function() {
+    if (this.createdFromStream && !this.streamEnds) {
+        while (this.stream.hasNext()) {
+            var obj = this.stream.next()
+            this.putString(obj.getKey(), obj.getValue())
+        }
+        this.streamEnds = true
+    } else {
+        //string
+    }
+}
 
 
 
