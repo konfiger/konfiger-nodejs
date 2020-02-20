@@ -224,7 +224,7 @@ Konfiger.prototype.remove = function(keyIndex) {
         
     } else {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry key(string) or index(Number) found " + 
-                        konfiger.typeOf(keyIndex))
+                        konfigerUtil.typeOf(keyIndex))
     }
 }
 
@@ -235,6 +235,32 @@ Konfiger.prototype.size = function() {
 Konfiger.prototype.isEmpty = function() {
     return this.konfigerObjects.size === 0
 }
+
+Konfiger.prototype.getSeperator = function() {
+    return this.seperator
+}
+
+Konfiger.prototype.setSeperator = function(seperator) {
+    if (!konfigerUtil.isChar(seperator)) {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
+                        konfigerUtil.typeOf(seperator))
+    }
+    this.seperator = seperator
+}
+
+Konfiger.prototype.getDelimeter = function() {
+    return this.delimeter
+}
+
+Konfiger.prototype.setDelimeter = function(delimeter) {
+    if (!konfigerUtil.isChar(delimeter)) {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
+                        konfigerUtil.typeOf(delimeter))
+    }
+    this.delimeter = delimeter
+}
+
+
 
 module.exports = { 
     MAX_CAPACITY,
