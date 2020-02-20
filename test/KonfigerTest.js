@@ -5,7 +5,7 @@ console.log(Konfiger.MAX_CAPACITY)
 
 var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 konfiger.put("One", konfiger)
-konfiger.put("Two", `"hello", "world"`))
+konfiger.put("Two", `"hello", "world"`)
 konfiger.putString("Two", "hello world")
 konfiger.put("Three", 3)
 konfiger.putInt("Four", 4)
