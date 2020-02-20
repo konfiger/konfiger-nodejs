@@ -122,7 +122,7 @@ Konfiger.prototype.putFloat = function(key, value) {
     this.putString(key, value.toString())
 }
 
-Konfiger.prototype.get = function(key) {
+Konfiger.prototype.get = function(key, defaultValue) {
     if (this.enableCache_) {
         if (this.currentCachedObject.ckey === key) {
             return this.currentCachedObject.cvalue
@@ -130,8 +130,11 @@ Konfiger.prototype.get = function(key) {
         if (this.prevCachedObject.ckey === key) {
             return this.prevCachedObject.cvalue
         }
-        //TODO: maybe make the map value currentCache if not 
+        //TODO: maybe make the map value currentCache if no
         //performance cost
+    }
+    if (defaultValue && !this.contains(key)) {
+        return defaultValue
     }
     return this.konfigerObjects.get(key)
 }
@@ -152,7 +155,31 @@ Konfiger.prototype.enableCache = function(enableCache_) {
 }
 
 Konfiger.prototype.contains = function(key) {
-    return konfigerUtil.isDefined(this.konfigerObjects.get(key))
+    return this.konfigerObjects.has(key)
+}
+
+Konfiger.prototype.keys = function(key) {
+    return this.konfigerObjects.keys()
+}
+
+Konfiger.prototype.values = function(key) {
+    return this.konfigerObjects.values()
+}
+
+Konfiger.prototype.entries = function() {
+    return this.konfigerObjects.entries()
+}
+
+Konfiger.prototype.clear = function() {
+    return this.konfigerObjects.clear()
+}
+
+Konfiger.prototype.size = function() {
+    return this.konfigerObjects.size
+}
+
+Konfiger.prototype.isEmpty = function() {
+    return this.konfigerObjects.size === 0
 }
 
 module.exports = { 
