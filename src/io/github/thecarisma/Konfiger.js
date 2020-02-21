@@ -110,7 +110,7 @@ Konfiger.prototype.put = function(key, value) {
 
 Konfiger.prototype.putString = function(key, value) {
     if (this.konfigerObjects.size === MAX_CAPACITY) {
-        throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity " + MAX_CAPACITY)
+        throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity 10,000,000")
     }
     if (!konfigerUtil.isString(key)) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, key must be a string")
@@ -187,7 +187,6 @@ Konfiger.prototype.get = function(key, defaultValue) {
                     if (i == this.rawString.length) {
                         this.rawString = ""
                         if (subkey !== "") {
-                            if (subkey === "" && value === "") continue
                             if (parseKey === true && this.errTolerance === false) {
                                 this.loadingEnds = true
                                 throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
@@ -197,6 +196,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
                                 if (this.enableCache_) {
                                     this.shiftCache(key, value)
                                 }
+                                this.loadingEnds = true
                                 return value
                             }
                         }
@@ -446,21 +446,22 @@ Konfiger.prototype.lazyLoader = function() {
         var line = 1
         var column = 0
         var i = 0
+        this.rawString = konfigerUtil.escapeString(this.rawString, [this.seperator])
         for (; i <= this.rawString.length; ++i) {
             if (i == this.rawString.length) {
                 this.rawString = ""
                 if (key !== "") {
-                    if (key === "" && value === "") continue
                     if (parseKey === true && this.errTolerance === false) {
                         this.loadingEnds = true
-                        throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
+                        throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column)
                     }
                     this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
                 }
                 this.loadingEnds = true
                 break
             }
-            var character = this.rawString[i];
+            var character = this.rawString[i]
+            //var character = konfigerUtil.escapeString(this.rawString[i], [this.seperator])
             column++;
             if (character === '\n') {
                 line++;
@@ -468,17 +469,22 @@ Konfiger.prototype.lazyLoader = function() {
             }
             if (character === this.seperator) {
                 if (key === "" && value ==="") continue
+                    console.log(value)
                 if (parseKey === true && this.errTolerance === false) {
                     this.loadingEnds = true
                     throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
                 }
                 this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
-                parseKey = true 
-                key = "";
-                value = ""
-                continue
+                if (parseKey) {
+                    parseKey = false
+                } else {
+                    parseKey = true 
+                    key = "";
+                    value = ""
+                    continue
+                }
             }
-            if (character === this.delimeter) {
+            if (character === this.delimeter && parseKey) {
                 if (value !== "" && this.errTolerance !== false) {
                     this.loadingEnds = true
                     throw new Error("com.azeezadewale.konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");

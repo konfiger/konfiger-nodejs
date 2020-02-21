@@ -50,7 +50,8 @@ function throwError(title, error) {
 
 function escapeString(value, extraEscape) {
     var finalValue = ""
-    for (var c of value) {
+    for (var i = 0; i < value.length; i++) {
+        let c = value[i]
         switch (c) {
             case '\t':
                 finalValue += "\\t"
@@ -74,7 +75,12 @@ function escapeString(value, extraEscape) {
                 finalValue += "\\b"
                 break
             case '\\':
-                finalValue += "\\\\"
+                if ("tnvrfb?'\"\0000".indexOf(value[++i]) > -1) {
+                    finalValue += "\\" + value[i]
+                } else {
+                    finalValue += "\\\\"
+                }
+                
                 break
             case '\?':
                 finalValue += "\\?"
