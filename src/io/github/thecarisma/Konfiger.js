@@ -55,6 +55,7 @@ function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream, raw
     this.changesOccur = true
     this.stringValue = ""
     this.kArray = []
+    this.readIndex = 0
     
     if (!this.lazyLoad) {
         this.lazyLoader()
@@ -118,15 +119,12 @@ Konfiger.prototype.putString = function(key, value) {
     if (!konfigerUtil.isString(value)) {
         throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting String found " + konfigerUtil.typeOf(value))
     }
-    if (this.lazyLoad && this.contains(key) && !this.loadingEnds) {
+    if (this.lazyLoad && !this.loadingEnds && !this.contains(key)) {
         var _value = this.getString(key)
         if (_value === value) {
             return
         }
-        console.log("we got it: " + _value)
-        console.log("we got it: " + value)
     }
-        console.log("adding: " + value)
     this.konfigerObjects.set(key, value)
     this.changesOccur = true
     if (this.enableCache_) {
@@ -176,7 +174,8 @@ Konfiger.prototype.get = function(key, defaultValue) {
             if (this.createdFromStream) {
                 while (this.stream.hasNext()) {
                     var obj = this.stream.next()
-                    this.putString(obj[0], obj[1])
+                    this.konfigerObjects.set(obj[0], obj[1])
+                    this.changesOccur = true
                     if (obj[0] === key) {
                         if (this.enableCache_) {
                             this.shiftCache(key, obj[1])
@@ -191,16 +190,16 @@ Konfiger.prototype.get = function(key, defaultValue) {
                 var parseKey = true
                 var line = 1
                 var column = 0
-                var i = 0
-                for (; i <= this.rawString.length; ++i) {
-                    if (i == this.rawString.length) {
+                for (; this.readIndex <= this.rawString.length; ++this.readIndex) {
+                    if (this.readIndex == this.rawString.length) {
                         this.rawString = ""
                         if (subkey !== "") {
                             if (parseKey === true && this.errTolerance === false) {
                                 this.loadingEnds = true
                                 throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                             }
-                            this.putString(subkey, value)
+                            this.konfigerObjects.set(subkey, value)
+                            this.changesOccur = true
                             if (subkey === key) {
                                 if (this.enableCache_) {
                                     this.shiftCache(key, value)
@@ -212,7 +211,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
                         this.loadingEnds = true
                         break
                     }
-                    var character = this.rawString[i];
+                    var character = this.rawString[this.readIndex];
                     column++;
                     if (character === '\n') {
                         line++;
@@ -224,7 +223,8 @@ Konfiger.prototype.get = function(key, defaultValue) {
                             this.loadingEnds = true
                             throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                         }
-                        this.putString(subkey, value)
+                        this.konfigerObjects.set(subkey, value)
+                        this.changesOccur = true
                         if (subkey === key) {
                             if (this.enableCache_) {
                                 this.shiftCache(key, value)
@@ -454,10 +454,8 @@ Konfiger.prototype.lazyLoader = function() {
         var parseKey = true
         var line = 1
         var column = 0
-        var i = 0
-        //this.rawString = konfigerUtil.escapeString(this.rawString, [this.seperator])
-        for (; i <= this.rawString.length; ++i) {
-            if (i == this.rawString.length) {
+        for (; this.readIndex <= this.rawString.length; ++this.readIndex) {
+            if (this.readIndex == this.rawString.length) {
                 this.rawString = ""
                 if (key !== "") {
                     if (parseKey === true && this.errTolerance === false) {
@@ -469,13 +467,13 @@ Konfiger.prototype.lazyLoader = function() {
                 this.loadingEnds = true
                 break
             }
-            var character = this.rawString[i]
+            var character = this.rawString[this.readIndex]
             column++;
             if (character === '\n') {
                 line++;
                 column = 0 
             }
-            if (character === this.seperator) {
+            if (character === this.seperator && this.rawString[this.readIndex-1] != '\\') {
                 if (key === "" && value ==="") continue
                 if (parseKey === true && this.errTolerance === false) {
                     this.loadingEnds = true

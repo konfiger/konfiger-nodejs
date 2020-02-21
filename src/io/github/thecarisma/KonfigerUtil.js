@@ -101,7 +101,7 @@ function escapeString(value, extraEscape) {
                 if (extraEscape) {
                     for (var extra of extraEscape) {
                         if (c === extra) {
-                            finalValue += "\\"
+                            finalValue += "\\\\"
                             break
                         }
                     }
