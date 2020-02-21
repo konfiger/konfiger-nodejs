@@ -9,10 +9,11 @@
 const konfigerUtil = require("./KonfigerUtil.js")
 const fs = require("fs")
  
+ //does not throw error
 function KonfigerStream(filePath, delimeter, seperator) {
 	this.filePath = filePath;
-	this.delimeter = '='
-	this.seperator = '\n'
+	this.delimeter = (delimeter ? delimeter : '=')
+	this.seperator = (seperator ? seperator : '\n')
     
     this.validateFileExistence(filePath)
     if (delimeter && !seperator) {
@@ -71,6 +72,7 @@ KonfigerStream.prototype.next = function() {
     var key = ""
     var value = ""
     var parseKey = true
+    var prevChar = null
     while (true) {
         var num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
         if (num === 0) {
@@ -83,7 +85,8 @@ KonfigerStream.prototype.next = function() {
             parseKey = false
             continue
         }
-        if (char_ === this.seperator) {
+        //console.log(prevChar + ":" + char_ + "-" +  this.seperator)
+        if (char_ === this.seperator && prevChar != '\\') {
             break
         }
         if (parseKey === true) {
@@ -91,8 +94,9 @@ KonfigerStream.prototype.next = function() {
         } else {
             value += char_
         }
+        prevChar = char_
     }
-    return [key, value]
+    return [key, konfigerUtil.unEscapeString(value, [this.seperator])]
 }
 
 KonfigerStream.prototype.doneReading = function() {

@@ -9,6 +9,7 @@
  
 const konfigerUtil = require("./KonfigerUtil.js")
 const KonfigerStream = require("./KonfigerStream.js")
+const fs = require("fs")
  
 const MAX_CAPACITY = 10000000
 
@@ -305,14 +306,17 @@ Konfiger.prototype.contains = function(key) {
 }
 
 Konfiger.prototype.keys = function(key) {
+    this.toString()
     return this.konfigerObjects.keys()
 }
 
 Konfiger.prototype.values = function(key) {
+    this.toString()
     return this.konfigerObjects.values()
 }
 
 Konfiger.prototype.entries = function() {
+    this.toString()
     return this.konfigerObjects.entries()
 }
 
@@ -431,7 +435,7 @@ Konfiger.prototype.toString = function() {
         this.stringValue = ""
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
-            this.stringValue += entry[0] + this.delimeter + konfigerUtil.escapeString(entry[1], [this.seperator]) //unescape the seperator too
+            this.stringValue += entry[0] + this.delimeter + konfigerUtil.escapeString(entry[1], [this.seperator]) 
             if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
             ++index
         }
@@ -482,19 +486,15 @@ Konfiger.prototype.lazyLoader = function() {
                     throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                 }
                 this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
-                if (parseKey) {
-                    parseKey = false
-                } else {
-                    parseKey = true 
-                    key = "";
-                    value = ""
-                    continue
-                }
+                parseKey = true 
+                key = "";
+                value = ""
+                continue
             }
             if (character === this.delimeter && parseKey) {
                 if (value !== "" && this.errTolerance !== false) {
                     this.loadingEnds = true
-                    throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
+                    throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator")
                 }
                 parseKey = false 
                 continue
@@ -508,11 +508,19 @@ Konfiger.prototype.lazyLoader = function() {
     }
 }
 
-Konfiger.prototype.save = function() {
-    console.log(this.filePath)
-	if (this.filePath) {
-        
+Konfiger.prototype.save = function(filePath) {
+	if (!this.filePath && !filePath) {
+        throw new Error("io.github.thecarisma.Konfiger: The entries cannot be saved you need to specify the filePath as parameter or load Konfiger from a file")
     }
+	if (!filePath) {
+        filePath = this.filePath
+    }
+    fs.writeFile(filePath, this.toString(), function(err) {
+        if(err) {
+            throw new Error("io.github.thecarisma.Konfiger: Error occur while saving entries into "
+            + filePath)
+        }
+    })
 }
 
 
