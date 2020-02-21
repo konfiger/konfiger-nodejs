@@ -198,21 +198,21 @@ while (kStream.hasNext()) {
 | Konfiger fromString(rawString, lazyLoad)           | Create the konfiger object from a string, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used. The new Konfiger object is returned.
 | Konfiger fromString(rawString, lazyLoad, delimeter, seperator)           | Create the konfiger object from a string, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the third param is the delimeter and the fourth param is the seperator. The new Konfiger object is returned.
 | Konfiger fromStream(KonfigerStream, Boolean)           | Create the konfiger object from a KonfigerStream object, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed this make data loading progressive as data is only loaded from the file when put or get until the Stream reaches EOF. The new Konfiger object is returned.
-| put(String, Object)           | Put any object into the konfiger the Object value string value will be saved
-| putString(String, String)           | Put a String into the konfiger
-| putBoolean(String, Boolean)           | Put a Boolean` into the konfiger
-| putLong(String, Long)           | Put a Long into the konfiger
-| putInt(String, int)           | Put a Int into the konfiger
-| putFloat(String, Float)           | Put a Float into the konfiger
-| keys()           | Get all the keys entrie in the konfiger 
-| values()           | Get all the values entrie in the konfiger 
-| entries()           | Get all the entries in the konfiger in a `Map<K, V>`
-| get(String, Any)       | Get a value as string, if the key does not exist the seconds parameter will be returned
-| getString(String, String)   | Get a value as string, if the key does not exist the second parameter is returned
-| getBoolean(String, Boolean)   | Get a value as boolean, if the key does not exist the second parameter is returned
-| getLong(String, Long)   | Get a value as long, if the key does not exist the second parameter is returned
-| getInt(String, Int)   | Get a value as int, if the key does not exist the second parameter is returned
-| getFloat(String, Float)   | Get a value as float, if the key does not exist the second parameter is returned
+| void put(key, value)           | Put any object into the konfiger. if the second parameter is a Javascript Object, `JSON.stringify` will be used to get the string value of the object else the appropriate put* method will be called. e.g `put('Name', 'Adewale')` will result in the call `putString('Name', 'Adewale')`.
+| void putString(key, value)           | Put a String into the konfiger, the second parameter must be a string.
+| void putBoolean(key, value)           | Put a Boolean into the konfiger, the second parameter must be a Boolean.
+| void putLong(key, value)           | Put a Long into the konfiger, the second parameter must be a Number.
+| void putInt(key, value)           | Put a Int into the konfiger, alias for `void putLong(key, value)`.
+| void putFloat(key, value)           | Put a Float into the konfiger, the second parameter must be a Float
+| Array keys()           | Get all the keys entries in the konfiger object in iterable array list
+| Array values()           | Get all the values entries in the konfiger object in iterable array list
+| Array[Key, Value] entries()           | Get all the entries in the konfiger in a `[['Key', 'Value'], ...]`
+| String get(key, defaultValue)       | Get a value as string, the second parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `undefined` will be returned
+| String getString(key, defaultValue)   | Get a value as string, the second(string) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified empty string will be returned. 
+| Boolean getBoolean(key, defaultValue)   | Get a value as boolean, the second(Boolean) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `false` will be returned. When trying to cast the value to boolean if an error occur an exception will be thrown except if error tolerance is set to true then false will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
+| Number getLong(key, defaultValue)   | Get a value as Number, the second(Number) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0` will be returned. When trying to cast the value to Number if an error occur an exception will be thrown except if error tolerance is set to true then `0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
+| Number getInt(key, defaultValue)   | Get a value as Number, alias for `Number getLong(key, defaultValue)`.
+| Float getFloat(key, defaultValue)   | Get a value as Float, the second(Float) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0.0` will be returned. When trying to cast the value to Float if an error occur an exception will be thrown except if error tolerance is set to true then `0.0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
 | remove(int)           | Remove the entry at a particular index
 | remove(String)           | Remove the entry using the data Key 
 | appendString(String)          | Append new data to the konfiger from a string, the new string delimeter and seperator must be the same with the current konfigure delimeter and seperator
