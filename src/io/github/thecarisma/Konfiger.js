@@ -537,8 +537,20 @@ Konfiger.prototype.appendString = function(rawString) {
     this.LazyLoad = tmpLazyLoad
 }
 
-
-
+Konfiger.prototype.appendFile = function(filePath) {
+	if (!rawString) {
+        throw new Error("io.github.thecarisma.Konfiger: You must specified the file path that contains the entries to append")
+    }
+    if (!fs.existsSync(filePath)) {
+        throw new Error("io.github.thecarisma.Konfiger: The file does not exists " + filePath)
+    }  
+    var stream_ = new KonfigerStream(filePath, this.delimeter, this.seperator)
+    while (stream_.hasNext()) {
+        var obj = this.stream.next()
+        this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
+    }
+    
+}
 
 
 module.exports = { 
