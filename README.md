@@ -97,6 +97,25 @@ for (var entry of konfiger.entries()) {
 
 ## API Documentations
 
+## How it works
+
+## Contributing
+
+Before you begin contribution please read the contribution guide at [CONTRIBUTING GUIDE](https://github.com/konfiger/konfiger.github.io/blob/master/CONTRIBUTING.MD)
+
+You can open issue or file a request that only address problems in this implementation on this repo, if the issue address the concepts of the package then create an issue or rfc [here](https://github.com/konfiger/konfiger.github.io/)
+
+## Support
+
+You can support some of this community as they make big impact in the developement of people to get started with software engineering.
+
+- https://www.patreon.com/devcareer
+
+## License
+
+MIT License Copyright (c) 2020 Adewale Azeez - konfiger
+
+
 ---
 
 ## API
