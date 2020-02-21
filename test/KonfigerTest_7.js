@@ -2,7 +2,7 @@
 const Konfiger = require("../src/io/github/thecarisma/Konfiger.js")
 
 var konfiger = Konfiger.fromString(`
-Greet=\tHello\nWorld
+Greet=\\tHello\\nWorld
 Name===Adewale Azeez
 Occupation=Software Engineer
 Location=Nigeria
