@@ -12,15 +12,16 @@ ___
 ## Table of content
 - [Installation](#installation)
 - [Example](#example)
+    - [Basic](#basic)
+    - [Write to disk](#write-to-disk)
+- [API Documentations](#api-documentation)
 - [Usage](#usage)
 	- [Initialization](#initialization)
-	- [Inserting](#inserting-data)
-	- [Finding](#finding-data)
-	- [Updating](#updating-data)
-	- [Inserting](#inserting-data)
-	- [Removing](#removing-data)
-    - [IO Local disk](#io-local-disk)
-- [API Documentation](#how-it-works)
+	- [Inserting](#inserting)
+	- [Finding](#finding)
+	- [Updating](#updating)
+	- [Removing](#removing)
+    - [Saving to local disk](#saving-to-local-disk)
 - [How it works](#how-it-works)
 - [Contributing](#contributing)
 - [Support](#support)
@@ -50,7 +51,9 @@ yarn add konfiger
 
 ## Example
 
-The following example load, update, read and remove a simple key value object 
+### Basic
+
+The following example load from file, add an entry, remove an entry and iterate all the key value entries
 
 ```js
 const { Konfiger } = require("konfiger")
@@ -58,8 +61,11 @@ const { Konfiger } = require("konfiger")
 //initialize the key-value from file
 var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 
+//add a string
+konfiger.putString("Greet", "Hello Worlrd")
+
 //get an object
-konfiger.get("Greet")
+console.log(konfiger.get("Greet"))
 
 //remove an object
 konfiger.remove("Greet")
@@ -73,14 +79,25 @@ for (var entry of konfiger.entries()) {
 }
 ```
 
-## Legends
+### Write to disk
 
-```
-kvp  - Key Value Pair
-kvdb - Key value Database
-pss  - Possibly
-kvo  - Key Value Object
-```
+## Usage
+
+### Initialization
+
+### Inserting
+
+### Finding
+
+### Updating
+
+### Removing
+
+### Saving to local disk
+
+## API Documentations
+
+---
 
 ## API
 

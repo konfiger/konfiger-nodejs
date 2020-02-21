@@ -4,8 +4,11 @@ const { Konfiger } = require("../index.js")
 //initialize the key-value from file
 var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 
+//add a string
+konfiger.putString("Greet", "Hello Worlrd")
+
 //get an object
-konfiger.get("Greet")
+console.log(konfiger.get("Greet"))
 
 //remove an object
 konfiger.remove("Greet")
