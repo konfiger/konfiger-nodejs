@@ -7,7 +7,7 @@ Name===Adewale Azeez
 Occupation=Software Engineer
 Location=Nigeria
 `, true)
-//konfiger.putString("Greet", "\tHello\nWorld")
+konfiger.putString("Greet", `\tHello      World`)
 
 //var konfiger = Konfiger.fromFile('test/test.txt', true)
 

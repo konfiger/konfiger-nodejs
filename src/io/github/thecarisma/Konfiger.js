@@ -118,6 +118,15 @@ Konfiger.prototype.putString = function(key, value) {
     if (!konfigerUtil.isString(value)) {
         throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting String found " + konfigerUtil.typeOf(value))
     }
+    if (this.lazyLoad && this.contains(key) && !this.loadingEnds) {
+        var _value = this.getString(key)
+        if (_value === value) {
+            return
+        }
+        console.log("we got it: " + _value)
+        console.log("we got it: " + value)
+    }
+        console.log("adding: " + value)
     this.konfigerObjects.set(key, value)
     this.changesOccur = true
     if (this.enableCache_) {
@@ -189,7 +198,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
                         if (subkey !== "") {
                             if (parseKey === true && this.errTolerance === false) {
                                 this.loadingEnds = true
-                                throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
+                                throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                             }
                             this.putString(subkey, value)
                             if (subkey === key) {
@@ -213,7 +222,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
                         if (subkey === "" && value ==="") continue
                         if (parseKey === true && this.errTolerance === false) {
                             this.loadingEnds = true
-                            throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
+                            throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                         }
                         this.putString(subkey, value)
                         if (subkey === key) {
@@ -230,7 +239,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
                     if (character === this.delimeter) {
                         if (value !== "" && this.errTolerance !== false) {
                             this.loadingEnds = true
-                            throw new Error("com.azeezadewale.konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
+                            throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
                         }
                         parseKey = false 
                         continue
@@ -446,14 +455,14 @@ Konfiger.prototype.lazyLoader = function() {
         var line = 1
         var column = 0
         var i = 0
-        this.rawString = konfigerUtil.escapeString(this.rawString, [this.seperator])
+        //this.rawString = konfigerUtil.escapeString(this.rawString, [this.seperator])
         for (; i <= this.rawString.length; ++i) {
             if (i == this.rawString.length) {
                 this.rawString = ""
                 if (key !== "") {
                     if (parseKey === true && this.errTolerance === false) {
                         this.loadingEnds = true
-                        throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column)
+                        throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column)
                     }
                     this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
                 }
@@ -461,7 +470,6 @@ Konfiger.prototype.lazyLoader = function() {
                 break
             }
             var character = this.rawString[i]
-            //var character = konfigerUtil.escapeString(this.rawString[i], [this.seperator])
             column++;
             if (character === '\n') {
                 line++;
@@ -469,10 +477,9 @@ Konfiger.prototype.lazyLoader = function() {
             }
             if (character === this.seperator) {
                 if (key === "" && value ==="") continue
-                    console.log(value)
                 if (parseKey === true && this.errTolerance === false) {
                     this.loadingEnds = true
-                    throw new Error("com.azeezadewale.konfiger: Invalid entry detected near Line " + line + ":" + column);
+                    throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                 }
                 this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
                 if (parseKey) {
@@ -487,7 +494,7 @@ Konfiger.prototype.lazyLoader = function() {
             if (character === this.delimeter && parseKey) {
                 if (value !== "" && this.errTolerance !== false) {
                     this.loadingEnds = true
-                    throw new Error("com.azeezadewale.konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
+                    throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
                 }
                 parseKey = false 
                 continue
