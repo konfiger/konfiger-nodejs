@@ -81,13 +81,13 @@ KonfigerStream.prototype.next = function() {
         }
         this.readPosition++
         var char_ = this.buffer.toString('utf-8', 0, this.buffer[0])
-        if (char_ === this.delimeter) {
-            parseKey = false
-            continue
-        }
         //console.log(prevChar + ":" + char_ + "-" +  this.seperator)
         if (char_ === this.seperator && prevChar != '\\') {
             break
+        }
+        if (char_ === this.delimeter && parseKey) {
+            parseKey = false
+            continue
         }
         if (parseKey === true) {
             key += char_

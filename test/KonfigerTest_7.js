@@ -7,7 +7,7 @@ var konfiger = Konfiger.fromString(`Name===Adewale AzeezgOccupation=Software En\
 konfiger.setSeperator('\n')
 konfiger.putString("Greet", `\tHello-      World`)
 
-console.log(konfiger.getString("Location"))
+console.log(konfiger.getString("Greet"))
 console.log(konfiger.toString())
 konfiger.save('test/test.txt')
 

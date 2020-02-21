@@ -78,9 +78,18 @@ function escapeString(value, extraEscape) {
                 if ("tnvrfb?'\"\0000".indexOf(value[++i]) > -1) {
                     finalValue += "\\" + value[i]
                 } else {
-                    finalValue += "\\\\"
+                    if (extraEscape) {
+                        for (var extra of extraEscape) {
+                            if (value[i] === extra) {
+                        console.log("Screw " + value[i] + ":" + extra + "-" + c)
+                                finalValue += value[i]
+                                break
+                            }
+                        }
+                    } else {
+                        finalValue += "\\\\"
+                    }
                 }
-                
                 break
             case '\?':
                 finalValue += "\\?"

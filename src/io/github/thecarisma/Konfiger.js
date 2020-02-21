@@ -177,7 +177,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
             if (this.createdFromStream) {
                 while (this.stream.hasNext()) {
                     var obj = this.stream.next()
-                    this.konfigerObjects.set(obj[0], obj[1])
+                    this.konfigerObjects.set(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
                     this.changesOccur = true
                     if (obj[0] === key) {
                         if (this.enableCache_) {
@@ -451,7 +451,7 @@ Konfiger.prototype.lazyLoader = function() {
     if (this.createdFromStream) {
         while (this.stream.hasNext()) {
             var obj = this.stream.next()
-            this.putString(obj[0], obj[1])
+            this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
         }
         this.loadingEnds = true
     } else {
