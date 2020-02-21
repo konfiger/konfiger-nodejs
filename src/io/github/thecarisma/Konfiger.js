@@ -37,6 +37,7 @@ function fromString(rawString, lazyLoad, delimeter, seperator) {
 
 function fromStream(konfigerStream, lazyLoad) {
     const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, true, konfigerStream, undefined)
+    konfiger.filePath = konfigerStream.filePath
     return konfiger
 }
 
@@ -56,6 +57,7 @@ function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream, raw
     this.stringValue = ""
     this.kArray = []
     this.readIndex = 0
+    this.filePath = undefined
     
     if (!this.lazyLoad) {
         this.lazyLoader()
@@ -217,7 +219,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
                         line++;
                         column = 0 
                     }
-                    if (character === this.seperator) {
+                    if (character === this.seperator && this.rawString[this.readIndex-1] != '\\') {
                         if (subkey === "" && value ==="") continue
                         if (parseKey === true && this.errTolerance === false) {
                             this.loadingEnds = true
@@ -503,6 +505,13 @@ Konfiger.prototype.lazyLoader = function() {
                 value += character
             }
         }
+    }
+}
+
+Konfiger.prototype.save = function() {
+    console.log(this.filePath)
+	if (this.filePath) {
+        
     }
 }
 
