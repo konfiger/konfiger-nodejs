@@ -63,6 +63,9 @@ KonfigerStream.prototype.hasNext = function() {
 }
 
 KonfigerStream.prototype.next = function() {
+    if (this.doneReading_) {
+        throw new Error("io.github.thecarisma.KonfigerStream: You cannot read beyound the stream length, always use hasNext() to verify the Stream still has an entry")
+    }
     var fd = fs.openSync(this.filePath, 'r')
     if (!fd) {
         this.doneReading()

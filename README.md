@@ -176,7 +176,7 @@ while (kStream.hasNext()) {
 | KonfigerStream(filePath)  | initialize a new KonfigerStream object from the filePath. The default delimeter `=` and seperator `\n` is used. It throws en exception if the filePath does not exist
 | KonfigerStream(filePath, delimeter, seperator)  | initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character
 | Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
-| Array next()  | Get 
+| Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream
 
 ### Konfiger
 
