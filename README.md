@@ -11,10 +11,13 @@ ___
 
 ## Table of content
 - [Installation](#installation)
-- [Example](#example)
+- [Examples](#examples)
     - [Basic](#basic)
     - [Write to disk](#write-to-disk)
+    - [Read file with Stream](#read-file-with-stream)
 - [API Documentations](#api-documentation)
+    - [Konfiger](#konfiger)
+    - [KonfigerStream](#konfigerstream)
 - [Usage](#usage)
 	- [Initialization](#initialization)
 	- [Inserting](#inserting)
@@ -62,7 +65,7 @@ const { Konfiger } = require("konfiger")
 var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 
 //add a string
-konfiger.putString("Greet", "Hello Worlrd")
+konfiger.putString("Greet", "Hello World")
 
 //get an object
 console.log(konfiger.get("Greet"))
@@ -73,13 +76,41 @@ konfiger.remove("Greet")
 //add an String
 konfiger.putString("What", "i don't know what to write here");
 
-//print all the objects
 for (var entry of konfiger.entries()) {
 	console.log(entry)
 }
 ```
 
 ### Write to disk
+
+Initialize an empty konfiger object and populate it with random data, then save it to a file
+
+```js
+const { Konfiger } = require("konfiger")
+
+let randomValues = [ 'One', 'Two', 'Three', 'Four', 'Five' ]
+var konfiger = Konfiger.fromString("", false)
+
+for (var i = 0; i < 200; ++i) {
+    var random = Math.floor(Math.random() * (randomValues.length - 1) + 0)
+    konfiger.putString(''+i, randomValues[random])
+}
+konfiger.save('test/konfiger.conf')
+```
+
+### Read file with Stream
+
+Read a key value file using the progressive [KonfigerStream](https://github.com/konfiger/konfiger-nodejs/blob/master/src/io/github/thecarisma/KonfigerStream.js), each scan returns the current key value array `[ 'key', 'value']`
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var kStream = new KonfigerStream('test/konfiger.conf')
+while (kStream.hasNext()) {
+    let entry = kStream.next()
+    console.log(entry)
+}
+```
 
 ## Usage
 
