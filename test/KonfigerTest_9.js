@@ -10,3 +10,7 @@ Language=English
 `)
 konfiger.appendFile('test/test.txt')
 console.log(konfiger.toString())
+
+for (entry of konfiger.entries()) {
+    console.log(entry)
+}
