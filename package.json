@@ -1,10 +1,10 @@
 {
   "name": "konfiger",
-  "version": "0.1.0",
-  "description": "Light weight package to easily manage, load, update, save configuration and data files",
+  "version": "1.0.0",
+  "description": "Light weight package to manage key value based configuration and data files",
   "main": "index.js",
   "scripts": {
-    "test": "node test/KonfigerStreamTest.js && node test/KonfigerStreamTest_1.js && node test/KonfigerTest.js && node test/KonfigerTest_1.js && node test/KonfigerTest_2.js && node test/KonfigerTest_3.js && node test/KonfigerTest_4.js && node test/KonfigerTest_5.js && node test/KonfigerTest_6.js && node test/KonfigerUtilTest.js && node test/KonfigerUtilTest_1.js"
+    "test": "node test/KonfigerStreamTest.js && node test/KonfigerStreamTest_1.js && node test/KonfigerTest.js && node test/KonfigerTest_1.js && node test/KonfigerTest_2.js && node test/KonfigerTest_3.js && node test/KonfigerTest_4.js && node test/KonfigerTest_5.js && node test/KonfigerTest_6.js && node test/KonfigerTest_8.js && node test/KonfigerTest_9.js && node test/KonfigerUtilTest.js && node test/KonfigerUtilTest_1.js"
   },
   "repository": {
     "type": "git",

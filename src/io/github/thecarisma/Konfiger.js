@@ -195,7 +195,6 @@ Konfiger.prototype.get = function(key, defaultValue) {
                 var column = 0
                 for (; this.readIndex <= this.rawString.length; ++this.readIndex) {
                     if (this.readIndex == this.rawString.length) {
-                        this.rawString = ""
                         if (subkey !== "") {
                             if (parseKey === true && this.errTolerance === false) {
                                 this.loadingEnds = true
@@ -462,7 +461,6 @@ Konfiger.prototype.lazyLoader = function() {
         var column = 0
         for (; this.readIndex <= this.rawString.length; ++this.readIndex) {
             if (this.readIndex == this.rawString.length) {
-                this.rawString = ""
                 if (key !== "") {
                     if (parseKey === true && this.errTolerance === false) {
                         this.loadingEnds = true
@@ -522,6 +520,24 @@ Konfiger.prototype.save = function(filePath) {
         }
     })
 }
+
+Konfiger.prototype.appendString = function(rawString) {
+	if (!rawString) {
+        throw new Error("io.github.thecarisma.Konfiger: You must specified the string that contains the entries to append")
+    }
+    this.loadingEnds = false
+    var tmpcreatedFromStream = this.createdFromStream
+    var tmpLazyLoad = this.LazyLoad
+    
+    this.rawString += rawString
+    this.createdFromStream = false
+    this.LazyLoad = false
+	this.lazyLoader()
+    this.createdFromStream = tmpcreatedFromStream
+    this.LazyLoad = tmpLazyLoad
+}
+
+
 
 
 
