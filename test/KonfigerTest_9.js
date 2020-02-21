@@ -8,4 +8,5 @@ console.log()
 konfiger.appendString(`
 Language=English
 `)
+konfiger.appendFile('test/test.txt')
 console.log(konfiger.toString())

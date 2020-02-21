@@ -538,7 +538,7 @@ Konfiger.prototype.appendString = function(rawString) {
 }
 
 Konfiger.prototype.appendFile = function(filePath) {
-	if (!rawString) {
+	if (!filePath) {
         throw new Error("io.github.thecarisma.Konfiger: You must specified the file path that contains the entries to append")
     }
     if (!fs.existsSync(filePath)) {
@@ -546,7 +546,7 @@ Konfiger.prototype.appendFile = function(filePath) {
     }  
     var stream_ = new KonfigerStream(filePath, this.delimeter, this.seperator)
     while (stream_.hasNext()) {
-        var obj = this.stream.next()
+        var obj = stream_.next()
         this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
     }
     
