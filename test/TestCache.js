@@ -1,5 +1,5 @@
 
-const Konfiger = require("../src/io/github/thecarisma/Konfiger.js")
+const { Konfiger } = require("../index.js")
 const KonfigerUtil = require("../src/io/github/thecarisma/KonfigerUtil.js")
 const { performance } = require('perf_hooks');
 

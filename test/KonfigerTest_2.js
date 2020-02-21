@@ -1,5 +1,5 @@
 
-const Konfiger = require("../src/io/github/thecarisma/Konfiger.js")
+const { Konfiger } = require("../index.js")
 
 var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 konfiger.setSeperator('-')

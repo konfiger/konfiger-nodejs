@@ -69,6 +69,27 @@ function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream, raw
     this.currentCachedObject = { ckey : "", cvalue : null }
 }
 
+Konfiger.prototype.put = function(key, value) {
+    if (konfigerUtil.isString(key)) {
+        if (konfigerUtil.isString(value)) {
+            this.putString(key, value)
+            
+        } else if (konfigerUtil.isBoolean(value)) {
+            this.putBoolean(key, value)
+            
+        } else if (konfigerUtil.isNumber(value)) {
+            this.putLong(key, value)
+            
+        } else {
+            this.putString(key, JSON.stringify(value))
+        }
+        
+        
+    } else {
+        konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, key must be a string")
+    }
+}
+
 Konfiger.prototype.putString = function(key, value) {
     if (this.konfigerObjects.size === MAX_CAPACITY) {
         throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity 10,000,000")

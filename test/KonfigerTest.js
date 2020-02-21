@@ -1,5 +1,5 @@
 
-const Konfiger = require("../src/io/github/thecarisma/Konfiger.js")
+const { Konfiger } = require("../index.js")
 
 console.log(Konfiger.MAX_CAPACITY)
 

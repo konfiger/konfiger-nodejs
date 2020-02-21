@@ -6,33 +6,21 @@
 
 The sample use cases of this package is loading configuration file, language file, preference setting in an application. More use cases can be seen [here](https://konfiger.github.io/usecases/index.html).
 
-The package does not do any Input and Output operation as there are several way to read and write to file and the methods has their strength and weakness therefore the developer has to find the efficient way to load and save locally.
 
 ___
 
 ## Table of content
 - [Installation](#installation)
 - [Example](#example)
-- [Legends](#legends)
-- [API](#api)
-	- [Creating/loading a document](#creating/loading-a-document)
-	- [Inserting data](#inserting-data)
-	- [Finding data](#finding-data)
-	    - [Get KeyValue Object](#get-keyvalue-object)
-	    - [Get Like KeyValue Object](#get-like-keyvalue-object)
-	    - [Get](#get-like)
-	    - [Get Like](#get-like)
-	- [Updating data](#updating-data)
-        - [Set](#set)
-        - [Set KeyValue Object](#set-keyvalue-object)
-	- [Inserting data](#inserting-data)
-	- [Removing data](#removing-data)
-	- [Size, Clear, isEmpty](#size,-clear,-isempty)
-        - [Size](#size)
-        - [Clear](#clear)
-        - [isEmpty](#isempty)
-    - [Saving collection](#saving-collection)
-    - [Iterating collection](#iterating-collection)
+- [Usage](#usage)
+	- [Initialization](#initialization)
+	- [Inserting](#inserting-data)
+	- [Finding](#finding-data)
+	- [Updating](#updating-data)
+	- [Inserting](#inserting-data)
+	- [Removing](#removing-data)
+    - [IO Local disk](#io-local-disk)
+- [API Documentation](#how-it-works)
 - [How it works](#how-it-works)
 - [Contributing](#contributing)
 - [Support](#support)
@@ -40,24 +28,24 @@ ___
 
 ## Installation
 
-Module name on npm and bower is @thecarisma/konfiger.
+Module name on npm and bower is konfiger.
 
 Using npm:
 
 ```bash
-npm install @thecarisma/konfiger
+npm install konfiger
 ```
 
 Using bower:
 
 ```bash
-bower install @thecarisma/konfiger
+bower install konfiger
 ```
 
 Using yarn:
 
 ```bash
-yarn add @thecarisma/konfiger
+yarn add konfiger
 ```
 
 ## Example
@@ -65,24 +53,24 @@ yarn add @thecarisma/konfiger
 The following example load, update, read and remove a simple key value object 
 
 ```js
-const konfiger = require("@thecarisma/konfiger");
+const { Konfiger } = require("konfiger")
 
-//initialize the key-value 
-var konfiger = new konfiger.konfiger("Greet=Hello World,Project=konfiger", true, '=', ',', false);
+//initialize the key-value from file
+var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 
 //get an object
-console.log(konfiger.get("Greet"));
+konfiger.get("Greet")
 
 //remove an object
-konfiger.remove("Greet");
+konfiger.remove("Greet")
 
-//add an object
-konfiger.add("What", "i don't know what to write here");
+//add an String
+konfiger.putString("What", "i don't know what to write here");
 
 //print all the objects
-for (var kvo of konfiger) {
-	console.log('$' + kvo);
-};
+for (var entry of konfiger.entries()) {
+	console.log(entry)
+}
 ```
 
 ## Legends

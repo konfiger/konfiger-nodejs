@@ -1,5 +1,5 @@
 
-const Konfiger = require("../src/io/github/thecarisma/Konfiger.js")
+const { Konfiger } = require("../index.js")
 
 var konfiger = Konfiger.fromString(`Name===Adewale AzeezgOccupation=Software En\\gineergGreet=\tHello\nWorldgLocation=Ni\\geria`, false, '=', 'g')
 //var konfiger = Konfiger.fromFile('test/test.txt', true, '=', 'g')
