@@ -14,10 +14,12 @@ ___
 - [Examples](#examples)
     - [Basic](#basic)
     - [Write to disk](#write-to-disk)
+    - [Get Types](#get-types)
+    - [Seperator and delimeter](#seperator-and-delimeter)
     - [Read file with Stream](#read-file-with-stream)
 - [API Documentations](#api-documentation)
-    - [Konfiger](#konfiger)
     - [KonfigerStream](#konfigerstream)
+    - [Konfiger](#konfiger)
 - [Usage](#usage)
 	- [Initialization](#initialization)
 	- [Inserting](#inserting)
@@ -98,6 +100,45 @@ for (var i = 0; i < 200; ++i) {
 konfiger.save('test/konfiger.conf')
 ```
 
+### Get Types
+
+Load the entries as string and get them as a true type.
+
+```js
+const { Konfiger } = require("konfiger")
+
+var konfiger = Konfiger.fromString(`
+String=This is a string
+Number=215415245
+Float=56556.436746
+Boolean=true
+`, false)
+
+var str = konfiger.getString("String")
+var num = konfiger.getLong("Number")
+var flo = konfiger.getFloat("Float")
+var bool = konfiger.getBoolean("Boolean")
+
+console.log(typeof str)
+console.log(typeof num)
+console.log(typeof flo)
+console.log(typeof bool)
+```
+
+### Seperator and delimeter
+
+Initailize a konfiger object with default seperator and delimeter then change the seperator and selimeter at runtime
+
+```js
+const { Konfiger } = require("konfiger")
+
+let konfiger = Konfiger.fromFile('test/konfiger.conf', false)
+konfiger.setDelimeter('?')
+konfiger.setSeperator(',')
+
+console.log(konfiger.toString())
+```
+
 ### Read file with Stream
 
 Read a key value file using the progressive [KonfigerStream](https://github.com/konfiger/konfiger-nodejs/blob/master/src/io/github/thecarisma/KonfigerStream.js), each scan returns the current key value array `[ 'key', 'value']`
@@ -127,6 +168,25 @@ while (kStream.hasNext()) {
 ### Saving to local disk
 
 ## API Documentations
+
+### KonfigerStream
+
+| Function        | Description         
+| --------------- | ------------- 
+| KonfigerStream(filePath)  | initialize a new KonfigerStream object from the filePath. The default delimeter `=` and seperator `\n` is used. It throws en exception if the filePath does not exist
+| KonfigerStream(filePath, delimeter, seperator)  | initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character
+| Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
+| Array next()  | Get 
+
+### Konfiger
+
+| Field        | Description         
+| --------------- | ------------- 
+| MAX_CAPACITY  | The number of datas the konfiger can take, 10000000
+
+| Function        | Description         
+| --------------- | ------------- 
+| MAX_CAPACITY  | The number of datas the konfiger can take, 10000000
 
 ## How it works
 

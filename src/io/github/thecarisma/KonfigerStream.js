@@ -9,7 +9,6 @@
 const konfigerUtil = require("./KonfigerUtil.js")
 const fs = require("fs")
  
- //does not throw error
 function KonfigerStream(filePath, delimeter, seperator) {
 	this.filePath = filePath;
 	this.delimeter = (delimeter ? delimeter : '=')
@@ -47,7 +46,7 @@ KonfigerStream.prototype.validateFileExistence = function(filePath) {
 }
 
 KonfigerStream.prototype.hasNext = function() {
-    if (!this.hasNext_ && !this.doneReading_) {
+    if (!this.doneReading_) {
         var fd = fs.openSync(this.filePath, 'r')
         if (!fd) {
             this.doneReading()
