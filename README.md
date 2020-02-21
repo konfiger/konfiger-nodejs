@@ -17,7 +17,7 @@ ___
     - [Get Types](#get-types)
     - [Seperator and delimeter](#seperator-and-delimeter)
     - [Read file with Stream](#read-file-with-stream)
-- [API Documentations](#api-documentation)
+- [API Documentations](#api-documentations)
     - [KonfigerStream](#konfigerstream)
     - [Konfiger](#konfiger)
         - [Fields](#fields)
@@ -193,11 +193,11 @@ while (kStream.hasNext()) {
 
 | Function        | Description         
 | --------------- | ------------- 
-| fromFile(String, Boolean)           | Load the configer datas from a file, the first parameter is the file path, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used
-| fromFile(String, Boolean, Char, Char)           | Load the configer datas from a file, the first parameter is the file path, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the third param is the delimeter and the fourth param is the seperator
-| fromString(String, Boolean)           | Load the configer datas from a file, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used
-| fromString(String, Boolean, Char, Char)           | Load the configer datas from a file, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the third param is the delimeter and the fourth param is the seperator
-| fromStream(KonfigerStream, Boolean)           | Load the configer datas from a KonfigerStream object, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed this make data loading progressive as data is only loaded from the file when put or get until the Stream reaches EOF
+| Konfiger fromFile(filePath, lazyLoad)           | Create the konfiger object from a file, the first parameter(string) is the file path, the second parameter(boolean) indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used. This creates the konfiger object from call to `fromStream(konfigerStream, lazyLoad)` with the konfigerStream initialized with the filePath parameter. The new Konfiger object is returned.
+| Konfiger fromFile(filePath, lazyLoad, delimeter, seperator)           | Create the konfiger object from a file, the first(string) parameter is the file path, the second parameter(boolean) indicates whether to read all the entry in the file in the constructor or when needed, the third param(char) is the delimeter and the fourth param(char) is the seperator. This creates the konfiger object from call to `fromStream(konfigerStream, lazyLoad)` with the konfigerStream initialized with the filePath parameter. The new Konfiger object is returned.
+| Konfiger fromString(rawString, lazyLoad)           | Create the konfiger object from a string, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used. The new Konfiger object is returned.
+| Konfiger fromString(rawString, lazyLoad, delimeter, seperator)           | Create the konfiger object from a string, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the third param is the delimeter and the fourth param is the seperator. The new Konfiger object is returned.
+| Konfiger fromStream(KonfigerStream, Boolean)           | Create the konfiger object from a KonfigerStream object, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed this make data loading progressive as data is only loaded from the file when put or get until the Stream reaches EOF. The new Konfiger object is returned.
 | put(String, Object)           | Put any object into the konfiger the Object value string value will be saved
 | putString(String, String)           | Put a String into the konfiger
 | putBoolean(String, Boolean)           | Put a Boolean` into the konfiger
