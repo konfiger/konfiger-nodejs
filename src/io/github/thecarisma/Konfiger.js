@@ -37,7 +37,7 @@ function fromString(rawString, lazyLoad, delimeter, seperator) {
 }
 
 function fromStream(konfigerStream, lazyLoad) {
-    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, true, konfigerStream, undefined)
+    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, true, konfigerStream, "")
     konfiger.filePath = konfigerStream.filePath
     return konfiger
 }

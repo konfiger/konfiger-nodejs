@@ -5,7 +5,7 @@ var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 
 console.log(konfiger.toString())
 console.log()
-/*konfiger.appendString(`
+konfiger.appendString(`
 Language=English
-`)*/
+`)
 console.log(konfiger.toString())
