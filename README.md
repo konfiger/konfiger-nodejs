@@ -20,6 +20,8 @@ ___
 - [API Documentations](#api-documentation)
     - [KonfigerStream](#konfigerstream)
     - [Konfiger](#konfiger)
+        - [Fields](#fields)
+        - [Functions](#functions)
 - [Usage](#usage)
 	- [Initialization](#initialization)
 	- [Inserting](#inserting)
@@ -54,7 +56,7 @@ Using yarn:
 yarn add konfiger
 ```
 
-## Example
+## Examples
 
 ### Basic
 
@@ -177,16 +179,57 @@ while (kStream.hasNext()) {
 | KonfigerStream(filePath, delimeter, seperator)  | initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character
 | Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
 | Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream
+| void validateFileExistence(filePath)  | Validate the existence of the specified file path if it does not exist an exception is thrown
 
 ### Konfiger
+
+#### Fields
 
 | Field        | Description         
 | --------------- | ------------- 
 | MAX_CAPACITY  | The number of datas the konfiger can take, 10000000
 
+#### Functions
+
 | Function        | Description         
 | --------------- | ------------- 
-| MAX_CAPACITY  | The number of datas the konfiger can take, 10000000
+| fromFile(String, Boolean)           | Load the configer datas from a file, the first parameter is the file path, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used
+| fromFile(String, Boolean, Char, Char)           | Load the configer datas from a file, the first parameter is the file path, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the third param is the delimeter and the fourth param is the seperator
+| fromString(String, Boolean)           | Load the configer datas from a file, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used
+| fromString(String, Boolean, Char, Char)           | Load the configer datas from a file, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the third param is the delimeter and the fourth param is the seperator
+| fromStream(KonfigerStream, Boolean)           | Load the configer datas from a KonfigerStream object, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed this make data loading progressive as data is only loaded from the file when put or get until the Stream reaches EOF
+| put(String, Object)           | Put any object into the konfiger the Object value string value will be saved
+| putString(String, String)           | Put a String into the konfiger
+| putBoolean(String, Boolean)           | Put a Boolean` into the konfiger
+| putLong(String, Long)           | Put a Long into the konfiger
+| putInt(String, int)           | Put a Int into the konfiger
+| putFloat(String, Float)           | Put a Float into the konfiger
+| keys()           | Get all the keys entrie in the konfiger 
+| values()           | Get all the values entrie in the konfiger 
+| entries()           | Get all the entries in the konfiger in a `Map<K, V>`
+| get(String, Any)       | Get a value as string, if the key does not exist the seconds parameter will be returned
+| getString(String, String)   | Get a value as string, if the key does not exist the second parameter is returned
+| getBoolean(String, Boolean)   | Get a value as boolean, if the key does not exist the second parameter is returned
+| getLong(String, Long)   | Get a value as long, if the key does not exist the second parameter is returned
+| getInt(String, Int)   | Get a value as int, if the key does not exist the second parameter is returned
+| getFloat(String, Float)   | Get a value as float, if the key does not exist the second parameter is returned
+| remove(int)           | Remove the entry at a particular index
+| remove(String)           | Remove the entry using the data Key 
+| appendString(String)          | Append new data to the konfiger from a string, the new string delimeter and seperator must be the same with the current konfigure delimeter and seperator
+| appendFile(String)          | Read new datas from the file path and append, the new file delimeter and seperator must be the same with the current konfigure delimeter and seperator
+| save(String?)         | Save the konfiger datas into it IO path if specified, if no IO path specifed in the parameter the file path used in constructor is used, this does not clear the data
+| getSeperator()           | Get seperator char that seperate the datas
+| getDelimeter()           | Get delimeter char that seperated the key from object
+| setSeperator(Char)           | Change seperator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function
+| setDelimeter(Char)           | Change delimeter char that seperated the key from object, note that the file is not updates, to change the file call the `save()` function 
+| size()           | Get the total size of datas in the konfiger
+| clear()           | clear all the datas in the konfiger. if the konfiger is attached to a file, the file is updated immediatly 
+| isEmpty()           | Check if the konfiger does not have an data
+| updateAt(Int, Object)           | Update the value at the specified index with the new Object String value, throws an error if OutOfRange sn errTolerance is false
+| contains(String)           | Check if the konfiger contains a key 
+| enableCache(Boolean)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though)
+| errorTolerance(Boolean)           | Enable or disable the error tolerancy property of the konfiger
+| toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator
 
 ## How it works
 
