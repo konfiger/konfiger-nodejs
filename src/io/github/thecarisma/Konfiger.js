@@ -216,7 +216,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
                         value = "";
                         continue
                     }
-                    if (character === this.delimeter) {
+                    if (character === this.delimeter && parseKey) {
                         if (value !== "" && this.errTolerance !== false) {
                             this.loadingEnds = true
                             throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");

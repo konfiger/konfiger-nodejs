@@ -1,7 +1,7 @@
 
 const KonfigerStream = require("../src/io/github/thecarisma/KonfigerStream.js")
 
-var ks = new KonfigerStream('test/test.config.ini', '=', '\n')
+var ks = KonfigerStream.fileStream('test/test.txt', '=', '\n')
 while (ks.hasNext()) {
     console.log(ks.next())
 }
