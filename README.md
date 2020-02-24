@@ -213,23 +213,23 @@ while (kStream.hasNext()) {
 | Number getLong(key, defaultValue)   | Get a value as Number, the second(Number) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0` will be returned. When trying to cast the value to Number if an error occur an exception will be thrown except if error tolerance is set to true then `0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
 | Number getInt(key, defaultValue)   | Get a value as Number, alias for `Number getLong(key, defaultValue)`.
 | Float getFloat(key, defaultValue)   | Get a value as Float, the second(Float) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0.0` will be returned. When trying to cast the value to Float if an error occur an exception will be thrown except if error tolerance is set to true then `0.0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
-| remove(int)           | Remove the entry at a particular index
-| remove(String)           | Remove the entry using the data Key 
-| appendString(String)          | Append new data to the konfiger from a string, the new string delimeter and seperator must be the same with the current konfigure delimeter and seperator
-| appendFile(String)          | Read new datas from the file path and append, the new file delimeter and seperator must be the same with the current konfigure delimeter and seperator
-| save(String?)         | Save the konfiger datas into it IO path if specified, if no IO path specifed in the parameter the file path used in constructor is used, this does not clear the data
-| getSeperator()           | Get seperator char that seperate the datas
-| getDelimeter()           | Get delimeter char that seperated the key from object
-| setSeperator(Char)           | Change seperator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function
-| setDelimeter(Char)           | Change delimeter char that seperated the key from object, note that the file is not updates, to change the file call the `save()` function 
-| size()           | Get the total size of datas in the konfiger
-| clear()           | clear all the datas in the konfiger. if the konfiger is attached to a file, the file is updated immediatly 
-| isEmpty()           | Check if the konfiger does not have an data
-| updateAt(Int, Object)           | Update the value at the specified index with the new Object String value, throws an error if OutOfRange sn errTolerance is false
-| contains(String)           | Check if the konfiger contains a key 
-| enableCache(Boolean)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though)
-| errorTolerance(Boolean)           | Enable or disable the error tolerancy property of the konfiger
-| toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator
+| remove(keyIndex)           | Remove a key value entry at a particular index
+| remove(keyIndex)           | Remove a key value entry using the entry Key 
+| appendString(rawString)          | Append new data to the konfiger from a string, the new string delimeter and seperator must be the same with the current konfigure delimeter and seperator, if it not the same use the `setDelimeter` and `setSeperator` to change the konfiger seperator and delimeter to the new file seperator and delimeter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
+| appendFile(filePath)          | Read new datas from the file path and append, the new file delimeter and seperator must be the same with the current konfigure delimeter and seperator, if it not the same use the `setDelimeter` and `setSeperator` to change the konfiger seperator and delimeter to the new file seperator and delimeter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
+| save(filePath?)         | Save the konfiger datas into a file. The argument filePath is optional if specified the entries is writtent to the filePath else the filePath used to initialize the Konfiger object is used and if the Konfiger is initialized `fromString` and the filePath is not specified an exception is thrown. This does not clear the already added entries.
+| getSeperator()           | Get seperator char that seperate the key value entry, default is `\n`.
+| getDelimeter()           | Get delimeter char that seperated the key from it value, default is `=`.
+| setSeperator(seperator)           | Change seperator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function
+| setDelimeter(delimeter)           | Change delimeter char that seperated the key from object, note that the file is not updates, to change the file call the `save()` function 
+| size()           | Get the total size of key value entries in the konfiger
+| clear()           | clear all the key value entries in the konfiger. This does not update the file call the `save` method to update the file
+| isEmpty()           | Check if the konfiger does not have an key value entry.
+| updateAt(index, value)           | Update the value at the specified index with the new string value, throws an error if the index is OutOfRange 
+| contains(key)           | Check if the konfiger contains a key 
+| enableCache(enableCache_)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though). Using `getString` method **99999999999** with cache disabled takes over 1hr and with cache enabled takes 20min.
+| errorTolerance(errTolerance)           | Enable or disable the error tolerancy property of the konfiger, if enabled no exception will be throw even when it suppose to there for it a bad idea but useful in a fail safe environment.
+| toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 
 ## How it works
 
