@@ -27,6 +27,11 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
     if (this.isFile === true) {
         this.validateFileExistence(streamObj)
         this.buffer = new Buffer.alloc(1)
+    } else {
+        if (!konfigerUtil.isString(this.streamObj)) {
+            throw new Error("io.github.thecarisma.KonfigerStream: Invalid first argument expecting string found " 
+                            + konfigerUtil.typeOf(this.streamObj))
+        }
     }
     if (!konfigerUtil.isBoolean(this.errTolerance)) {
         throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for errTolerance expecting boolean found " 
