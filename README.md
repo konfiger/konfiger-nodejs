@@ -250,8 +250,8 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 
 | Function        | Description         
 | --------------- | ------------- 
-| KonfigerStream(filePath)  | initialize a new KonfigerStream object from the filePath. The default delimeter `=` and seperator `\n` is used. It throws en exception if the filePath does not exist
-| KonfigerStream(filePath, delimeter, seperator)  | initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character
+| fileStream(filePath, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
+| stringStream(rawString, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from a string. It throws en exception if the rawString is not a string or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
 | Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
 | Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream
 | void validateFileExistence(filePath)  | Validate the existence of the specified file path if it does not exist an exception is thrown
@@ -304,6 +304,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | contains(key)           | Check if the konfiger contains a key 
 | enableCache(enableCache_)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though). Using `getString` method to fetch vallue **99999999999** times with cache disabled takes over 1hr and with cache enabled takes 20min.
 | errorTolerance(errTolerance)           | Enable or disable the error tolerancy property of the konfiger, if enabled no exception will be throw even when it suppose to there for it a bad idea but useful in a fail safe environment.
+| isErrorTolerant() | Check if the konfiger object errTolerance is set to true.
 | toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 
 ## How it works

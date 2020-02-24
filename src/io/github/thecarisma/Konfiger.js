@@ -35,7 +35,6 @@ function Konfiger(delimeter, seperator, lazyLoad, stream) {
     this.konfigerObjects = new Map()
     this.delimeter = delimeter
     this.seperator = seperator
-    this.errTolerance = false
     this.caseSensitive = true
     this.changesOccur = true
     this.stringValue = ""
@@ -305,11 +304,11 @@ Konfiger.prototype.setDelimeter = function(delimeter) {
 }
 
 Konfiger.prototype.errorTolerance = function(errTolerance) {
-	if (!konfigerUtil.isBoolean(enableCache_)) {
-        konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, expecting boolean found " 
-                                + konfigerUtil.typeOf(errTolerance))
-    }
-    this.errTolerance = errTolerance
+    this.stream.errTolerance = errTolerance
+}
+
+Konfiger.prototype.isErrorTolerant = function() {
+	return this.stream.errTolerance
 }
 
 Konfiger.prototype.hashCode = function() {

@@ -4,7 +4,7 @@
 
 ---
 
-The sample use cases of this package is loading configuration file, language file, preference setting in an application. More use cases can be seen [here](https://konfiger.github.io/usecases/index.html).
+The notable use cases of this package is loading configuration file, language file, preference setting in an application. More use cases and examples can be seen [here](https://github.com/konfiger/konfiger.github.io/blob/master/usecases/use_cases.js.md).
 
 
 ___
@@ -15,6 +15,7 @@ ___
     - [Basic](#basic)
     - [Write to disk](#write-to-disk)
     - [Get Types](#get-types)
+    - [Lazy Loading](#lazy-loading)
     - [Seperator and delimeter](#seperator-and-delimeter)
     - [Read file with Stream](#read-file-with-stream)
 - [API Documentations](#api-documentations)
@@ -127,6 +128,45 @@ console.log(typeof flo)
 console.log(typeof bool)
 ```
 
+### Lazy Loading
+
+The lazyLoad parameter is useful for progressively read entries from a large file. The next example shows initializing from a file with so much key value entry with lazy loading:
+
+The content of `test/konfiger.conf` is 
+
+```
+Ones=11111111111
+Twos=2222222222222
+Threes=3333333333333
+Fours=444444444444
+Fives=5555555555555
+```
+
+```js
+const { Konfiger } = require("konfiger")
+
+let konfiger = Konfiger.fromFile('test/konfiger.conf', //the file pth
+                                true //lazyLoad true
+                                )
+//at this point nothing is read from the file
+
+//the size of konfiger is 0 even if the file contains over 1000 entries
+console.log(konfiger.size())
+
+//the key 'Twos' is at the second line in the file, therefore two entry has 
+//been read to get the value.
+console.log(konfiger.get("Twos"))
+
+//the size becomes 2, 
+console.log(konfiger.size())
+
+//to read all the entries simple call the toString() method
+console.log(konfiger.toString())
+
+//now the size is equal to the entry
+console.log(konfiger.size())
+```
+
 ### Seperator and delimeter
 
 Initailize a konfiger object with default seperator and delimeter then change the seperator and selimeter at runtime
@@ -159,6 +199,39 @@ while (kStream.hasNext()) {
 
 ### Initialization
 
+The main Konfiger contructor is not exported from the package, the two functions are exported for initialization, `fromString` and `fromFile`. The fromString function creates a Konfiger object from a string with valid key value entry or from empty string, the fromFile function creates the Konfiger object from a file, the two functions accept a cumpulsory second parameter `lazyLoad` which indicates whether to read all the entry from the file or string suring initialization. The lazyLoad parameter is useful for progressively read entries from a large file. The two initializing functions also take 2 extra optional parameters `delimeter` and `seperator`. If the third and fourth parameter is not specified the default is used, delimeter = `=`, seperator = `\n`. If the file or string has different delimeter and seperator always send the third and fourth parameter.
+
+
+```js
+const { Konfiger } = require("konfiger")
+
+//The following initializer progressively read the file when needed
+let konfiger = Konfiger.fromFile('test/konfiger.conf', //the file pth
+                                true //lazyLoad true
+                                )
+
+//The following initializer read all the entries from file at once
+let konfiger = Konfiger.fromFile('test/konfiger.conf', false)
+
+//The following initializer read all the entries from string when needed
+let konfiger = Konfiger.fromString(`
+Ones=11111111111
+Twos=2222222222222
+`, true)
+
+//The following initializer read all the entries from String at once
+let konfiger = Konfiger.fromString(`
+Ones=11111111111
+Twos=2222222222222
+`, false)
+
+//Initialize a string which have custom delimeter and seperator
+let konfiger = Konfiger.fromString(`Ones:11111111111,Twos:2222222222222`, 
+                                false, 
+                                ':',
+                                ',')
+```
+
 ### Inserting
 
 ### Finding
@@ -171,12 +244,14 @@ while (kStream.hasNext()) {
 
 ## API Documentations
 
+Even though JavaScript is weakly type the package does type checking to ensure wrong datatype is not passed into the functions.
+
 ### KonfigerStream
 
 | Function        | Description         
 | --------------- | ------------- 
-| KonfigerStream(filePath)  | initialize a new KonfigerStream object from the filePath. The default delimeter `=` and seperator `\n` is used. It throws en exception if the filePath does not exist
-| KonfigerStream(filePath, delimeter, seperator)  | initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character
+| fileStream(filePath, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
+| stringStream(rawString, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from a string. It throws en exception if the rawString is not a string or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
 | Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
 | Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream
 | void validateFileExistence(filePath)  | Validate the existence of the specified file path if it does not exist an exception is thrown
@@ -229,9 +304,17 @@ while (kStream.hasNext()) {
 | contains(key)           | Check if the konfiger contains a key 
 | enableCache(enableCache_)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though). Using `getString` method to fetch vallue **99999999999** times with cache disabled takes over 1hr and with cache enabled takes 20min.
 | errorTolerance(errTolerance)           | Enable or disable the error tolerancy property of the konfiger, if enabled no exception will be throw even when it suppose to there for it a bad idea but useful in a fail safe environment.
+| isErrorTolerant() | Check if the konfiger object errTolerance is set to true.
 | toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 
 ## How it works
+
+Konfiger stream progressively load the key value entry from a file or string when needed, it uses two method `hasNext` which check if there is still an entry in the stream and `next` for the current key value entry in the stream. 
+ 
+In Konfiger the key value pair is stored in a `map`, all search updating and removal is done on the `konfigerObjects` in the class. The string sent as first parameter if parsed into valid key value using the separator and delimiter fields and if loaded from file it content is parsed into valid key value pair. The `toString` method also parse the `keyValueObjects` content into a valid string with regards to the 
+separator and delimeter. The value is properly escaped and unescaped.
+
+The `save` function write the current `Konfiger` to the file, if the file does not exist it is created if it can. Everything is written in memory and is disposed on app exit hence it important to call the `save` function when nessasary.
 
 ## Contributing
 
@@ -241,9 +324,9 @@ You can open issue or file a request that only address problems in this implemen
 
 ## Support
 
-You can support some of this community as they make big impact in the developement of people to get started with software engineering.
+You can support some of this community as they make big impact in the traing of individual to get started with software engineering and open source contribution.
 
-- https://www.patreon.com/devcareer
+- [https://www.patreon.com/devcareer](https://www.patreon.com/devcareer)
 
 ## License
 
