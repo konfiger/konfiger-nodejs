@@ -9,10 +9,11 @@
 const konfigerUtil = require("./KonfigerUtil.js")
 const fs = require("fs")
  
-function KonfigerStream(filePath, delimeter, seperator) {
+function KonfigerStream(filePath, delimeter, seperator, errTolerance) {
 	this.filePath = filePath;
 	this.delimeter = (delimeter ? delimeter : '=')
 	this.seperator = (seperator ? seperator : '\n')
+	this.errTolerance = (errTolerance ? errTolerance : false)
     
     this.validateFileExistence(filePath)
     if (delimeter && !seperator) {

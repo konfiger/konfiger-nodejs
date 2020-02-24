@@ -1,8 +1,10 @@
 
-const { KonfigerStream } = require("../index.js")
+const { Konfiger } = require("../index.js")
 
-var kStream = new KonfigerStream('test/test.txt')
-while (kStream.hasNext()) {
-    let entry = kStream.next()
-    console.log(entry)
-}
+let konfiger = Konfiger.fromString(`Ones:11111111111,Twos:2222222222222`, 
+                                false, 
+                                ':',
+                                ',')
+
+//to read all the entries simple call the toString() method
+console.log(konfiger.toString())
