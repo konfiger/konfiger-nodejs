@@ -26,6 +26,7 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
     
     if (this.isFile === true) {
         this.validateFileExistence(streamObj)
+        this.buffer = new Buffer.alloc(1)
     }
     if (!konfigerUtil.isBoolean(this.errTolerance)) {
         throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for errTolerance expecting boolean found " 
@@ -46,7 +47,6 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
     this.readPosition = 0
     this.hasNext_ = false
     this.doneReading_ = false
-    this.buffer = new Buffer.alloc(1)
 }
 
 KonfigerStream.prototype.validateFileExistence = function(filePath) {
@@ -75,9 +75,18 @@ KonfigerStream.prototype.hasNext = function() {
                 return
             }
         } else {
-            console.log("booyakasha")
+            while (this.readPosition < this.streamObj.length) {
+                if (this.streamObj[this.readPosition].trim() !== '') {
+                    this.hasNext_ = true
+                    return this.hasNext_
+                }
+                ++this.readPosition
+            }
+            this.hasNext_ = false 
+            return this.hasNext_
+            
         }
-        this.hasNext_ = true
+        this.hasNext_ = true        
     }
     return this.hasNext_
 }
@@ -85,11 +94,6 @@ KonfigerStream.prototype.hasNext = function() {
 KonfigerStream.prototype.next = function() {
     if (this.doneReading_) {
         throw new Error("io.github.thecarisma.KonfigerStream: You cannot read beyound the stream length, always use hasNext() to verify the Stream still has an entry")
-    }
-    var fd = fs.openSync(this.streamObj, 'r')
-    if (!fd) {
-        this.doneReading()
-        throw fd
     }
     var key = ""
     var value = ""
@@ -99,6 +103,11 @@ KonfigerStream.prototype.next = function() {
     var column = 0
     
     if (this.isFile === true) {
+        var fd = fs.openSync(this.streamObj, 'r')
+        if (!fd) {
+            this.doneReading()
+            throw fd
+        }
         while (true) {
             var num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
             if (num === 0) {
@@ -112,7 +121,13 @@ KonfigerStream.prototype.next = function() {
             }
             this.readPosition++
             var char_ = this.buffer.toString('utf-8', 0, this.buffer[0])
+            column++;
+            if (char_ === '\n') {
+                line++;
+                column = 0 
+            }
             if (char_ === this.seperator && prevChar != '\\') {
+                if (key === "" && value ==="") continue
                 if (parseKey === true && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.KonfigerStream: Invalid entry detected near Line " + line + ":" + column);
                 }
@@ -133,7 +148,45 @@ KonfigerStream.prototype.next = function() {
             prevChar = char_
         }
     } else {
-        console.log("booyakasha")
+        for (; this.readPosition <= this.streamObj.length; ++this.readPosition) {
+            if (this.readPosition === this.streamObj.length) {
+                if (key !== "") {
+                    if (parseKey === true && this.errTolerance === false) {
+                        this.loadingEnds = true
+                        throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
+                    }
+                }
+                this.doneReading()
+                break
+            }
+            var character = this.streamObj[this.readPosition]
+            column++;
+            if (character === '\n') {
+                line++;
+                column = 0 
+            }
+            if (character === this.seperator && this.streamObj[this.readPosition-1] != '\\') {
+                if (key === "" && value ==="") continue
+                if (parseKey === true && this.errTolerance === false) {
+                    this.loadingEnds = true
+                    throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
+                }
+                break
+            }
+            if (character === this.delimeter && parseKey) {
+                if (value !== "" && this.errTolerance !== false) {
+                    this.loadingEnds = true
+                    throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
+                }
+                parseKey = false 
+                continue
+            }
+            if (parseKey) {
+                key += character
+            } else {
+                value += character
+            }
+        }
     }
     return [key, konfigerUtil.unEscapeString(value, [this.seperator])]
 }
