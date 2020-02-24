@@ -227,7 +227,7 @@ while (kStream.hasNext()) {
 | isEmpty()           | Check if the konfiger does not have an key value entry.
 | updateAt(index, value)           | Update the value at the specified index with the new string value, throws an error if the index is OutOfRange 
 | contains(key)           | Check if the konfiger contains a key 
-| enableCache(enableCache_)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though). Using `getString` method **99999999999** with cache disabled takes over 1hr and with cache enabled takes 20min.
+| enableCache(enableCache_)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though). Using `getString` method to fetch vallue **99999999999** times with cache disabled takes over 1hr and with cache enabled takes 20min.
 | errorTolerance(errTolerance)           | Enable or disable the error tolerancy property of the konfiger, if enabled no exception will be throw even when it suppose to there for it a bad idea but useful in a fail safe environment.
 | toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 
