@@ -14,39 +14,22 @@ const fs = require("fs")
 const MAX_CAPACITY = 10000000
 
 function fromFile(filePath, lazyLoad, delimeter, seperator) {
-    return fromStream(new KonfigerStream(filePath, delimeter, seperator), lazyLoad)
+    return fromStream(KonfigerStream.fileStream(filePath, delimeter, seperator), lazyLoad)
 }
 
 function fromString(rawString, lazyLoad, delimeter, seperator) {
-    if (!konfigerUtil.isBoolean(lazyLoad)) {
-        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, the second parameter must be a Boolean")
-    }
-    if (delimeter) {
-        if (!konfigerUtil.isChar(delimeter)) {
-            throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character for the delimeter value")
-        }
-        if (!konfigerUtil.isChar(seperator)) {
-            throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character for the seperator value")
-        }
-    } else {
-        delimeter = '='
-        seperator = '\n'
-    }
-    const konfiger = new Konfiger(delimeter, seperator, lazyLoad, false, undefined, rawString)
-    return konfiger
+    return fromStream(KonfigerStream.stringStream(rawString, delimeter, seperator), lazyLoad)
 }
 
 function fromStream(konfigerStream, lazyLoad) {
-    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, true, konfigerStream, "")
+    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, konfigerStream)
     konfiger.filePath = konfigerStream.filePath
     return konfiger
 }
 
-function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream, rawString) {
+function Konfiger(delimeter, seperator, lazyLoad, stream) {
     this.hashcode = 0
     this.stream = stream
-    this.rawString = rawString
-    this.createdFromStream = createdFromStream
     this.loadingEnds = false
     this.lazyLoad = (lazyLoad ? lazyLoad : false)
     this.konfigerObjects = new Map()
@@ -63,6 +46,10 @@ function Konfiger(delimeter, seperator, lazyLoad, createdFromStream, stream, raw
     if (!this.lazyLoad) {
         this.lazyLoader()
     }
+    if (!konfigerUtil.isBoolean(this.lazyLoad)) {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, the lazyLoad parameter must be a Boolean")
+    }
+    
     
     this.enableCache_ = true
     this.prevCachedObject = { ckey : "", cvalue : null }
@@ -152,85 +139,18 @@ Konfiger.prototype.get = function(key, defaultValue) {
     }
     if (!this.contains(key) && this.lazyLoad) {
         if (!this.loadingEnds) {
-            if (this.createdFromStream) {
-                while (this.stream.hasNext()) {
-                    var obj = this.stream.next()
-                    this.konfigerObjects.set(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
-                    this.changesOccur = true
-                    if (obj[0] === key) {
-                        if (this.enableCache_) {
-                            this.shiftCache(key, obj[1])
-                        }
-                        return obj[1]
+            while (this.stream.hasNext()) {
+                var obj = this.stream.next()
+                this.konfigerObjects.set(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
+                this.changesOccur = true
+                if (obj[0] === key) {
+                    if (this.enableCache_) {
+                        this.shiftCache(key, obj[1])
                     }
-                }
-                this.loadingEnds = true
-            } else {
-                var subkey = ""
-                var value = ""
-                var parseKey = true
-                var line = 1
-                var column = 0
-                for (; this.readIndex <= this.rawString.length; ++this.readIndex) {
-                    if (this.readIndex == this.rawString.length) {
-                        if (subkey !== "") {
-                            if (parseKey === true && this.errTolerance === false) {
-                                this.loadingEnds = true
-                                throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
-                            }
-                            this.konfigerObjects.set(subkey, value)
-                            this.changesOccur = true
-                            if (subkey === key) {
-                                if (this.enableCache_) {
-                                    this.shiftCache(key, value)
-                                }
-                                this.loadingEnds = true
-                                return value
-                            }
-                        }
-                        this.loadingEnds = true
-                        break
-                    }
-                    var character = this.rawString[this.readIndex];
-                    column++;
-                    if (character === '\n') {
-                        line++;
-                        column = 0 
-                    }
-                    if (character === this.seperator && this.rawString[this.readIndex-1] != '\\') {
-                        if (subkey === "" && value ==="") continue
-                        if (parseKey === true && this.errTolerance === false) {
-                            this.loadingEnds = true
-                            throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
-                        }
-                        this.konfigerObjects.set(subkey, value)
-                        this.changesOccur = true
-                        if (subkey === key) {
-                            if (this.enableCache_) {
-                                this.shiftCache(key, value)
-                            }
-                            return value
-                        }
-                        parseKey = true 
-                        subkey = "";
-                        value = "";
-                        continue
-                    }
-                    if (character === this.delimeter && parseKey) {
-                        if (value !== "" && this.errTolerance !== false) {
-                            this.loadingEnds = true
-                            throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
-                        }
-                        parseKey = false 
-                        continue
-                    }
-                    if (parseKey) {
-                        subkey += character
-                    } else {
-                        value += character
-                    }
+                    return obj[1]
                 }
             }
+            this.loadingEnds = true
         }
     }
     if (defaultValue && !this.contains(key)) {
@@ -425,63 +345,11 @@ Konfiger.prototype.lazyLoader = function() {
     if (this.loadingEnds) {
         return
     }
-    if (this.createdFromStream) {
-        while (this.stream.hasNext()) {
-            var obj = this.stream.next()
-            this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
-        }
-        this.loadingEnds = true
-    } else {
-        var key = ""
-        var value = ""
-        var parseKey = true
-        var line = 1
-        var column = 0
-        for (; this.readIndex <= this.rawString.length; ++this.readIndex) {
-            if (this.readIndex == this.rawString.length) {
-                if (key !== "") {
-                    if (parseKey === true && this.errTolerance === false) {
-                        this.loadingEnds = true
-                        throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column)
-                    }
-                    this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
-                }
-                this.loadingEnds = true
-                break
-            }
-            var character = this.rawString[this.readIndex]
-            column++;
-            if (character === '\n') {
-                line++;
-                column = 0 
-            }
-            if (character === this.seperator && this.rawString[this.readIndex-1] != '\\') {
-                if (key === "" && value ==="") continue
-                if (parseKey === true && this.errTolerance === false) {
-                    this.loadingEnds = true
-                    throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
-                }
-                this.putString(key, konfigerUtil.unEscapeString(value, [this.seperator]))
-                parseKey = true 
-                key = "";
-                value = ""
-                continue
-            }
-            if (character === this.delimeter && parseKey) {
-                if (value !== "" && this.errTolerance !== false) {
-                    this.loadingEnds = true
-                    throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator")
-                }
-                parseKey = false 
-                continue
-            }
-            if (parseKey) {
-                key += character
-            } else {
-                value += character
-            }
-        }
+    while (this.stream.hasNext()) {
+        var obj = this.stream.next()
+        this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
     }
+    this.loadingEnds = true
 }
 
 Konfiger.prototype.save = function(filePath) {
@@ -503,16 +371,11 @@ Konfiger.prototype.appendString = function(rawString) {
 	if (!rawString) {
         throw new Error("io.github.thecarisma.Konfiger: You must specified the string that contains the entries to append")
     }
-    this.loadingEnds = false
-    var tmpcreatedFromStream = this.createdFromStream
-    var tmpLazyLoad = this.LazyLoad
-    
-    this.rawString += rawString
-    this.createdFromStream = false
-    this.LazyLoad = false
-	this.lazyLoader()
-    this.createdFromStream = tmpcreatedFromStream
-    this.LazyLoad = tmpLazyLoad
+    var stream_ = KonfigerStream.stringStream(rawString, this.delimeter, this.seperator)
+    while (stream_.hasNext()) {
+        var obj = stream_.next()
+        this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
+    }
 }
 
 Konfiger.prototype.appendFile = function(filePath) {
@@ -522,7 +385,7 @@ Konfiger.prototype.appendFile = function(filePath) {
     if (!fs.existsSync(filePath)) {
         throw new Error("io.github.thecarisma.Konfiger: The file does not exists " + filePath)
     }  
-    var stream_ = new KonfigerStream(filePath, this.delimeter, this.seperator)
+    var stream_ = KonfigerStream.fileStream(filePath, this.delimeter, this.seperator)
     while (stream_.hasNext()) {
         var obj = stream_.next()
         this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
