@@ -410,5 +410,5 @@ You can support some of this community as they make big impact in the traing of 
 
 ## License
 
-MIT License Copyright (c) 2020 Adewale Azeez - konfiger
+MIT License Copyright (c) 2020 [Adewale Azeez](https://twitter.com/iamthecarisma) - konfiger
 
