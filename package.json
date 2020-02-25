@@ -1,6 +1,6 @@
 {
   "name": "konfiger",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Light weight package to manage key value based configuration and data files",
   "main": "index.js",
   "scripts": {

@@ -77,9 +77,6 @@ Konfiger.prototype.put = function(key, value) {
 }
 
 Konfiger.prototype.putString = function(key, value) {
-    if (this.konfigerObjects.size === MAX_CAPACITY) {
-        throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity 10,000,000")
-    }
     if (!konfigerUtil.isString(key)) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, key must be a string")
     }
@@ -91,6 +88,9 @@ Konfiger.prototype.putString = function(key, value) {
         if (_value === value) {
             return
         }
+    }
+    if (this.konfigerObjects.size === MAX_CAPACITY) {
+        throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity 10,000,000")
     }
     this.konfigerObjects.set(key, value)
     this.changesOccur = true
