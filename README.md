@@ -264,9 +264,46 @@ konfiger.putFloat("Float", 12.345)
 
 ### Finding
 
+There are various ways to get the value from the konfiger object, the main `get` method and `getString` method both returns a string type, the other get methods returns specific types
+
+```js
+konfiger.get("String")
+```
+
+To get specific type from the object use the following methods, `getString`, `getBoolean`, `getLong`, `getFloat` and `getInt`. 
+
+```js
+konfiger.getString("String")
+konfiger.getLong("Long")
+konfiger.getBoolean("Boolean")
+konfiger.getFloat("Float")
+```
+
+If the requested entrr does not exist a null/undefined value is returned, to prevent that a fallback value should be sent as second parameter incase the key is not found the second parameter will be returned.
+
+```js
+konfiger.get("String", "Default Value")
+konfiger.getBoolean("Boolean", false)
+```
+
+If the konfiger is initialized with lazy loading enabled if the get method is called the stream will start reading until the key is found and the stream is paused again, if the key is not found the stream will read to end. 
+
 ### Updating
 
+The `put` method can be used to add new entry or to update an already existing entry in the object. The `updateAt` method is usefull for updating a value using it index instead of key
+
+```js
+konfiger.updateAt(0, "This is an updated string")
+```
+
 ### Removing
+
+The `remove` method removes a key value entry from the konfiger, it returns true if an entry is removed and false if no entry is removed. The `remove` method accept either key(string) or index(int) of the entry.
+
+```js
+konfiger.remove("String")
+konfiger.remove(0)
+```
 
 ### Saving to local disk
 
