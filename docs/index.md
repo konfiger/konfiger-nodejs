@@ -29,7 +29,7 @@ ___
 	- [Finding](#finding)
 	- [Updating](#updating)
 	- [Removing](#removing)
-    - [Saving to local disk](#saving-to-local-disk)
+    - [Saving to disk](#saving-to-disk)
 - [How it works](#how-it-works)
 - [Contributing](#contributing)
 - [Support](#support)
@@ -201,31 +201,39 @@ while (kStream.hasNext()) {
 
 The main Konfiger contructor is not exported from the package, the two functions are exported for initialization, `fromString` and `fromFile`. The fromString function creates a Konfiger object from a string with valid key value entry or from empty string, the fromFile function creates the Konfiger object from a file, the two functions accept a cumpulsory second parameter `lazyLoad` which indicates whether to read all the entry from the file or string suring initialization. The lazyLoad parameter is useful for progressively read entries from a large file. The two initializing functions also take 2 extra optional parameters `delimeter` and `seperator`. If the third and fourth parameter is not specified the default is used, delimeter = `=`, seperator = `\n`. If the file or string has different delimeter and seperator always send the third and fourth parameter.
 
+The following initializer progressively read the file when needed
 
 ```js
-const { Konfiger } = require("konfiger")
+let konfiger = Konfiger.fromFile('test/konfiger.conf', true)
+```
 
-//The following initializer progressively read the file when needed
-let konfiger = Konfiger.fromFile('test/konfiger.conf', //the file pth
-                                true //lazyLoad true
-                                )
+The following initializer read all the entries from file at once
 
-//The following initializer read all the entries from file at once
+```js
 let konfiger = Konfiger.fromFile('test/konfiger.conf', false)
+```
 
-//The following initializer read all the entries from string when needed
+The following initializer read all the entries from string when needed
+
+```js
 let konfiger = Konfiger.fromString(`
 Ones=11111111111
 Twos=2222222222222
 `, true)
+```
 
-//The following initializer read all the entries from String at once
+The following initializer read all the entries from String at once
+
+```js
 let konfiger = Konfiger.fromString(`
 Ones=11111111111
 Twos=2222222222222
 `, false)
+```
 
-//Initialize a string which have custom delimeter and seperator
+Initialize a string which have custom delimeter and seperator
+
+```js
 let konfiger = Konfiger.fromString(`Ones:11111111111,Twos:2222222222222`, 
                                 false, 
                                 ':',
@@ -234,13 +242,85 @@ let konfiger = Konfiger.fromString(`Ones:11111111111,Twos:2222222222222`,
 
 ### Inserting
 
+The following types can be added into the object, int, float, long, boolean, object and string.
+
+To add any object into the entry use the `put` method as it check the value type and properly get it string value
+
+```js
+konfiger.put("String", "This is a string")
+konfiger.put("Long", 143431423)
+konfiger.put("Boolean", true)
+konfiger.put("Float", 12.345)
+```
+
+The `put` method do a type check on the value and calls the appropriate put method e.g `konfiger.put("Boolean", true)` will result in a call to `konfiger.putBoolean("Boolean", true)`. The following method are avaliable to directly add the value according to the type, `putString`, `putBoolean`, `putLong` and `putInt`. The previous example can be re-written as:
+
+```js
+konfiger.putString("String", "This is a string")
+konfiger.putLong("Long", 143431423)
+konfiger.putBoolean("Boolean", true)
+konfiger.putFloat("Float", 12.345)
+```
+
 ### Finding
+
+There are various ways to get the value from the konfiger object, the main `get` method and `getString` method both returns a string type, the other get methods returns specific types
+
+```js
+konfiger.get("String")
+```
+
+To get specific type from the object use the following methods, `getString`, `getBoolean`, `getLong`, `getFloat` and `getInt`. 
+
+```js
+konfiger.getString("String")
+konfiger.getLong("Long")
+konfiger.getBoolean("Boolean")
+konfiger.getFloat("Float")
+```
+
+If the requested entrr does not exist a null/undefined value is returned, to prevent that a fallback value should be sent as second parameter incase the key is not found the second parameter will be returned.
+
+```js
+konfiger.get("String", "Default Value")
+konfiger.getBoolean("Boolean", false)
+```
+
+If the konfiger is initialized with lazy loading enabled if the get method is called the stream will start reading until the key is found and the stream is paused again, if the key is not found the stream will read to end. 
 
 ### Updating
 
+The `put` method can be used to add new entry or to update an already existing entry in the object. The `updateAt` method is usefull for updating a value using it index instead of key
+
+```js
+konfiger.updateAt(0, "This is an updated string")
+```
+
 ### Removing
 
-### Saving to local disk
+The `remove` method removes a key value entry from the konfiger, it returns true if an entry is removed and false if no entry is removed. The `remove` method accept either key(string) or index(int) of the entry.
+
+```js
+konfiger.remove("String")
+konfiger.remove(0)
+```
+
+### Saving to disk
+
+Every operation on the konfiger object is done in memory to save the updated entries in a file call the `save` method with the file path to save the entry. If the konfiger is initiated from file then there is no need to add the file path to the `save` method, the entries will be saved to the file path used during initialization.
+
+```js
+konfiger.save("test/test.config.ini")
+```
+
+in case of load from file, the save will write the entries to *test/test.config.ini*.
+
+```js
+//...
+var konfiger = Konfiger.fromFile('test/test.config.ini', true)
+//...
+konfiger.save()
+```
 
 ## API Documentations
 
