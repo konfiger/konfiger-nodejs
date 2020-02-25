@@ -29,7 +29,7 @@ ___
 	- [Finding](#finding)
 	- [Updating](#updating)
 	- [Removing](#removing)
-    - [Saving to local disk](#saving-to-local-disk)
+    - [Saving to disk](#saving-to-disk)
 - [How it works](#how-it-works)
 - [Contributing](#contributing)
 - [Support](#support)
@@ -305,7 +305,22 @@ konfiger.remove("String")
 konfiger.remove(0)
 ```
 
-### Saving to local disk
+### Saving to disk
+
+Every operation on the konfiger object is done in memory to save the updated entries in a file call the `save` method with the file path to save the entry. If the konfiger is initiated from file then there is no need to add the file path to the `save` method, the entries will be saved to the file path used during initialization.
+
+```js
+konfiger.save("test/test.config.ini")
+```
+
+in case of load from file, the save will write the entries to *test/test.config.ini*.
+
+```js
+//...
+var konfiger = Konfiger.fromFile('test/test.config.ini', true)
+//...
+konfiger.save()
+```
 
 ## API Documentations
 
