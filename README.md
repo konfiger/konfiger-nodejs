@@ -18,6 +18,7 @@ ___
     - [Lazy Loading](#lazy-loading)
     - [Seperator and delimeter](#seperator-and-delimeter)
     - [Read file with Stream](#read-file-with-stream)
+    - [Read String with Stream](#read-string-with-stream)
 - [API Documentations](#api-documentations)
     - [KonfigerStream](#konfigerstream)
     - [Konfiger](#konfiger)
@@ -188,7 +189,27 @@ Read a key value file using the progressive [KonfigerStream](https://github.com/
 ```js
 const { KonfigerStream } = require("konfiger")
 
-var kStream = new KonfigerStream('test/konfiger.conf')
+var kStream = KonfigerStream.fileStream('test/konfiger.conf', false)
+while (kStream.hasNext()) {
+    let entry = kStream.next()
+    console.log(entry)
+}
+```
+
+### Read String with Stream
+
+Read a key value string using the progressive [KonfigerStream](https://github.com/konfiger/konfiger-nodejs/blob/master/src/io/github/thecarisma/KonfigerStream.js), each scan returns the current key value array `[ 'key', 'value']`
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var kStream = KonfigerStream.stringStream(`
+String=This is a string
+Number=215415245
+Float=56556.436746
+Boolean=true
+`, false)
+
 while (kStream.hasNext()) {
     let entry = kStream.next()
     console.log(entry)
