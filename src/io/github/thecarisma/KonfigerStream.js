@@ -177,7 +177,7 @@ KonfigerStream.prototype.next = function() {
                 break
             }
             if (character === this.delimeter && parseKey) {
-                if (value !== "" && this.errTolerance !== false) {
+                if (value !== "" && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
                 }
                 parseKey = false 
