@@ -157,7 +157,6 @@ KonfigerStream.prototype.next = function() {
             if (this.readPosition === this.streamObj.length) {
                 if (key !== "") {
                     if (parseKey === true && this.errTolerance === false) {
-                        this.loadingEnds = true
                         throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                     }
                 }
@@ -173,14 +172,12 @@ KonfigerStream.prototype.next = function() {
             if (character === this.seperator && this.streamObj[this.readPosition-1] != '\\') {
                 if (key === "" && value ==="") continue
                 if (parseKey === true && this.errTolerance === false) {
-                    this.loadingEnds = true
                     throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                 }
                 break
             }
             if (character === this.delimeter && parseKey) {
                 if (value !== "" && this.errTolerance !== false) {
-                    this.loadingEnds = true
                     throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
                 }
                 parseKey = false 
