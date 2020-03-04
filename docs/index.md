@@ -380,6 +380,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | void putLong(key, value)           | Put a Long into the konfiger, the second parameter must be a Number.
 | void putInt(key, value)           | Put a Int into the konfiger, alias for `void putLong(key, value)`.
 | void putFloat(key, value)           | Put a Float into the konfiger, the second parameter must be a Float
+| void putDouble(key, value)           | Put a Double into the konfiger, the second parameter must be a Double
 | Array keys()           | Get all the keys entries in the konfiger object in iterable array list
 | Array values()           | Get all the values entries in the konfiger object in iterable array list
 | Array[Key, Value] entries()           | Get all the entries in the konfiger in a `[['Key', 'Value'], ...]`
@@ -389,8 +390,9 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | Number getLong(key, defaultValue)   | Get a value as Number, the second(Number) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0` will be returned. When trying to cast the value to Number if an error occur an exception will be thrown except if error tolerance is set to true then `0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
 | Number getInt(key, defaultValue)   | Get a value as Number, alias for `Number getLong(key, defaultValue)`.
 | Float getFloat(key, defaultValue)   | Get a value as Float, the second(Float) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0.0` will be returned. When trying to cast the value to Float if an error occur an exception will be thrown except if error tolerance is set to true then `0.0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
-| remove(keyIndex)           | Remove a key value entry at a particular index
-| remove(keyIndex)           | Remove a key value entry using the entry Key 
+| Double getDouble(key, defaultValue)   | Get a value as Double, the second(Double) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0.0` will be returned. When trying to cast the value to Double if an error occur an exception will be thrown except if error tolerance is set to true then `0.0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
+| remove(keyIndex)           | Remove a key value entry at a particular index. Returns the value of the entry that was removed.
+| remove(keyIndex)           | Remove a key value entry using the entry Key. Returns the value of the entry that was removed.
 | appendString(rawString)          | Append new data to the konfiger from a string, the new string delimeter and seperator must be the same with the current konfigure delimeter and seperator, if it not the same use the `setDelimeter` and `setSeperator` to change the konfiger seperator and delimeter to the new file seperator and delimeter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
 | appendFile(filePath)          | Read new datas from the file path and append, the new file delimeter and seperator must be the same with the current konfigure delimeter and seperator, if it not the same use the `setDelimeter` and `setSeperator` to change the konfiger seperator and delimeter to the new file seperator and delimeter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
 | save(filePath?)         | Save the konfiger datas into a file. The argument filePath is optional if specified the entries is writtent to the filePath else the filePath used to initialize the Konfiger object is used and if the Konfiger is initialized `fromString` and the filePath is not specified an exception is thrown. This does not clear the already added entries.
@@ -412,7 +414,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 
 Konfiger stream progressively load the key value entry from a file or string when needed, it uses two method `hasNext` which check if there is still an entry in the stream and `next` for the current key value entry in the stream. 
  
-In Konfiger the key value pair is stored in a `map`, all search updating and removal is done on the `konfigerObjects` in the class. The string sent as first parameter if parsed into valid key value using the separator and delimiter fields and if loaded from file it content is parsed into valid key value pair. The `toString` method also parse the `keyValueObjects` content into a valid string with regards to the 
+In Konfiger the key value pair is stored in a `map`, all search updating and removal is done on the `konfigerObjects` in the class. The string sent as first parameter if parsed into valid key value using the separator and delimiter fields and if loaded from file it content is parsed into valid key value pair. The `toString` method also parse the `konfigerObjects` content into a valid string with regards to the 
 separator and delimeter. The value is properly escaped and unescaped.
 
 The `save` function write the current `Konfiger` to the file, if the file does not exist it is created if it can. Everything is written in memory and is disposed on app exit hence it important to call the `save` function when nessasary.
