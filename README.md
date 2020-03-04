@@ -380,6 +380,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | void putLong(key, value)           | Put a Long into the konfiger, the second parameter must be a Number.
 | void putInt(key, value)           | Put a Int into the konfiger, alias for `void putLong(key, value)`.
 | void putFloat(key, value)           | Put a Float into the konfiger, the second parameter must be a Float
+| void putDouble(key, value)           | Put a Double into the konfiger, the second parameter must be a Double
 | Array keys()           | Get all the keys entries in the konfiger object in iterable array list
 | Array values()           | Get all the values entries in the konfiger object in iterable array list
 | Array[Key, Value] entries()           | Get all the entries in the konfiger in a `[['Key', 'Value'], ...]`
@@ -389,6 +390,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | Number getLong(key, defaultValue)   | Get a value as Number, the second(Number) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0` will be returned. When trying to cast the value to Number if an error occur an exception will be thrown except if error tolerance is set to true then `0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
 | Number getInt(key, defaultValue)   | Get a value as Number, alias for `Number getLong(key, defaultValue)`.
 | Float getFloat(key, defaultValue)   | Get a value as Float, the second(Float) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0.0` will be returned. When trying to cast the value to Float if an error occur an exception will be thrown except if error tolerance is set to true then `0.0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
+| Double getDouble(key, defaultValue)   | Get a value as Double, the second(Double) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0.0` will be returned. When trying to cast the value to Double if an error occur an exception will be thrown except if error tolerance is set to true then `0.0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
 | remove(keyIndex)           | Remove a key value entry at a particular index
 | remove(keyIndex)           | Remove a key value entry using the entry Key 
 | appendString(rawString)          | Append new data to the konfiger from a string, the new string delimeter and seperator must be the same with the current konfigure delimeter and seperator, if it not the same use the `setDelimeter` and `setSeperator` to change the konfiger seperator and delimeter to the new file seperator and delimeter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
