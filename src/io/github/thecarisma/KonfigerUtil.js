@@ -81,7 +81,6 @@ function escapeString(value, extraEscape) {
                     if (extraEscape) {
                         for (var extra of extraEscape) {
                             if (value[i] === extra) {
-                        console.log("Screw " + value[i] + ":" + extra + "-" + c)
                                 finalValue += value[i]
                                 break
                             }
@@ -126,7 +125,7 @@ function unEscapeString(value, extraEscape) {
     for (var i = 0; i < value.length; ++i) {
         var c = value[i]
         if (c==='\\') {
-            if (c===value.length) {
+            if (i===value.length) {
                 break
             }
             d = ++i
