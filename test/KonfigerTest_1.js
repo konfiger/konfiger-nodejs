@@ -8,7 +8,7 @@ konfiger.putLong("Two", 123456789)
 konfiger.putBoolean("Bool", true)
 konfiger.putFloat("Float", 123.56)
 konfiger.putString("Dummy", "Noooooo 1")
-konfiger.putString("Dummy2", "Noooooo 1")
+konfiger.putString("Dummy2", "Noooooo 2")
 
 
 console.log("=====================================")
@@ -51,9 +51,9 @@ for (var en of konfiger.entries()) {
 console.log()
 
 console.log(konfiger.size())
-konfiger.remove("Dummy2")
+console.log("We removed: " + konfiger.remove("Dummy2"))
 console.log(konfiger.size())
-konfiger.remove(konfiger.size() - 1)
+console.log("We removed: " + konfiger.remove(konfiger.size() - 1))
 console.log(konfiger.size())
 console.log()
 
