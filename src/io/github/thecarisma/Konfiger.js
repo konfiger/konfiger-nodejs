@@ -381,29 +381,31 @@ Konfiger.prototype.save = function(filePath) {
     })
 }
 
-Konfiger.prototype.appendString = function(rawString) {
+Konfiger.prototype.appendString = function(rawString, delimeter, seperator) {
 	if (!rawString) {
         throw new Error("io.github.thecarisma.Konfiger: You must specified the string that contains the entries to append")
     }
-    var stream_ = KonfigerStream.stringStream(rawString, this.delimeter, this.seperator)
+    var stream_ = KonfigerStream.stringStream(rawString, (delimeter ? delimeter : this.delimeter), (seperator ? seperator : this.seperator))
     while (stream_.hasNext()) {
         var obj = stream_.next()
         this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
     }
+    this.changesOccur = true
 }
 
-Konfiger.prototype.appendFile = function(filePath) {
+Konfiger.prototype.appendFile = function(filePath, delimeter, seperator) {
 	if (!filePath) {
         throw new Error("io.github.thecarisma.Konfiger: You must specified the file path that contains the entries to append")
     }
     if (!fs.existsSync(filePath)) {
         throw new Error("io.github.thecarisma.Konfiger: The file does not exists " + filePath)
     }  
-    var stream_ = KonfigerStream.fileStream(filePath, this.delimeter, this.seperator)
+    var stream_ = KonfigerStream.fileStream(filePath, (delimeter ? delimeter : this.delimeter), (seperator ? seperator : this.seperator))
     while (stream_.hasNext()) {
         var obj = stream_.next()
         this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
     }
+    this.changesOccur = true
     
 }
 
