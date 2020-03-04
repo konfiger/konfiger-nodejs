@@ -38,7 +38,6 @@ function Konfiger(delimeter, seperator, lazyLoad, stream) {
     this.caseSensitive = true
     this.changesOccur = true
     this.stringValue = ""
-    this.kArray = []
     this.readIndex = 0
     this.filePath = undefined
     
