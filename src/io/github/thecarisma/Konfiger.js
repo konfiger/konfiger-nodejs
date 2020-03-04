@@ -250,8 +250,6 @@ Konfiger.prototype.remove = function(keyIndex) {
             for (let o of this.keys()) {
                 ++i
                 if (i === keyIndex) {
-                    this.changesOccur = true
-                    this.enableCache(this.enableCache_)
                     return this.remove(o)
                 }
             }
