@@ -128,7 +128,7 @@ function unEscapeString(value, extraEscape) {
             if (i===value.length) {
                 break
             }
-            d = ++i
+            var d = ++i
             switch (value[d]) {
                 case 't':
                     finalValue += "\t"
