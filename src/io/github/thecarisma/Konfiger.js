@@ -125,6 +125,10 @@ Konfiger.prototype.putFloat = function(key, value) {
     this.putString(key, value.toString())
 }
 
+Konfiger.prototype.putDouble = function(key, value) {
+    this.putFloat(key, value)
+}
+
 Konfiger.prototype.get = function(key, defaultValue) {
     if (!konfigerUtil.isString(key)) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, key must be a string")
@@ -179,6 +183,11 @@ Konfiger.prototype.getInt = function(key, defaultValue) {
 }
 
 Konfiger.prototype.getFloat = function(key, defaultValue) {
+    var value = this.get(key, defaultValue)
+    return (value ? parseFloat(value) : value)
+}
+
+Konfiger.prototype.getDouble = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
     return (value ? parseFloat(value) : value)
 }
