@@ -82,7 +82,7 @@ Konfiger.prototype.putString = function(key, value) {
     if (!konfigerUtil.isString(value)) {
         throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting String found " + konfigerUtil.typeOf(value))
     }
-    if (this.lazyLoad && !this.loadingEnds && !this.contains(key)) {
+    if (this.lazyLoad && !this.loadingEnds && this.contains(key)) {
         var _value = this.getString(key)
         if (_value === value) {
             return
