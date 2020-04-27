@@ -1,4 +1,0 @@
-Name===Adewale Azeez
-Occupation=Software Engineer
-Greet=\tHello-      World
-Location=Nigeria

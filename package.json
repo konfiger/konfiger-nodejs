@@ -4,7 +4,7 @@
   "description": "Light weight package to manage key value based configuration and data files",
   "main": "index.js",
   "scripts": {
-    "test": "node test/KonfigerStreamTest.js && node test/KonfigerFileStreamTest_1.js && node test/KonfigerStringStreamTest_1.js && node test/KonfigerTest.js && node test/KonfigerTest_1.js && node test/KonfigerTest_2.js && node test/KonfigerTest_3.js && node test/KonfigerTest_4.js && node test/KonfigerTest_5.js && node test/KonfigerTest_6.js && node test/KonfigerTest_8.js && node test/KonfigerTest_9.js && node test/KonfigerUtilTest.js && node test/KonfigerUtilTest_1.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,8 @@
     "config"
   ],
   "author": "Adewale Azeez",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^7.1.2"
+  }
 }

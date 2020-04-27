@@ -24,6 +24,7 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
 	this.errTolerance = (errTolerance ? errTolerance : false)
     this.isFile = isFile
     this.escapingEntry = true
+    this.trimingKey = false
     
     if (this.isFile === true) {
         this.validateFileExistence(streamObj)
@@ -71,8 +72,24 @@ KonfigerStream.prototype.isEscaping = function() {
     return this.escapingEntry
 }
 
-KonfigerStream.prototype.isEscaping = function(escapingEntry) {
+KonfigerStream.prototype.setEscaping = function(escapingEntry) {
+    if (!konfigerUtil.isBoolean(escapingEntry)) {
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found " + 
+                        konfigerUtil.typeOf(escapingEntry))
+    }
     this.escapingEntry = escapingEntry
+}
+
+KonfigerStream.prototype.isTrimingKey = function() {
+    return this.trimingKey
+}
+
+KonfigerStream.prototype.setTrimingKey = function(trimingKey) {
+    if (!konfigerUtil.isBoolean(trimingKey)) {
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found " + 
+                        konfigerUtil.typeOf(trimingKey))
+    }
+    this.trimingKey = trimingKey
 }
 
 KonfigerStream.prototype.hasNext = function() {
@@ -200,8 +217,8 @@ KonfigerStream.prototype.next = function() {
         }
     }
     return [ 
-                key, 
-                (escapingEntry ? konfigerUtil.unEscapeString(value, [this.seperator]) : value ) 
+                (this.trimingKey ? key.trim() : key), 
+                (this.escapingEntry ? konfigerUtil.unEscapeString(value, [this.seperator]) : value ) 
            ]
 }
 
