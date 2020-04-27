@@ -25,6 +25,8 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
     this.isFile = isFile
     this.escapingEntry = true
     this.trimingKey = false
+    this.commentPrefix = "//"
+    this.isFirst = 0
     
     if (this.isFile === true) {
         this.validateFileExistence(streamObj)
@@ -92,8 +94,22 @@ KonfigerStream.prototype.setTrimingKey = function(trimingKey) {
     this.trimingKey = trimingKey
 }
 
+KonfigerStream.prototype.getCommentPrefix = function() {
+    return this.commentPrefix
+}
+
+KonfigerStream.prototype.setCommentPrefix = function(commentPrefix) {
+    if (!konfigerUtil.isString(commentPrefix)) {
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument, expecting a string found " + 
+                        konfigerUtil.typeOf(trimingKey))
+    }
+    this.commentPrefix = commentPrefix
+}
+
 KonfigerStream.prototype.hasNext = function() {
     if (!this.doneReading_) {
+        var commentSize = this.commentPrefix.length
+        var subCount = 0
         if (this.isFile === true) {
             var fd = fs.openSync(this.streamObj, 'r')
             if (!fd) {
@@ -103,21 +119,55 @@ KonfigerStream.prototype.hasNext = function() {
             var num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
             if (num === 0) {
                 this.doneReading()
-                return
-            }
-        } else {
-            while (this.readPosition < this.streamObj.length) {
-                if (this.streamObj[this.readPosition].trim() !== '') {
+            } else {                
+                while (num !== 0) {
+                    num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
+                    while (this.buffer.toString('utf-8') == this.commentPrefix[subCount]) {
+                        ++subCount
+                        num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
+                    }
+                    this.isFirst |= 1
+                    if (subCount === commentSize) {
+                        ++this.readPosition
+                        while (num !== 0 && this.buffer.toString('utf-8') !== this.seperator) {
+                            ++this.readPosition
+                            num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
+                        }
+                        return this.hasNext()
+                    }
+                    if (this.buffer.toString('utf-8').trim() === '') {
+                        ++this.readPosition
+                        continue
+                    }
                     this.hasNext_ = true
                     return this.hasNext_
                 }
-                ++this.readPosition
+                this.hasNext_ = false 
+                return this.hasNext_    
+            }
+        } else {
+            while (this.readPosition < this.streamObj.length) {
+                while (this.streamObj[subCount+this.readPosition+this.isFirst] == this.commentPrefix[subCount]) {
+                    ++subCount
+                }
+                this.isFirst |= 1
+                if (subCount === commentSize) {
+                    ++this.readPosition
+                    while (this.readPosition < this.streamObj.length && this.streamObj[this.readPosition] !== this.seperator) {
+                        ++this.readPosition
+                    }
+                    return this.hasNext()
+                }
+                if (this.streamObj[this.readPosition].trim() === "") {
+                    ++this.readPosition
+                    continue
+                }
+                this.hasNext_ = true
+                return this.hasNext_
             }
             this.hasNext_ = false 
-            return this.hasNext_
-            
+            return this.hasNext_            
         }
-        this.hasNext_ = true        
     }
     return this.hasNext_
 }

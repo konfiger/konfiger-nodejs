@@ -216,6 +216,27 @@ while (kStream.hasNext()) {
 }
 ```
 
+### Skip Comment entries
+
+Read all the key value entry using the stream and skipping all commented entries. The default comment prefix is `//` but in the example below the commented entries starts with `#` so the prefix is changed. The same thing happen if the key value entry is loaded from file. 
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var kStream = KonfigerStream.stringStream(`
+String=This is a string
+#Number=215415245
+Float=56556.436746
+#Boolean=true
+`)
+kStream.setCommentPrefix("#")
+
+while (kStream.hasNext()) {
+    let entry = kStream.next()
+    console.log(entry)
+}
+```
+
 ## Usage
 
 ### Initialization
@@ -353,12 +374,14 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | --------------- | ------------- 
 | KonfigerStream fileStream(filePath, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
 | KonfigerStream stringStream(rawString, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from a string. It throws en exception if the rawString is not a string or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
+| Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
+| Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream
 | Boolean isEscaping() | Check if the konfiger stream is configured to escape and unescape special characters
 | void setEscaping(escapingEntry) | Change the stream to enable/disable escaping and unescape special characters. This can be used to disable special character escaping if it causing error.
 | Boolean isTrimingKey() | Check if the stream is configured to trim key
 | void setTrimingKey(trimingKey) | Change the stream to enable/disable key trimming
-| Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
-| Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream
+| getCommentPrefix() | Get the prefix string that indicate a pair entry if commented
+| setCommentPrefix(commentPrefix) | Change the stream comment prefix, any entry starting with the comment prefix will be skipped. Comment in KonfigerStream is relative to the key value entry and not relative to a line.
 | void validateFileExistence(filePath)  | Validate the existence of the specified file path if it does not exist an exception is thrown
 
 ### Konfiger

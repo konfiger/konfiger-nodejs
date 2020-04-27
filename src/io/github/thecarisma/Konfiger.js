@@ -129,6 +129,10 @@ Konfiger.prototype.putDouble = function(key, value) {
     this.putFloat(key, value)
 }
 
+Konfiger.prototype.putComment = function(theComment) {
+    this.putString(this.stream.commentPrefix, theComment)
+}
+
 Konfiger.prototype.get = function(key, defaultValue) {
     if (!konfigerUtil.isString(key)) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, key must be a string")

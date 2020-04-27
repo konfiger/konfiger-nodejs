@@ -76,6 +76,22 @@ it('test isEscaping value', () => {
     assert.equal(ks.isEscaping(), false);
 })
 
+it('test the single pair commenting in string stream', () => {
+    var ks = KonfigerStream.stringStream("Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020", ':', ',')
+    while (ks.hasNext()) {
+        assert.notEqual(ks.next()[0], "Project")
+    }
+    assert.throws(function () { 
+        assert.notEqual(ks.next()[0], "Project")
+    }, Error, "Error: io.github.thecarisma.KonfigerStream: You cannot read beyound the stream length, always use hasNext() to verify the Stream still has an entry")
+    ks = KonfigerStream.stringStream("Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020", ':', ',')
+})
+
+it('test the single pair commenting in file stream', () => {
+    var ks = KonfigerStream.fileStream("test/test.comment.conf")
+    Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020
+})
+
 
 
 

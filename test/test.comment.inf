@@ -1,0 +1,10 @@
+
+[The file props]
+File=test.comment.inf
+Author=Adewale Azeez
+Project=konfiger
+
+[Second Part]
+Version=2.1.3
+Date=April 2020
+Platform=Cross Platform
