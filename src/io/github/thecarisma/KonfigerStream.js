@@ -23,6 +23,7 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
 	this.seperator = (seperator ? seperator : '\n')
 	this.errTolerance = (errTolerance ? errTolerance : false)
     this.isFile = isFile
+    this.escapingEntry = true
     
     if (this.isFile === true) {
         this.validateFileExistence(streamObj)
@@ -64,6 +65,14 @@ KonfigerStream.prototype.validateFileExistence = function(filePath) {
     if (!fs.existsSync(filePath)) {
         throw new Error("io.github.thecarisma.KonfigerStream: The file does not exists " + filePath)
     }    
+}
+
+KonfigerStream.prototype.isEscaping = function() {
+    return this.escapingEntry
+}
+
+KonfigerStream.prototype.isEscaping = function(escapingEntry) {
+    this.escapingEntry = escapingEntry
 }
 
 KonfigerStream.prototype.hasNext = function() {
@@ -190,7 +199,10 @@ KonfigerStream.prototype.next = function() {
             }
         }
     }
-    return [key, konfigerUtil.unEscapeString(value, [this.seperator])]
+    return [ 
+                key, 
+                (escapingEntry ? konfigerUtil.unEscapeString(value, [this.seperator]) : value ) 
+           ]
 }
 
 KonfigerStream.prototype.doneReading = function() {
