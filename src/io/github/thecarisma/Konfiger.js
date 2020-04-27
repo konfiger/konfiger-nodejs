@@ -169,17 +169,17 @@ Konfiger.prototype.get = function(key, defaultValue) {
 
 Konfiger.prototype.getString = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
-    return (value ? value.toString() : value)
+    return (value ? value.toString() : "")
 }
 
 Konfiger.prototype.getBoolean = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
-    return (value ? Boolean(value) : value)
+    return (value ? Boolean(value) : false)
 }
 
 Konfiger.prototype.getLong = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
-    return (value ? Number(value) : value)
+    return (value ? Number(value) : 0)
 }
 
 Konfiger.prototype.getInt = function(key, defaultValue) {
@@ -188,12 +188,12 @@ Konfiger.prototype.getInt = function(key, defaultValue) {
 
 Konfiger.prototype.getFloat = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
-    return (value ? parseFloat(value) : value)
+    return (value ? parseFloat(value) : 0.0)
 }
 
 Konfiger.prototype.getDouble = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
-    return (value ? parseFloat(value) : value)
+    return (value ? parseFloat(value) : 0.0)
 }
 
 Konfiger.prototype.shiftCache = function(key, value) {

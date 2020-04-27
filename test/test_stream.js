@@ -88,8 +88,11 @@ it('test the single pair commenting in string stream', () => {
 })
 
 it('test the single pair commenting in file stream', () => {
-    var ks = KonfigerStream.fileStream("test/test.comment.conf")
-    Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020
+    var ks = KonfigerStream.fileStream("test/test.comment.inf")
+    ks.setCommentPrefix("[")
+    while (ks.hasNext()) {
+        assert.notEqual(ks.next()[0], null)
+    }
 })
 
 
