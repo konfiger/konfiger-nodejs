@@ -54,7 +54,7 @@ it('validate the string stream value', () => {
 })
 
 it('test string stream key trimming', () => {
-    var ks = KonfigerStream.stringStream(" Name =Adewale Azeez,Project =konfiger, Date=April 24 2020", '=', ',')
+    var ks = KonfigerStream.stringStream(" Name =Adewale Azeez:Project =konfiger: Date=April 24 2020", '=', ':')
     assert.equal(ks.isTrimingKey(), false)
     ks.setTrimingKey(true)
     assert.equal(ks.isTrimingKey(), true)
@@ -62,3 +62,19 @@ it('test string stream key trimming', () => {
     assert.equal(ks.next()[0], "Project")
     assert.equal(ks.next()[0], "Date")
 })
+
+it('test isEscaping value', () => {
+    var ks = KonfigerStream.stringStream("")
+    assert.equal(ks.isEscaping(), true)
+    ks.setEscaping(false)
+    assert.equal(ks.isEscaping(), false);
+})
+
+
+
+
+
+
+
+
+
