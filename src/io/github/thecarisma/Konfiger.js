@@ -145,7 +145,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
         if (!this.loadingEnds) {
             while (this.stream.hasNext()) {
                 var obj = this.stream.next()
-                this.konfigerObjects.set(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
+                this.konfigerObjects.set(obj[0], (this.stream.isEscaping() ? konfigerUtil.escapeString(obj[1], [this.seperator]) : obj[1] ))
                 this.changesOccur = true
                 if (obj[0] === key) {
                     if (this.enableCache_) {
@@ -346,7 +346,7 @@ Konfiger.prototype.toString = function() {
         this.stringValue = ""
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
-            this.stringValue += entry[0] + this.delimeter + konfigerUtil.escapeString(entry[1], [this.seperator]) 
+            this.stringValue += entry[0] + this.delimeter + (this.stream.isEscaping() ? konfigerUtil.escapeString(entry[1], [this.seperator]) : entry[1]) 
             if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
             ++index
         }
@@ -361,7 +361,7 @@ Konfiger.prototype.lazyLoader = function() {
     }
     while (this.stream.hasNext()) {
         var obj = this.stream.next()
-        this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
+        this.putString(obj[0], (this.stream.isEscaping() ? konfigerUtil.escapeString(obj[1], [this.seperator]) : obj[1] ))
     }
     this.loadingEnds = true
 }
@@ -388,7 +388,7 @@ Konfiger.prototype.appendString = function(rawString, delimeter, seperator) {
     var stream_ = KonfigerStream.stringStream(rawString, (delimeter ? delimeter : this.delimeter), (seperator ? seperator : this.seperator))
     while (stream_.hasNext()) {
         var obj = stream_.next()
-        this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
+        this.putString(obj[0], (this.stream.isEscaping() ? konfigerUtil.escapeString(obj[1], [this.seperator]) : obj[1]))
     }
     this.changesOccur = true
 }
@@ -403,7 +403,7 @@ Konfiger.prototype.appendFile = function(filePath, delimeter, seperator) {
     var stream_ = KonfigerStream.fileStream(filePath, (delimeter ? delimeter : this.delimeter), (seperator ? seperator : this.seperator))
     while (stream_.hasNext()) {
         var obj = stream_.next()
-        this.putString(obj[0], konfigerUtil.escapeString(obj[1], [this.seperator]))
+        this.putString(obj[0], (this.stream.isEscaping() ? konfigerUtil.escapeString(obj[1], [this.seperator]) : obj[1]))
     }
     this.changesOccur = true
     

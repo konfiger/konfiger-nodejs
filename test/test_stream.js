@@ -1,6 +1,6 @@
 
 const assert = require('assert')
-const KonfigerStream = require("../src/io/github/thecarisma/KonfigerStream.js")
+const { KonfigerStream } = require("../index.js")
 
 it('should throw exceptions', () => {
     assert.throws(function () { 
@@ -57,6 +57,9 @@ it('test string stream key trimming', () => {
     var ks = KonfigerStream.stringStream(" Name =Adewale Azeez:Project =konfiger: Date=April 24 2020", '=', ':')
     assert.equal(ks.isTrimingKey(), false)
     ks.setTrimingKey(true)
+    assert.throws(function () { 
+        ks.setTrimingKey("Hello World")
+    }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found string")
     assert.equal(ks.isTrimingKey(), true)
     assert.equal(ks.next()[0], "Name")
     assert.equal(ks.next()[0], "Project")
@@ -66,6 +69,9 @@ it('test string stream key trimming', () => {
 it('test isEscaping value', () => {
     var ks = KonfigerStream.stringStream("")
     assert.equal(ks.isEscaping(), true)
+    assert.throws(function () { 
+        ks.setEscaping(20)
+    }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found number")
     ks.setEscaping(false)
     assert.equal(ks.isEscaping(), false);
 })
