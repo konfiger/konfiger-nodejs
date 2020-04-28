@@ -149,12 +149,34 @@ it('test complex and confusing seperator', () => {
 it('append new unparsed entries from string and file', () => {
     var konfiger = Konfiger.fromString('')
     
-    assert.equal(konfiger.size(), 0)
+    assert.equal(konfiger.size(), 0)    
     konfiger.appendString('Language=English')
     assert.equal(konfiger.size(), 1)
+    assert.equal(konfiger.get("Name"), null)
+    assert.notEqual(konfiger.get("Name"), "Adewale Azeez")
     assert.equal(konfiger.get("Language"), "English")
+    
+    konfiger.appendFile('test/test.config.ini')
+    assert.notEqual(konfiger.get("Name"), null)
+    assert.equal(konfiger.get("Name"), "Adewale Azeez")
 })
 
-//test prev and current cache
+it('test prev and current cache', () => {
+    var konfiger = Konfiger.fromString('')
+    
+    konfiger.put("Name", "Adewale")
+    konfiger.put("Project", "konfiger")
+    konfiger.putInt("Year", 2020)
+    
+    assert.equal(konfiger.get("Name"), "Adewale")
+    assert.equal(konfiger.get("Project"), "konfiger")
+    assert.strictEqual(konfiger.getInt("Year"), 2020)
+    assert.equal(konfiger.currentCachedObject.ckey, "Year")
+    assert.equal(konfiger.prevCachedObject.ckey, "Project")
+    assert.equal(konfiger.currentCachedObject.cvalue, "2020")
+    assert.equal(konfiger.prevCachedObject.cvalue, "konfiger")
+})
+
 //test and doc putComment
 //test the single pair commenting
+//add test for other methods
