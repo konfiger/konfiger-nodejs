@@ -146,6 +146,15 @@ it('test complex and confusing seperator', () => {
     }
 })
 
+it('append new unparsed entries from string and file', () => {
+    var konfiger = Konfiger.fromString('')
+    
+    assert.equal(konfiger.size(), 0)
+    konfiger.appendString('Language=English')
+    assert.equal(konfiger.size(), 1)
+    assert.equal(konfiger.get("Language"), "English")
+})
+
 //test prev and current cache
 //test and doc putComment
 //test the single pair commenting
