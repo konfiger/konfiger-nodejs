@@ -305,8 +305,13 @@ Konfiger.prototype.setSeperator = function(seperator) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
                         konfigerUtil.typeOf(seperator))
     }
-    this.changesOccur = true
-    this.seperator = seperator
+    if (this.seperator !== seperator) {
+        this.changesOccur = true
+        this.seperator = seperator
+        for (var entry of this.entries()) {
+            this.konfigerObjects.set(entry[0], (this.stream.isEscaping() ? konfigerUtil.escapeString(entry[1], [this.seperator]) : entry[1]))
+        }
+    }
 }
 
 Konfiger.prototype.getDelimeter = function() {
@@ -377,12 +382,11 @@ Konfiger.prototype.save = function(filePath) {
 	if (!filePath) {
         filePath = this.filePath
     }
-    fs.writeFile(filePath, this.toString(), function(err) {
-        if(err) {
-            throw new Error("io.github.thecarisma.Konfiger: Error occur while saving entries into "
-            + filePath)
-        }
-    })
+    var ret = fs.writeFileSync(filePath, this.toString())
+    if(ret) {
+        throw new Error("io.github.thecarisma.Konfiger: Error occur while saving entries into "
+        + filePath)
+    }
 }
 
 Konfiger.prototype.appendString = function(rawString, delimeter, seperator) {

@@ -427,7 +427,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | save(filePath?)         | Save the konfiger datas into a file. The argument filePath is optional if specified the entries is writtent to the filePath else the filePath used to initialize the Konfiger object is used and if the Konfiger is initialized `fromString` and the filePath is not specified an exception is thrown. This does not clear the already added entries.
 | getSeperator()           | Get seperator char that seperate the key value entry, default is `\n`.
 | getDelimeter()           | Get delimeter char that seperated the key from it value, default is `=`.
-| setSeperator(seperator)           | Change seperator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function
+| setSeperator(seperator)           | Change seperator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function. If the new seperator is different from the old one all the entries values will be re parsed to get the new proper values, this process can take time if the entries is much.
 | setDelimeter(delimeter)           | Change delimeter char that seperated the key from object, note that the file is not updates, to change the file call the `save()` function 
 | size()           | Get the total size of key value entries in the konfiger
 | clear()           | clear all the key value entries in the konfiger. This does not update the file call the `save` method to update the file

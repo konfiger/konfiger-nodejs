@@ -2,7 +2,7 @@
 const assert = require('assert')
 const { Konfiger, KonfigerStream } = require("../index.js")
 
-it('validate konfiger string stream entries 1', () => {
+it('validate konfiger string stream entries', () => {
     var konfiger = Konfiger.fromString(`
 String=This is a string
 Number=215415245
@@ -91,6 +91,59 @@ it('remove entry and validate size', () => {
     assert.equal(konfiger.remove(0), "111")
     assert.equal(konfiger.size(), 1)
     assert.equal(konfiger.get("Three"), "333")
+})
+
+it('set get delimeter and seperator', () => {
+    var konfiger = Konfiger.fromFile('test/test.config.ini', true)
+    
+    assert.equal(konfiger.getSeperator(), "\n")
+    assert.equal(konfiger.getDelimeter(), "=")
+    assert.equal(konfiger.toString().split("\n").length > 2, true)
+    konfiger.setSeperator('-')
+    konfiger.setDelimeter('+')
+    assert.equal(konfiger.getSeperator(), "-")
+    assert.equal(konfiger.getDelimeter(), "+")
+    assert.equal(konfiger.toString().split("\n").length, 1)
+})
+
+it('escaping and unescaping entries and save', () => {
+    var ks = KonfigerStream.fileStream('test/test.config.ini')
+    var ks1 = KonfigerStream.fileStream('test/test.txt')
+    var konfiger = Konfiger.fromStream(ks, true)
+    var konfiger1 = Konfiger.fromStream(ks1, true)
+    ks.setEscaping(false)
+    
+    assert.equal(konfiger.get("Hobby"), "i don't know")
+    assert.notEqual(konfiger1.get("Hobby"), "i don\\'t know")
+    assert.equal(konfiger1.get("Hobby"), "i don't know")
+    assert.notEqual(konfiger.get("Hobby"), "i don\\'t know")
+    konfiger.save('test/test.config.ini')
+    konfiger1.save('test/test.txt')
+    
+    var newKs = KonfigerStream.fileStream('test/test.config.ini')
+    var newKonfiger = Konfiger.fromStream(newKs, true)
+    var newKonfiger1 = Konfiger.fromFile('test/test.txt', true)
+    newKs.setEscaping(false)
+    assert.equal(konfiger.toString(), newKonfiger.toString())
+    assert.equal(konfiger1.toString(), newKonfiger1.toString())
+})
+
+it('test complex and confusing seperator', () => {
+    var konfiger = Konfiger.fromString(`Occupation=Software En\\gineergLocation=Ni\\geriagState=La\\gos`, false, '=', 'g')
+    
+    assert.equal(konfiger.size(), 3)
+    assert.equal(konfiger.toString().indexOf("\\g") > -1, true)
+    for (var entry of konfiger.entries()) {
+        assert.equal(entry[1].indexOf("\\g") > -1, true)
+    }
+    konfiger.setSeperator('f')
+    assert.equal(konfiger.get("Occupation"), "So\\\\ftware Engineer")
+    konfiger.setSeperator('\n')
+    assert.equal(konfiger.toString().indexOf("\\g") > -1, false)
+    assert.equal(konfiger.size(), 3)
+    for (var entry of konfiger.entries()) {
+        assert.equal(entry[1].indexOf("\\g") > -1, false)
+    }
 })
 
 //test prev and current cache
