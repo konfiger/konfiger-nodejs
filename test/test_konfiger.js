@@ -174,6 +174,13 @@ it('test prev and current cache', () => {
     assert.equal(konfiger.prevCachedObject.cvalue, "konfiger")
 })
 
-//test and doc putComment
-//test the single pair commenting
-//add test for other methods
+it('test the single pair commenting in string stream konfiger', () => {
+    var ks = KonfigerStream.stringStream("Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020", ':', ',')
+    var kon = Konfiger.fromStream(ks)
+    for (var entry of kon.entries()) {
+        assert.notEqual(entry, "Project")
+    }
+    assert.equal(kon.size(), 2)
+})
+
+

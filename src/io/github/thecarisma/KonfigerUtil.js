@@ -70,7 +70,8 @@ function unEscapeString(value, extraEscape) {
     for (var i = 0; i < value.length; ++i) {
         var c = value[i]
         if (c==='/') {
-            if (i===value.length) {
+            if (i===value.length - 1) {
+                finalValue += c
                 break
             }
             var d = ++i

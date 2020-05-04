@@ -109,7 +109,7 @@ KonfigerStream.prototype.hasNext = function() {
                     num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
                     while (this.buffer.toString('utf-8') == this.commentPrefix[subCount]) {
                         ++subCount
-                        num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
+                        num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition+subCount)
                     }
                     this.isFirst |= 1
                     if (subCount === commentSize) {
@@ -118,6 +118,7 @@ KonfigerStream.prototype.hasNext = function() {
                             ++this.readPosition
                             num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
                         }
+                        ++this.readPosition
                         return this.hasNext()
                     }
                     if (this.buffer.toString('utf-8').trim() === '') {
@@ -132,7 +133,7 @@ KonfigerStream.prototype.hasNext = function() {
             }
         } else {
             while (this.readPosition < this.streamObj.length) {
-                while (this.streamObj[subCount+this.readPosition+this.isFirst] == this.commentPrefix[subCount]) {
+                while (this.streamObj[subCount+this.readPosition] == this.commentPrefix[subCount]) {
                     ++subCount
                 }
                 this.isFirst |= 1
@@ -141,6 +142,7 @@ KonfigerStream.prototype.hasNext = function() {
                     while (this.readPosition < this.streamObj.length && this.streamObj[this.readPosition] !== this.seperator) {
                         ++this.readPosition
                     }
+                    ++this.readPosition
                     return this.hasNext()
                 }
                 if (this.streamObj[this.readPosition].trim() === "") {

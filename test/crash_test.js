@@ -3,7 +3,7 @@ const { Konfiger, KonfigerStream } = require("../index.js")
 const KonfigerUtil = require("../src/io/github/thecarisma/KonfigerUtil.js")
 const { performance } = require('perf_hooks');
 
-
+/*
 let times = 999999999
 
 console.log(`===================
@@ -40,7 +40,7 @@ function millisToMinutesAndSeconds(millis) {
   return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
 
-/*
+
 
 var konfiger = Konfiger.fromFile('test/test.config.ini', true)
 for (var i = 0; i < Konfiger.MAX_CAPACITY + 2; i++) {

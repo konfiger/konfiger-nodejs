@@ -74,7 +74,6 @@ it('test the single pair commenting in string stream', () => {
     assert.throws(function () { 
         assert.notEqual(ks.next()[0], "Project")
     }, Error, "Error: io.github.thecarisma.KonfigerStream: You cannot read beyound the stream length, always use hasNext() to verify the Stream still has an entry")
-    ks = KonfigerStream.stringStream("Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020", ':', ',')
 })
 
 it('test the single pair commenting in file stream', () => {
