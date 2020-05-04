@@ -52,70 +52,15 @@ function escapeString(value, extraEscape) {
     var finalValue = ""
     for (var i = 0; i < value.length; i++) {
         let c = value[i]
-        switch (c) {
-            case '\t':
-                finalValue += "\\t"
-                break
-            case '\n':
-                finalValue += "\\n"
-                break
-            case '\v':
-                finalValue += "\\v"
-                break
-            case '\r':
-                finalValue += "\\r"
-                break
-            case '\f':
-                finalValue += "\\f"
-                break
-            /*case '\a':
-                finalValue += "\\a"
-                break*/
-            case '\b':
-                finalValue += "\\b"
-                break
-            case '\\':
-                if ("tnvrfb?'\"\0000".indexOf(value[++i]) > -1) {
-                    finalValue += "\\" + value[i]
-                } else {
-                    if (extraEscape) {
-                        for (var extra of extraEscape) {
-                            if (value[i] === extra) {
-                                finalValue += value[i]
-                                break
-                            }
-                        }
-                    } else {
-                        finalValue += "\\\\"
-                    }
-                }
-                break
-            case '\?':
-                finalValue += "\\?"
-                break
-            case '\'':
-                finalValue += "\\'"
-                break
-            /*case '\i':
-                finalValue += "\\i"
-                break*/
-            case '\"':
-                finalValue += "\\\""
-                break
-            case '\000':
-                finalValue += "\\000"
-                break
-            default:
-                if (extraEscape) {
-                    for (var extra of extraEscape) {
-                        if (c === extra) {
-                            finalValue += "\\\\"
-                            break
-                        }
-                    }
-                }
-                finalValue += c
-        }
+		if (extraEscape) {
+			for (var extra of extraEscape) {
+				if (c === extra) {
+					finalValue += "/"
+					break
+				}
+			}
+		}
+		finalValue += c
     }
     return finalValue
 }
@@ -124,67 +69,25 @@ function unEscapeString(value, extraEscape) {
     var finalValue = ""
     for (var i = 0; i < value.length; ++i) {
         var c = value[i]
-        if (c==='\\') {
+        if (c==='/') {
             if (i===value.length) {
                 break
             }
             var d = ++i
-            switch (value[d]) {
-                case 't':
-                    finalValue += "\t"
-                    break
-                case 'n':
-                    finalValue += "\n"
-                    break
-                case 'v':
-                    finalValue += "\v"
-                    break
-                case 'r':
-                    finalValue += "\r"
-                    break
-                case 'f':
-                    finalValue += "\f"
-                    break
-                /*case 'a':
-                    finalValue += "\a"
-                    break*/
-                case 'b':
-                    finalValue += "\b"
-                    break
-                case '\\':
-                    finalValue += "\\"
-                    break
-                case '?':
-                    finalValue += "\?"
-                    break
-                case "'":
-                    finalValue += "\'"
-                    break
-                /*case "i":
-                    finalValue += "\i"
-                    break*/
-                case '\"':
-                    finalValue += "\""
-                    break
-                case '000':
-                    finalValue += "\000"
-                    break
-                default:
-                    if (extraEscape) {
-                        var continua = false
-                        for (var extra of extraEscape) {
-                            if (value[d] === extra) {
-                                finalValue += extra
-                                continua = true
-                                break
-                            }
-                        }
-                        if (continua) {
-                            continue
-                        }
-                    }
-                    finalValue += value[d]+c
-            }
+            if (extraEscape) {
+				var continua = false
+				for (var extra of extraEscape) {
+					if (value[d] === extra) {
+						finalValue += value[d]
+						continua = true
+						break
+					}
+				}
+				if (continua) {
+					continue
+				}
+			}
+			finalValue += "/" + value[d]
             continue
         }
         finalValue += c

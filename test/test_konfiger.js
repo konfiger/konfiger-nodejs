@@ -111,35 +111,32 @@ it('escaping and unescaping entries and save', () => {
     var ks1 = KonfigerStream.fileStream('test/test.txt')
     var konfiger = Konfiger.fromStream(ks, true)
     var konfiger1 = Konfiger.fromStream(ks1, true)
-    ks.setEscaping(false)
     
     assert.equal(konfiger.get("Hobby"), "i don't know")
-    assert.notEqual(konfiger1.get("Hobby"), "i don\\'t know")
+    assert.equal(konfiger1.get("Hobby"), konfiger.get("Hobby"))
     assert.equal(konfiger1.get("Hobby"), "i don't know")
-    assert.notEqual(konfiger.get("Hobby"), "i don\\'t know")
     konfiger.save('test/test.config.ini')
     konfiger1.save('test/test.txt')
     
     var newKs = KonfigerStream.fileStream('test/test.config.ini')
     var newKonfiger = Konfiger.fromStream(newKs, true)
     var newKonfiger1 = Konfiger.fromFile('test/test.txt', true)
-    newKs.setEscaping(false)
     assert.equal(konfiger.toString(), newKonfiger.toString())
     assert.equal(konfiger1.toString(), newKonfiger1.toString())
 })
 
 it('test complex and confusing seperator', () => {
-    var konfiger = Konfiger.fromString(`Occupation=Software En\\gineergLocation=Ni\\geriagState=La\\gos`, false, '=', 'g')
+    var konfiger = Konfiger.fromString(`Occupation=Software En/gineergLocation=Ni/geriagState=La/gos`, false, '=', 'g')
     
     assert.equal(konfiger.size(), 3)
-    assert.equal(konfiger.toString().indexOf("\\g") > -1, true)
+    assert.equal(konfiger.toString().indexOf("/g") > -1, true)
     for (var entry of konfiger.entries()) {
-        assert.equal(entry[1].indexOf("\\g") > -1, true)
+        assert.equal(entry[1].indexOf("/g") > -1, false)
     }
     konfiger.setSeperator('f')
-    assert.equal(konfiger.get("Occupation"), "So\\\\ftware Engineer")
+    assert.equal(konfiger.get("Occupation"), "Software Engineer")
     konfiger.setSeperator('\n')
-    assert.equal(konfiger.toString().indexOf("\\g") > -1, false)
+    assert.equal(konfiger.toString().indexOf("/g") > -1, false)
     assert.equal(konfiger.size(), 3)
     for (var entry of konfiger.entries()) {
         assert.equal(entry[1].indexOf("\\g") > -1, false)

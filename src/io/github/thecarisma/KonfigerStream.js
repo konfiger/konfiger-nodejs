@@ -21,9 +21,8 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
 	this.streamObj = streamObj
 	this.delimeter = (delimeter ? delimeter : '=')
 	this.seperator = (seperator ? seperator : '\n')
-	this.errTolerance = (errTolerance ? errTolerance : false)
+	this.errTolerance = (errTolerance === true ? errTolerance : false)
     this.isFile = isFile
-    this.escapingEntry = true
     this.trimingKey = false
     this.commentPrefix = "//"
     this.isFirst = 0
@@ -42,16 +41,14 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
                         + konfigerUtil.typeOf(errTolerance))
     }
     if (delimeter && !seperator) {
-        throw new Error("io.github.thecarisma.KonfigerStream: Invalid length of argument, seperator parameter is missing")
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid length of argument, seperator or delimeter parameter is missing")
     }
-    if (delimeter && seperator) {
-        if (!konfigerUtil.isChar(delimeter)) { 
-            throw new Error("io.github.thecarisma.KonfigerStream: invalid argument for delimeter expecting char found " + konfigerUtil.typeOf(delimeter)) 
-        }
-        if (!konfigerUtil.isChar(seperator)) { 
-            throw new Error("io.github.thecarisma.KonfigerStream: invalid argument for seperator expecting char found " + konfigerUtil.typeOf(seperator)) 
-        }
-    }    
+    if (!konfigerUtil.isChar(this.delimeter)) { 
+        throw new Error("io.github.thecarisma.KonfigerStream: invalid argument for delimeter expecting char found " + konfigerUtil.typeOf(delimeter)) 
+    }
+    if (!konfigerUtil.isChar(this.seperator)) { 
+        throw new Error("io.github.thecarisma.KonfigerStream: invalid argument for seperator expecting char found " + konfigerUtil.typeOf(seperator)) 
+    }  
     
     this.readPosition = 0
     this.hasNext_ = false
@@ -68,18 +65,6 @@ KonfigerStream.prototype.validateFileExistence = function(filePath) {
     if (!fs.existsSync(filePath)) {
         throw new Error("io.github.thecarisma.KonfigerStream: The file does not exists " + filePath)
     }    
-}
-
-KonfigerStream.prototype.isEscaping = function() {
-    return this.escapingEntry
-}
-
-KonfigerStream.prototype.setEscaping = function(escapingEntry) {
-    if (!konfigerUtil.isBoolean(escapingEntry)) {
-        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found " + 
-                        konfigerUtil.typeOf(escapingEntry))
-    }
-    this.escapingEntry = escapingEntry
 }
 
 KonfigerStream.prototype.isTrimingKey = function() {
@@ -162,6 +147,7 @@ KonfigerStream.prototype.hasNext = function() {
                     ++this.readPosition
                     continue
                 }
+                
                 this.hasNext_ = true
                 return this.hasNext_
             }
@@ -207,8 +193,8 @@ KonfigerStream.prototype.next = function() {
                 line++;
                 column = 0 
             }
-            if (char_ === this.seperator && prevChar != '\\') {
-                if (key === "" && value ==="") continue
+            if (char_ === this.seperator && prevChar != '\\' && !parseKey ) {
+                if (value ==="") continue
                 if (parseKey === true && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.KonfigerStream: Invalid entry detected near Line " + line + ":" + column);
                 }
@@ -245,13 +231,13 @@ KonfigerStream.prototype.next = function() {
                 line++;
                 column = 0 
             }
-            if (character === this.seperator && this.streamObj[this.readPosition-1] != '\\') {
+            if (character === this.seperator && this.streamObj[this.readPosition-1] != '/' && !parseKey ) {
                 if (key === "" && value ==="") continue
                 if (parseKey === true && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
                 }
                 break
-            }
+            } 
             if (character === this.delimeter && parseKey) {
                 if (value !== "" && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
@@ -265,10 +251,12 @@ KonfigerStream.prototype.next = function() {
                 value += character
             }
         }
+        ++this.readPosition
     }
+    
     return [ 
                 (this.trimingKey ? key.trim() : key), 
-                (this.escapingEntry ? konfigerUtil.unEscapeString(value, [this.seperator]) : value ) 
+                konfigerUtil.unEscapeString(value, [this.seperator])
            ]
 }
 

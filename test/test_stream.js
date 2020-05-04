@@ -66,16 +66,6 @@ it('test string stream key trimming', () => {
     assert.equal(ks.next()[0], "Date")
 })
 
-it('test isEscaping value', () => {
-    var ks = KonfigerStream.stringStream("")
-    assert.equal(ks.isEscaping(), true)
-    assert.throws(function () { 
-        ks.setEscaping(20)
-    }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found number")
-    ks.setEscaping(false)
-    assert.equal(ks.isEscaping(), false);
-})
-
 it('test the single pair commenting in string stream', () => {
     var ks = KonfigerStream.stringStream("Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020", ':', ',')
     while (ks.hasNext()) {
