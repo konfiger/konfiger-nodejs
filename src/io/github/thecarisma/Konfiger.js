@@ -162,7 +162,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
         }
     }
     if (defaultValue && !this.contains(key)) {
-        return defaultValue
+        return ""+defaultValue
     }
     return this.konfigerObjects.get(key)
 }
@@ -174,7 +174,7 @@ Konfiger.prototype.getString = function(key, defaultValue) {
 
 Konfiger.prototype.getBoolean = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
-    return (value ? Boolean(value) : false)
+    return (value ? value === "true" : false)
 }
 
 Konfiger.prototype.getLong = function(key, defaultValue) {
@@ -357,8 +357,8 @@ Konfiger.prototype.toString = function() {
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
             this.stringValue += entry[0] + this.delimeter + konfigerUtil.escapeString(entry[1], [this.seperator])
-            if (index != (this.konfigerObjects.size - 1)) this.stringValue += this.seperator
             ++index
+            if (index < (this.konfigerObjects.size)) this.stringValue += this.seperator
         }
 		this.changesOccur = false
 	}

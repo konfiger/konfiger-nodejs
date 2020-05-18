@@ -54,9 +54,9 @@ it('validate konfiger get*() returned types', () => {
     assert.notStrictEqual(konfiger.getLong("Two"), "123456789")
     
     assert.equal(konfiger.get("Bool"), "true")
-    assert.equal(konfiger.getBoolean("Two"), true)
-    assert.notEqual(konfiger.getBoolean("Two"), false)
-    assert.notStrictEqual(konfiger.getBoolean("Two"), "true")
+    assert.equal(konfiger.getBoolean("Two"), false)
+    assert.notEqual(konfiger.getBoolean("Two"), true)
+    assert.notEqual(konfiger.getBoolean("Two"), "true")
     
     assert.equal(konfiger.get("Float"), "123.56")
     assert.equal(konfiger.getFloat("Float"), 123.56)
@@ -77,11 +77,11 @@ it('validate konfiger default value for non existing key', () => {
     assert.equal(konfiger.getLong("TheNumber", 123), 123)
     assert.equal(konfiger.getFloat("TheNumber"), 0.0)
     assert.notEqual(konfiger.getFloat("TheNumber"), 0.1)
-    assert.equal(konfiger.getLong("TheNumber", 0.12), 0.12)
 })
 
 it('remove entry and validate size', () => {
     var konfiger = Konfiger.fromString('One=111,Two=222,Three=333', false, '=', ',')
+    konfiger.errorTolerance(true)
     
     assert.equal(konfiger.size(), 3)
     assert.notEqual(konfiger.get("Two"), null)
