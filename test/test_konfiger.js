@@ -108,7 +108,7 @@ it('set get delimeter and seperator', () => {
 
 it('escaping and unescaping entries and save', () => {
     var ks = KonfigerStream.fileStream('test/test.config.ini')
-    var ks1 = KonfigerStream.fileStream('test/test.txt')
+    var ks1 = KonfigerStream.fileStream('test/test.txt', ':',  ',')
     var konfiger = Konfiger.fromStream(ks, true)
     var konfiger1 = Konfiger.fromStream(ks1, true)
     
@@ -116,11 +116,10 @@ it('escaping and unescaping entries and save', () => {
     assert.equal(konfiger1.get("Hobby"), konfiger.get("Hobby"))
     assert.equal(konfiger1.get("Hobby"), "i don't know")
     konfiger.save('test/test.config.ini')
-    konfiger1.save('test/test.txt')
     
     var newKs = KonfigerStream.fileStream('test/test.config.ini')
     var newKonfiger = Konfiger.fromStream(newKs, true)
-    var newKonfiger1 = Konfiger.fromFile('test/test.txt', true)
+    var newKonfiger1 = Konfiger.fromFile('test/test.txt', true, ':',  ',')
     assert.equal(konfiger.toString(), newKonfiger.toString())
     assert.equal(konfiger1.toString(), newKonfiger1.toString())
 })

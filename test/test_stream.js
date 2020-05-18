@@ -33,7 +33,7 @@ it('should successfully initialize', () => {
 })
 
 it('validate the file stream value', () => {
-    var ks = KonfigerStream.fileStream('test/test.txt', '=', '\n')
+    var ks = KonfigerStream.fileStream('test/test.config.ini', '=', '\n')
     while (ks.hasNext()) {
         assert.notEqual(ks.next(), null)
     }
@@ -76,11 +76,18 @@ it('test the single pair commenting in string stream', () => {
     }, Error, "Error: io.github.thecarisma.KonfigerStream: You cannot read beyound the stream length, always use hasNext() to verify the Stream still has an entry")
 })
 
-it('test the single pair commenting in file stream', () => {
+it('test the single pair commenting in file stream 1', () => {
     var ks = KonfigerStream.fileStream("test/test.comment.inf")
     ks.setCommentPrefix("[")
     while (ks.hasNext()) {
-        assert.notEqual(ks.next()[0], null)
+        assert.equal(ks.next()[0].startsWith("["), false)
+    }
+})
+
+it('test the single pair commenting in file stream', () => {
+    var ks = KonfigerStream.fileStream("test/test.txt", ':',  ',')
+    while (ks.hasNext()) {
+        assert.equal(ks.next()[0].startsWith("//"), false)
     }
 })
 

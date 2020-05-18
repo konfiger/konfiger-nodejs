@@ -1,4 +1,1 @@
-Name=Adewale Azeez
-Occupation=Software Engineer
-Location=Nigeria
-Hobby=i don't know
+Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020,/Time:12:00 PM,Hobby:i don't know
