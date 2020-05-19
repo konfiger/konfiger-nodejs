@@ -46,7 +46,7 @@ it('validate lazyload konfiger entries get() with fallback', () => {
     assert.equal(konfiger.get("Occupation", "Pen Tester"), "Software Engineer") 
     assert.equal(konfiger.get("Hobby", "Worm Creation"), "i don't know")
     assert.equal(konfiger.get("Fav OS"), null)
-    assert.equal(konfiger.get("Fav OS", "Whatever get work done"), "Whatever get work done")
+    assert.notEqual(konfiger.get("Fav OS", "Whatever get work done"), null)
 })
 
 it('validate konfiger get*() returned types', () => {
