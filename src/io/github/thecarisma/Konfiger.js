@@ -161,10 +161,16 @@ Konfiger.prototype.get = function(key, defaultValue) {
             this.loadingEnds = true
         }
     }
+    var value
     if (defaultValue && !this.contains(key)) {
-        return ""+defaultValue
+        value = ""+defaultValue
+    } else if (this.contains(key)) {
+        value = this.konfigerObjects.get(key)
+        if (this.enableCache_) {
+            this.shiftCache(key, value)
+        }
     }
-    return this.konfigerObjects.get(key)
+    return value
 }
 
 Konfiger.prototype.getString = function(key, defaultValue) {
@@ -239,9 +245,10 @@ Konfiger.prototype.clear = function() {
 Konfiger.prototype.remove = function(keyIndex) {
     if (konfigerUtil.isString(keyIndex)) {
         this.changesOccur = true
-        this.enableCache(this.enableCache_)
         if (this.contains(keyIndex)) {
+            this.enableCache(false)
             var ret = this.get(keyIndex)
+            this.enableCache(this.enableCache_)
             if (this.konfigerObjects.delete(keyIndex)) {
                 return ret
             }

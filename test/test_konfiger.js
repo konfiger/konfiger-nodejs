@@ -20,7 +20,7 @@ Boolean=true
 })
 
 it('validate konfiger entries get() method', () => {
-    var konfiger = Konfiger.fromFile('test/test.config.ini', true)
+    var konfiger = Konfiger.fromFile('test/test.config.ini')
     konfiger.put("One", konfiger)
     konfiger.put("Two", '"hello", "world"')
     konfiger.put("Three", 3)
@@ -38,6 +38,15 @@ it('validate konfiger entries get() method', () => {
     assert.equal(konfiger.get("Six"), "false") 
     assert.equal(konfiger.get("Seven"), "121251656.1367367263726") 
     assert.equal(konfiger.get("Eight"), "0.21") 
+})
+
+it('validate lazyload konfiger entries get() with fallback', () => {
+    var konfiger = Konfiger.fromFile('test/test.config.ini', true)
+    
+    assert.equal(konfiger.get("Occupation", "Pen Tester"), "Software Engineer") 
+    assert.equal(konfiger.get("Hobby", "Worm Creation"), "i don't know")
+    assert.equal(konfiger.get("Fav OS"), null)
+    assert.equal(konfiger.get("Fav OS", "Whatever get work done"), "Whatever get work done")
 })
 
 it('validate konfiger get*() returned types', () => {
@@ -164,13 +173,24 @@ it('test prev and current cache', () => {
     konfiger.put("Project", "konfiger")
     konfiger.putInt("Year", 2020)
     
+    assert.strictEqual(konfiger.getInt("Year"), 2020)
+    assert.equal(konfiger.get("Project"), "konfiger")
+    assert.equal(konfiger.get("Name"), "Adewale")
+    assert.strictEqual(konfiger.getInt("Year"), 2020)
+    assert.equal(konfiger.currentCachedObject.ckey, "Name")
+    assert.equal(konfiger.prevCachedObject.ckey, "Year")
+    assert.equal(konfiger.currentCachedObject.cvalue, "Adewale")
+    assert.equal(konfiger.prevCachedObject.cvalue, "2020")
+    assert.equal(konfiger.get("Name"), "Adewale")
     assert.equal(konfiger.get("Name"), "Adewale")
     assert.equal(konfiger.get("Project"), "konfiger")
-    assert.strictEqual(konfiger.getInt("Year"), 2020)
-    assert.equal(konfiger.currentCachedObject.ckey, "Year")
-    assert.equal(konfiger.prevCachedObject.ckey, "Project")
-    assert.equal(konfiger.currentCachedObject.cvalue, "2020")
-    assert.equal(konfiger.prevCachedObject.cvalue, "konfiger")
+    assert.equal(konfiger.get("Name"), "Adewale")
+    assert.equal(konfiger.get("Name"), "Adewale")
+    assert.equal(konfiger.get("Name"), "Adewale")
+    assert.equal(konfiger.currentCachedObject.ckey, "Project")
+    assert.equal(konfiger.prevCachedObject.ckey, "Name")
+    assert.equal(konfiger.currentCachedObject.cvalue, "konfiger")
+    assert.equal(konfiger.prevCachedObject.cvalue, "Adewale")
 })
 
 it('test the single pair commenting in string stream konfiger', () => {
