@@ -4,8 +4,7 @@
 
 ---
 
-The notable use cases of this package is loading configuration file, language file, preference setting in an application. More use cases and examples can be seen [here](https://github.com/konfiger/konfiger.github.io/blob/master/usecases/use_cases.js.md).
-
+The notable use cases of this package is loading configuration file, language file, preference setting in an application. 
 
 ___
 

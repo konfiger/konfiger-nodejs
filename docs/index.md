@@ -4,8 +4,7 @@
 
 ---
 
-The notable use cases of this package is loading configuration file, language file, preference setting in an application. More use cases and examples can be seen [here](https://github.com/konfiger/konfiger.github.io/blob/master/usecases/use_cases.js.md).
-
+The notable use cases of this package is loading configuration file, language file, preference setting in an application. 
 
 ___
 
@@ -216,6 +215,27 @@ while (kStream.hasNext()) {
 }
 ```
 
+### Skip Comment entries
+
+Read all the key value entry using the stream and skipping all commented entries. The default comment prefix is `//` but in the example below the commented entries starts with `#` so the prefix is changed. The same thing happen if the key value entry is loaded from file. 
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var kStream = KonfigerStream.stringStream(`
+String=This is a string
+#Number=215415245
+Float=56556.436746
+#Boolean=true
+`)
+kStream.setCommentPrefix("#")
+
+while (kStream.hasNext()) {
+    let entry = kStream.next()
+    console.log(entry)
+}
+```
+
 ## Usage
 
 ### Initialization
@@ -351,10 +371,14 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 
 | Function        | Description         
 | --------------- | ------------- 
-| fileStream(filePath, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
-| stringStream(rawString, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from a string. It throws en exception if the rawString is not a string or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
+| KonfigerStream fileStream(filePath, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
+| KonfigerStream stringStream(rawString, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from a string. It throws en exception if the rawString is not a string or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
 | Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
-| Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream
+| Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream.
+| Boolean isTrimingKey() | Check if the stream is configured to trim key
+| void setTrimingKey(trimingKey) | Change the stream to enable/disable key trimming
+| getCommentPrefix() | Get the prefix string that indicate a pair entry if commented
+| setCommentPrefix(commentPrefix) | Change the stream comment prefix, any entry starting with the comment prefix will be skipped. Comment in KonfigerStream is relative to the key value entry and not relative to a line.
 | void validateFileExistence(filePath)  | Validate the existence of the specified file path if it does not exist an exception is thrown
 
 ### Konfiger
@@ -400,7 +424,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | save(filePath?)         | Save the konfiger datas into a file. The argument filePath is optional if specified the entries is writtent to the filePath else the filePath used to initialize the Konfiger object is used and if the Konfiger is initialized `fromString` and the filePath is not specified an exception is thrown. This does not clear the already added entries.
 | getSeperator()           | Get seperator char that seperate the key value entry, default is `\n`.
 | getDelimeter()           | Get delimeter char that seperated the key from it value, default is `=`.
-| setSeperator(seperator)           | Change seperator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function
+| setSeperator(seperator)           | Change seperator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function. If the new seperator is different from the old one all the entries values will be re parsed to get the new proper values, this process can take time if the entries is much.
 | setDelimeter(delimeter)           | Change delimeter char that seperated the key from object, note that the file is not updates, to change the file call the `save()` function 
 | size()           | Get the total size of key value entries in the konfiger
 | clear()           | clear all the key value entries in the konfiger. This does not update the file call the `save` method to update the file
