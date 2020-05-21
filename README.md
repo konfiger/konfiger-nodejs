@@ -160,7 +160,7 @@ console.log(konfiger.get("Twos"))
 //the size becomes 2, 
 console.log(konfiger.size())
 
-//to read all the entries simple call the toString() method
+//to read all the entries simply call the toString() method
 console.log(konfiger.toString())
 
 //now the size is equal to the entry
@@ -188,7 +188,7 @@ Read a key value file using the progressive [KonfigerStream](https://github.com/
 ```js
 const { KonfigerStream } = require("konfiger")
 
-var kStream = KonfigerStream.fileStream('test/konfiger.conf', false)
+var kStream = KonfigerStream.fileStream('test/konfiger.conf')
 while (kStream.hasNext()) {
     let entry = kStream.next()
     console.log(entry)
@@ -207,7 +207,7 @@ String=This is a string
 Number=215415245
 Float=56556.436746
 Boolean=true
-`, false)
+`)
 
 while (kStream.hasNext()) {
     let entry = kStream.next()
