@@ -1,1 +1,6 @@
 theme: jekyll-theme-cayman
+maintainer_url: https://github.com/Thecarisma
+maintainer_name: thecarisma
+header_links:
+ - text: Download on NPM
+   href: https://www.npmjs.com/package/konfiger
