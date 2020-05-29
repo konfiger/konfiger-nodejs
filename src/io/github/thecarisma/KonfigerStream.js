@@ -67,11 +67,11 @@ KonfigerStream.prototype.validateFileExistence = function(filePath) {
     }    
 }
 
-KonfigerStream.prototype.isTrimingKey = function() {
+KonfigerStream.prototype.isTrimmingKey = function() {
     return this.trimingKey
 }
 
-KonfigerStream.prototype.setTrimingKey = function(trimingKey) {
+KonfigerStream.prototype.setTrimmingKey = function(trimingKey) {
     if (!konfigerUtil.isBoolean(trimingKey)) {
         throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found " + 
                         konfigerUtil.typeOf(trimingKey))

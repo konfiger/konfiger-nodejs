@@ -55,12 +55,12 @@ it('validate the string stream value', () => {
 
 it('test string stream key trimming', () => {
     var ks = KonfigerStream.stringStream(" Name =Adewale Azeez:Project =konfiger: Date=April 24 2020", '=', ':')
-    assert.equal(ks.isTrimingKey(), true)
-    ks.setTrimingKey(false)
+    assert.equal(ks.isTrimmingKey(), true)
+    ks.setTrimmingKey(false)
     assert.throws(function () { 
-        ks.setTrimingKey("Hello World")
+        ks.setTrimmingKey("Hello World")
     }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found string")
-    assert.equal(ks.isTrimingKey(), false)
+    assert.equal(ks.isTrimmingKey(), false)
     assert.equal(ks.next()[0], " Name ")
     assert.equal(ks.next()[0], "Project ")
     assert.equal(ks.next()[0], " Date")
