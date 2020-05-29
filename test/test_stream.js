@@ -17,7 +17,7 @@ it('should throw exceptions', () => {
     
     assert.throws(function () { 
         var ks = KonfigerStream.fileStream("./index.js", ',')
-    }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid length of argument, seperator parameter is missing")
+    }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid length of argument, seperator or delimeter parameter is missing")
     
     assert.throws(function () { 
         var ks = KonfigerStream.fileStream("./index.js", ',', '==')
@@ -40,10 +40,10 @@ it('validate the file stream value', () => {
 })
 
 it('validate the string stream key', () => {
-    var ks = KonfigerStream.stringStream("Name=Adewale Azeez,Project=konfiger, Date=April 24 2020", '=', ',')
+    var ks = KonfigerStream.stringStream(" Name =Adewale Azeez,Project =konfiger, Date=April 24 2020", '=', ',')
     assert.equal(ks.next()[0], "Name")
     assert.equal(ks.next()[0], "Project")
-    assert.equal(ks.next()[0], " Date")
+    assert.equal(ks.next()[0], "Date")
 })
 
 it('validate the string stream value', () => {
@@ -55,15 +55,15 @@ it('validate the string stream value', () => {
 
 it('test string stream key trimming', () => {
     var ks = KonfigerStream.stringStream(" Name =Adewale Azeez:Project =konfiger: Date=April 24 2020", '=', ':')
-    assert.equal(ks.isTrimingKey(), false)
-    ks.setTrimingKey(true)
+    assert.equal(ks.isTrimingKey(), true)
+    ks.setTrimingKey(false)
     assert.throws(function () { 
         ks.setTrimingKey("Hello World")
     }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found string")
-    assert.equal(ks.isTrimingKey(), true)
-    assert.equal(ks.next()[0], "Name")
-    assert.equal(ks.next()[0], "Project")
-    assert.equal(ks.next()[0], "Date")
+    assert.equal(ks.isTrimingKey(), false)
+    assert.equal(ks.next()[0], " Name ")
+    assert.equal(ks.next()[0], "Project ")
+    assert.equal(ks.next()[0], " Date")
 })
 
 it('test the single pair commenting in string stream', () => {

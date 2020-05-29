@@ -23,7 +23,7 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
 	this.seperator = (seperator ? seperator : '\n')
 	this.errTolerance = (errTolerance === true ? errTolerance : false)
     this.isFile = isFile
-    this.trimingKey = false
+    this.trimingKey = true
     this.commentPrefix = "//"
     this.isFirst = 0
     
@@ -44,10 +44,10 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
         throw new Error("io.github.thecarisma.KonfigerStream: Invalid length of argument, seperator or delimeter parameter is missing")
     }
     if (!konfigerUtil.isChar(this.delimeter)) { 
-        throw new Error("io.github.thecarisma.KonfigerStream: invalid argument for delimeter expecting char found " + konfigerUtil.typeOf(delimeter)) 
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for delimeter expecting char found " + konfigerUtil.typeOf(delimeter)) 
     }
     if (!konfigerUtil.isChar(this.seperator)) { 
-        throw new Error("io.github.thecarisma.KonfigerStream: invalid argument for seperator expecting char found " + konfigerUtil.typeOf(seperator)) 
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for seperator expecting char found " + konfigerUtil.typeOf(seperator)) 
     }  
     
     this.readPosition = 0
