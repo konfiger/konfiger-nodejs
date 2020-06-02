@@ -24,6 +24,7 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
 	this.errTolerance = (errTolerance === true ? errTolerance : false)
     this.isFile = isFile
     this.trimingKey = true
+    this.trimingValue = true
     this.commentPrefix = "//"
     this.isFirst = 0
     
@@ -77,6 +78,18 @@ KonfigerStream.prototype.setTrimmingKey = function(trimingKey) {
                         konfigerUtil.typeOf(trimingKey))
     }
     this.trimingKey = trimingKey
+}
+
+KonfigerStream.prototype.isTrimmingValue = function() {
+    return this.trimingValue
+}
+
+KonfigerStream.prototype.setTrimmingValue = function(trimingValue) {
+    if (!konfigerUtil.isBoolean(trimingValue)) {
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found " + 
+                        konfigerUtil.typeOf(trimingValue))
+    }
+    this.trimingValue = trimingValue
 }
 
 KonfigerStream.prototype.getCommentPrefix = function() {
@@ -258,7 +271,7 @@ KonfigerStream.prototype.next = function() {
     
     return [ 
                 (this.trimingKey ? key.trim() : key), 
-                konfigerUtil.unEscapeString(value, [this.seperator])
+                (this.trimingValue ? konfigerUtil.unEscapeString(value, [this.seperator]).trim() : konfigerUtil.unEscapeString(value, [this.seperator]) )
            ]
 }
 

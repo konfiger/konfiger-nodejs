@@ -91,6 +91,35 @@ it('test the single pair commenting in file stream', () => {
     }
 })
 
+it('test string stream value trimming', () => {
+    var ks = KonfigerStream.stringStream(" Name =Adewale Azeez :Project = konfiger: Date= April 24 2020 :Language = Multiple Languages", '=', ':')
+    assert.notEqual(ks.isTrimmingValue(), false)
+    assert.throws(function () { 
+        ks.setTrimmingValue("Hello World")
+    }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found string")
+    assert.equal(ks.isTrimmingValue(), true)
+    assert.equal(ks.next()[1], "Adewale Azeez")
+    assert.equal(ks.next()[1], "konfiger")
+    assert.equal(ks.next()[1], "April 24 2020")
+    assert.equal(ks.next()[1], "Multiple Languages")
+})
+
+it('test string stream key value trimming', () => {
+    var entriesStr = " Name =Adewale Azeez :Project = konfiger: Date= April 24 2020 :Language = Multiple Languages"
+    var ks = KonfigerStream.stringStream(entriesStr, '=', ':')
+    var ks1 = KonfigerStream.stringStream(entriesStr, '=', ':')
+    assert.equal(ks.next()[0], "Name")
+    assert.equal(ks.next()[0], "Project")
+    assert.equal(ks.next()[0], "Date")
+    assert.equal(ks.next()[0], "Language")
+    
+    
+    assert.equal(ks1.next()[1], "Adewale Azeez")
+    assert.equal(ks1.next()[1], "konfiger")
+    assert.equal(ks1.next()[1], "April 24 2020")
+    assert.equal(ks1.next()[1], "Multiple Languages")
+})
+
 
 
 
