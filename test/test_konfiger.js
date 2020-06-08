@@ -211,4 +211,13 @@ it('test contains with lazy load', () => {
     assert.equal(kon.contains("Author"), true)
 })
 
+it('read multiline entry from file stream', () => {
+    var ks = KonfigerStream.fileStream("test/test.contd.conf")
+    var kon = Konfiger.fromStream(ks)
+    
+    assert.equal(kon.get("ProgrammingLanguages").indexOf("Kotlin, NodeJS, Powershell, Python, Ring, Rust") > 0, true)
+    assert.equal(kon.get("ProjectName"), "konfiger")
+    assert.notEqual(kon.get("Description").endsWith(" in other languages and off the Android platform."), false)
+})
+
 

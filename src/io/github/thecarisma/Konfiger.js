@@ -469,17 +469,39 @@ Konfiger.prototype.resolve = function(obj) {
                                 + konfigerUtil.typeOf(obj))
     }
 	this.attachedResolveObj = obj
-    for (var key in obj) {
-        if (key === "matchGetKey") {
+    for (var key in this.attachedResolveObj) {
+        if (key === "matchGetKey" || key == "matchPutKey") {
             continue
         }
         var findKey
-        if ((obj.matchGetKey && !(findKey = obj.matchGetKey(key))) || (!obj.matchGetKey)) {
+        if ((this.attachedResolveObj.matchGetKey && !(findKey = this.attachedResolveObj.matchGetKey(key))) || 
+            (!this.attachedResolveObj.matchGetKey)) {
             findKey = key
         }
         if (this.contains(findKey)) {
-            obj[key] = this.get(findKey)
+            this.attachedResolveObj[key] = this.get(findKey)
         }        
+    }
+}
+
+Konfiger.prototype.dissolve = function(obj) {
+    if (!konfigerUtil.isObject(obj)) {
+        konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, expecting an object found " 
+                                + konfigerUtil.typeOf(obj))
+    }
+	this.attachedResolveObj = obj
+    for (var key in this.attachedResolveObj) {
+        if (key === "matchGetKey" || key == "matchPutKey") {
+            continue
+        }
+        var findKey
+        if ((this.attachedResolveObj.matchPutKey && !(findKey = this.attachedResolveObj.matchPutKey(key))) || 
+            (!this.attachedResolveObj.matchPutKey)) {
+                
+            findKey = key
+        }
+        this.konfigerObjects.set(key, this.attachedResolveObj[findKey])
+      
     }
 }
 

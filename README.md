@@ -236,6 +236,8 @@ while (kStream.hasNext()) {
 }
 ```
 
+## Native Object Attachement
+
 ## Usage
 
 ### Initialization
@@ -381,6 +383,8 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | void setTrimingValue(trimingValue) | Change the stream to enable/disable entry value trimming
 | getCommentPrefix() | Get the prefix string that indicate a pair entry if commented
 | setCommentPrefix(commentPrefix) | Change the stream comment prefix, any entry starting with the comment prefix will be skipped. Comment in KonfigerStream is relative to the key value entry and not relative to a line.
+| setContinuationChar(contdChar) | Set the character that indicates to the stream to continue reading for the entry value on the next line. The follwoing line leading spaces is trimmed. The default is `\`
+| getContinuationChar() | Get the continuation character used in the stream.
 | void validateFileExistence(filePath)  | Validate the existence of the specified file path if it does not exist an exception is thrown
 
 ### Konfiger
@@ -437,6 +441,8 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | errorTolerance(errTolerance)           | Enable or disable the error tolerancy property of the konfiger, if enabled no exception will be throw even when it suppose to there for it a bad idea but useful in a fail safe environment.
 | isErrorTolerant() | Check if the konfiger object errTolerance is set to true.
 | toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
+| resolve(obj)           | Attach an object to konfiger, on attachment the values of the entries in the object will be set to the coresponding value in konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
+| dissolve(obj) | Attach an object to konfiger, on attachement each entry in the object will be put into konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
 
 ## How it works
 

@@ -36,6 +36,13 @@ var texts = {
     }
 }
 
+var entries = {
+    project: "konfiger",
+    author: "Adewale Azeez",
+    platform: "Cross Platform",
+    file: "test.comment.inf"
+}
+
 it('invalid argument type to Konfiger.resolve', () => {
     var kStream = KonfigerStream.fileStream('test/test.comment.inf')
     kStream.setCommentPrefix("[")
@@ -46,7 +53,7 @@ it('invalid argument type to Konfiger.resolve', () => {
     }, Error, "io.github.thecarisma.Konfiger", "invalid argument, expecting an object")
 })
 
-it('test resolve without matchGetKey function', () => {
+it('resolve without matchGetKey function', () => {
     var kStream = KonfigerStream.fileStream('test/test.comment.inf')
     kStream.setCommentPrefix("[")
     var kon = Konfiger.fromStream(kStream)
@@ -70,7 +77,7 @@ it('test resolve with matchGetKey function', () => {
     assert.equal(texts.author, "Adewale Azeez")
 })
 
-it('test resolve with changing values and map key with matchPutKey', () => {
+it('resolve with changing values and map key with matchPutKey', () => {
     var kStream = KonfigerStream.fileStream('test/test.comment.inf')
     kStream.setCommentPrefix("[")
     var kon = Konfiger.fromStream(kStream)
@@ -94,5 +101,15 @@ it('test resolve with changing values and map key with matchPutKey', () => {
     
     kon.put("author", "Adewale")
     assert.equal(texts.author, "Adewale")
+})
+
+it('dissolve an object into konfiger', () => {
+    var kon = Konfiger.fromString("")
+    kon.dissolve(entries)
+    
+    assert.equal(kon.get("project"), "konfiger")
+    assert.equal(kon.get("platform"), "Cross Platform")
+    assert.equal(kon.get("file"), "test.comment.inf")
+    assert.equal(kon.get("author"), "Adewale Azeez")
 })
 

@@ -120,6 +120,30 @@ it('test string stream key value trimming', () => {
     assert.equal(ks1.next()[1], "Multiple Languages")
 })
 
+it('read multiline entry and test continuation char in file stream', () => {
+    var ks = KonfigerStream.fileStream("test/test.contd.conf")
+    while (ks.hasNext()) {
+        assert.equal(ks.next()[0].indexOf('\n'), -1)
+    }
+})
+
+it('read multiline entry and test continuation char in string stream', () => {
+    var ks = KonfigerStream.stringStream(`
+Description = This project is the closest thing to Android +
+              [Shared Preference](https://developer.android.com/reference/android/content/SharedPreferences) +
+              in other languages and off the Android platform.
+ProjectName = konfiger
+ProgrammingLanguages = C, C++, C#, Dart, Elixr, Erlang, Go, +
+                        Haskell, Java, Kotlin, NodeJS, Powershell, +
+                        Python, Ring, Rust, Scala, Visual Basic, +
+                        and whatever language possible in the future
+`)
+    ks.setContinuationChar('+')
+    while (ks.hasNext()) {
+        assert.equal(ks.next()[0].indexOf('\n'), -1)
+    }
+})
+
 
 
 
