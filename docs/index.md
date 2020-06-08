@@ -276,6 +276,8 @@ console.log(properties.project) // konfiger-nodejs
 The following snippet reads the value of a javascript object into the konfiger object, the object is then attached to konfiger so anytime the konfiger entry changes it updates the object.
 
 ```js
+const { Konfiger } = require("konfiger")
+
 var properties = {
     project: "konfiger",
     author: "Adewale"
@@ -329,7 +331,7 @@ NewsletterOptin = Signup for our weekly news letter
 For an object which as the same key as the konfiger entries above there is no need to declare the matchGetKey or matchPutKey in the object. Resolve example
 
 ```js
-const { KonfigerStream } = require("konfiger")
+const { Konfiger } = require("konfiger")
 
 var pageProps = {
     LoginTitle: "",
@@ -345,7 +347,7 @@ console.log(pageProps)
 Dissolve example
 
 ```js
-const { KonfigerStream } = require("konfiger")
+const { Konfiger } = require("konfiger")
 
 var pageProps = {
     LoginTitle: "Login Page",
@@ -363,7 +365,7 @@ console.log(kon.toString())
 If the identifier in the object keys does not match the above entries key the object will not be resolved. For example loginTitle does not match LoginTitle, the matchGetKey can be used to map the variable key to the konfiger entry key. The following example map the object key to konfiger entries key.
 
 ```js
-const { KonfigerStream } = require("konfiger")
+const { Konfiger } = require("konfiger")
 
 var pageProps = {
     loginTitle: "",
@@ -391,7 +393,7 @@ The way the above code snippet works is that when iterating the object keys if c
 For dissolving an object the method matchGetKey is invoked to find the actual key to use to add the entry in konfiger, if the object does not declare the matchGetKey function the entries will be added to konfiger as it is declared. The following example similar to the one above but dissolves an object into konfiger.
 
 ```js
-const { KonfigerStream } = require("konfiger")
+const { Konfiger } = require("konfiger")
 
 var pageProps = {
     loginTitle: "Login Page",
@@ -417,7 +419,7 @@ console.log(kon.toString())
 The matchPutKey is invoked when an entry value is changed or when a new entry is added to konfiger. The matchPutKey is invoked with the new entry key and checked in the object matchPutKey (if decalred), the returned value is what is set in the object. E.g. if an entry `[Name, Thecarisma]` is added to konfiger the object matchPutKey is invoked with the parameter `Name` the returned value is used to set the corresponding object entry. 
 
 ```js
-const { KonfigerStream } = require("konfiger")
+const { Konfiger } = require("konfiger")
 
 var pageProps = {
     loginTitle: "",
