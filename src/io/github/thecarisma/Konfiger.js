@@ -105,7 +105,7 @@ Konfiger.prototype.putString = function(key, value) {
                 
             findKey = key
         }
-        if (this.attachedResolveObj[findKey]) {
+        if (!konfigerUtil.isFunction(this.attachedResolveObj[findKey]) && this.attachedResolveObj[findKey] !== undefined ) {
             this.attachedResolveObj[findKey] = value
         }
     }
@@ -401,6 +401,7 @@ Konfiger.prototype.toString = function() {
         this.stringValue = ""
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
+            if (!entry[1]) { continue }
             this.stringValue += entry[0] + this.delimeter + konfigerUtil.escapeString(entry[1], [this.seperator])
             ++index
             if (index < (this.konfigerObjects.size)) this.stringValue += this.seperator
@@ -470,7 +471,7 @@ Konfiger.prototype.resolve = function(obj) {
     }
 	this.attachedResolveObj = obj
     for (var key in this.attachedResolveObj) {
-        if (key === "matchGetKey" || key == "matchPutKey") {
+        if (konfigerUtil.isFunction(this.attachedResolveObj[key])) {
             continue
         }
         var findKey
@@ -491,16 +492,18 @@ Konfiger.prototype.dissolve = function(obj) {
     }
 	this.attachedResolveObj = obj
     for (var key in this.attachedResolveObj) {
-        if (key === "matchGetKey" || key == "matchPutKey") {
+        if (konfigerUtil.isFunction(this.attachedResolveObj[key])) {
             continue
         }
         var findKey
-        if ((this.attachedResolveObj.matchPutKey && !(findKey = this.attachedResolveObj.matchPutKey(key))) || 
-            (!this.attachedResolveObj.matchPutKey)) {
+        if ((this.attachedResolveObj.matchGetKey && !(findKey = this.attachedResolveObj.matchGetKey(key))) || 
+            (!this.attachedResolveObj.matchGetKey)) {
                 
             findKey = key
         }
-        this.konfigerObjects.set(key, this.attachedResolveObj[findKey])
+        if (this.attachedResolveObj[key]) {
+            this.konfigerObjects.set(findKey, this.attachedResolveObj[key])
+        }
       
     }
 }

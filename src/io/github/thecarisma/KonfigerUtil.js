@@ -44,6 +44,10 @@ function isFloat(arg) {
     return Number(arg) === arg && arg % 1 !== 0
 }
 
+function isFunction(arg) {
+ return arg && {}.toString.call(arg) === '[object Function]';
+}
+
 function throwError(title, error) {
     throw new Error(title + ": " + error)
 }
@@ -107,5 +111,6 @@ module.exports = {
     throwError,
     unEscapeString,
     escapeString,
-    isFloat
+    isFloat,
+    isFunction
 }

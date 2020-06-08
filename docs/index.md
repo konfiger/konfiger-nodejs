@@ -18,6 +18,13 @@ ___
     - [Seperator and delimeter](#seperator-and-delimeter)
     - [Read file with Stream](#read-file-with-stream)
     - [Read String with Stream](#read-string-with-stream)
+    - [Skip Comment entries](#Skip-comment-entries)
+    - [Object Attachement, Get](#object-attachement-get)
+    - [Object Attachement, Put](#object-attachement-put)
+    - [Multiline value](#multiline-value)
+- [Native Object Attachement](#native-object-attachement)
+    - [matchGetKey](#matchgetkey)
+    - [matchPutKey](#matchputkey)
 - [API Documentations](#api-documentations)
     - [KonfigerStream](#konfigerstream)
     - [Konfiger](#konfiger)
@@ -160,7 +167,7 @@ console.log(konfiger.get("Twos"))
 //the size becomes 2, 
 console.log(konfiger.size())
 
-//to read all the entries simple call the toString() method
+//to read all the entries simply call the toString() method
 console.log(konfiger.toString())
 
 //now the size is equal to the entry
@@ -188,7 +195,7 @@ Read a key value file using the progressive [KonfigerStream](https://github.com/
 ```js
 const { KonfigerStream } = require("konfiger")
 
-var kStream = KonfigerStream.fileStream('test/konfiger.conf', false)
+var kStream = KonfigerStream.fileStream('test/konfiger.conf')
 while (kStream.hasNext()) {
     let entry = kStream.next()
     console.log(entry)
@@ -207,7 +214,7 @@ String=This is a string
 Number=215415245
 Float=56556.436746
 Boolean=true
-`, false)
+`)
 
 while (kStream.hasNext()) {
     let entry = kStream.next()
@@ -235,6 +242,214 @@ while (kStream.hasNext()) {
     console.log(entry)
 }
 ```
+
+### Object Attachement, Get
+
+The example below attach a javascript object to a konfiger object, whenever the value of the konfiger object changes the attached object entries is also updated.
+
+For the file properties.conf
+
+```
+project = konfiger
+author = Adewale Azeez
+```
+
+```js
+const { Konfiger } = require("konfiger")
+
+var properties = {
+    project: "",
+    author: ""
+}
+
+var kon = Konfiger.fromFile('properties.conf')
+kon.resolve(properties)
+
+console.log(properties.project) // konfiger
+console.log(properties.author) // Adewale Azeez
+kon.put("project", "konfiger-nodejs")
+console.log(properties.project) // konfiger-nodejs
+```
+
+### Object Attachement, Put
+
+The following snippet reads the value of a javascript object into the konfiger object, the object is then attached to konfiger so anytime the konfiger entry changes it updates the object.
+
+```js
+var properties = {
+    project: "konfiger",
+    author: "Adewale"
+}
+
+var kon = Konfiger.fromString('')
+kon.dissolve(properties)
+
+console.log(kon.get("project")) // konfiger
+console.log(kon.get("author")) // Adewale Azeez
+```
+
+### Multiline value
+
+Konfiger stream allow multiline value. If the line ends with `\` the next line will be parse as the continuation and the leading spaces will be trimmed. The continuation character chan be changed like the example below the continuation character is changed from `\` to `+`.
+
+for the file test.contd.conf
+
+```js
+Description = This project is the closest thing to Android +
+              Shared Preference in other languages +
+              and off the Android platform.
+ProjectName = konfiger
+```
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var ks = KonfigerStream.fileStream("test.contd.conf")
+ks.setContinuationChar('+')
+console.log(ks.next()[1])
+console.log(ks.next()[1])
+```
+
+## Native Object Attachement
+
+This feature of the project allow seamless integration with the konfiger entries by eliminating the need for writing `Konfiger.get*("")` everytime to read a value into a variable or writing lot of `Konfiger.put*()` to add an entry. 
+
+The two function `resolve` and `dissolve` is used to attach an object. resolve function integrate the object such that the entries in konfiger will be assigned to the matching key in the object. See the [resolve](#object-attachement-get) and [dissolve](#object-attachement-put) examples above.
+
+In a case where the object keys are different from the entries keys in the konfiger object the function `matchGetKey` can be attached to the object to match the key when setting the object entries values, and the function `matchPutKey` is called when setting the konfiger entries from the object.
+
+For the file English.lang
+
+```js
+LoginTitle = Login Page
+AgeInstruction = You must me 18 years or above to register
+NewsletterOptin = Signup for our weekly news letter
+```
+
+For an object which as the same key as the konfiger entries above there is no need to declare the matchGetKey or matchPutKey in the object. Resolve example
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var pageProps = {
+    LoginTitle: "",
+    AgeInstruction: "",
+    NewsletterOptin: ""
+}
+
+var kon = Konfiger.fromFile('English.lang')
+kon.resolve(pageProps)
+console.log(pageProps)
+```
+
+Dissolve example
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var pageProps = {
+    LoginTitle: "Login Page",
+    AgeInstruction: "You must me 18 years or above to register",
+    NewsletterOptin: "Signup for our weekly news letter"
+}
+
+var kon = Konfiger.fromString('')
+kon.dissolve(pageProps)
+console.log(kon.toString())
+```
+
+### matchGetKey
+
+If the identifier in the object keys does not match the above entries key the object will not be resolved. For example loginTitle does not match LoginTitle, the matchGetKey can be used to map the variable key to the konfiger entry key. The following example map the object key to konfiger entries key.
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var pageProps = {
+    loginTitle: "",
+    ageInstruct: "",
+    NewsletterOptin: "",
+    matchGetKey: function(key) {
+        switch (key) {
+            case "loginTitle":
+                return "LoginTitle"
+            case "ageInstruct":
+                return "AgeInstruction"
+        }
+    }
+}
+
+var kon = Konfiger.fromFile('English.lang')
+kon.resolve(pageProps)
+console.log(pageProps)
+```
+
+The way the above code snippet works is that when iterating the object keys if check if the function matchGetKey is present in the object if it is present the key is sent as parameter to the matchGetKey and the returned value is used to get the value from konfiger, if the matchGetKey does not return anything the object key is used to get the value from konfiger (as in the case of NewsletterOptin).
+
+> During the resolve or dissolve process if the entry value is function it is skipped even if it key matches
+
+For dissolving an object the method matchGetKey is invoked to find the actual key to use to add the entry in konfiger, if the object does not declare the matchGetKey function the entries will be added to konfiger as it is declared. The following example similar to the one above but dissolves an object into konfiger.
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var pageProps = {
+    loginTitle: "Login Page",
+    ageInstruct: "You must me 18 years or above to register",
+    NewsletterOptin: "Signup for our weekly news letter",
+    matchGetKey: function(key) {
+        switch (key) {
+            case "loginTitle":
+                return "LoginTitle"
+            case "ageInstruct":
+                return "AgeInstruction"
+        }
+    }
+}
+
+var kon = Konfiger.fromFile('English.lang')
+kon.dissolve(pageProps)
+console.log(kon.toString())
+```
+
+### matchPutKey
+
+The matchPutKey is invoked when an entry value is changed or when a new entry is added to konfiger. The matchPutKey is invoked with the new entry key and checked in the object matchPutKey (if decalred), the returned value is what is set in the object. E.g. if an entry `[Name, Thecarisma]` is added to konfiger the object matchPutKey is invoked with the parameter `Name` the returned value is used to set the corresponding object entry. 
+
+```js
+const { KonfigerStream } = require("konfiger")
+
+var pageProps = {
+    loginTitle: "",
+    ageInstruct: "",
+    NewsletterOptin: "",
+    matchPutKey: function(key) {
+        switch (key) {
+            case "LoginTitle":
+                return "loginTitle"
+            case "AgeInstruction":
+                return "ageInstruct"
+        }
+    }
+}
+
+var kon = Konfiger.fromString('')
+kon.resolve(pageProps)
+
+kon.put("LoginTitle", "Login Page")
+kon.put("AgeInstruction", "You must me 18 years or above to register")
+kon.put("NewsletterOptin", "Signup for our weekly news letter")
+console.log(pageProps.loginTitle)
+console.log(pageProps.ageInstruct)
+console.log(pageProps.NewsletterOptin)
+```
+
+Konfiger does not create new entry in an object it just set existing values. Konfiger only change the value in an object if the key is defined
+
+> Warning!!!
+The values resolved is not typed so if the entry initial value is an integer the resolved value will be a string. All resolved value is string, you will need to do the type conversion by your self.
+
+If your entry keys is the same as the object keys you don't need to declare the matchGetKey or matchPutKey function in the object.
 
 ## Usage
 
@@ -381,6 +596,8 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | void setTrimingValue(trimingValue) | Change the stream to enable/disable entry value trimming
 | getCommentPrefix() | Get the prefix string that indicate a pair entry if commented
 | setCommentPrefix(commentPrefix) | Change the stream comment prefix, any entry starting with the comment prefix will be skipped. Comment in KonfigerStream is relative to the key value entry and not relative to a line.
+| setContinuationChar(contdChar) | Set the character that indicates to the stream to continue reading for the entry value on the next line. The follwoing line leading spaces is trimmed. The default is `\`
+| getContinuationChar() | Get the continuation character used in the stream.
 | void validateFileExistence(filePath)  | Validate the existence of the specified file path if it does not exist an exception is thrown
 
 ### Konfiger
@@ -437,6 +654,8 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | errorTolerance(errTolerance)           | Enable or disable the error tolerancy property of the konfiger, if enabled no exception will be throw even when it suppose to there for it a bad idea but useful in a fail safe environment.
 | isErrorTolerant() | Check if the konfiger object errTolerance is set to true.
 | toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
+| resolve(obj)           | Attach an object to konfiger, on attachment the values of the entries in the object will be set to the coresponding value in konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
+| dissolve(obj) | Attach an object to konfiger, on attachement each entry in the object will be put into konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
 
 ## How it works
 
