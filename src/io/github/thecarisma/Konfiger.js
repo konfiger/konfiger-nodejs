@@ -22,6 +22,9 @@ function fromString(rawString, lazyLoad, delimeter, seperator) {
 }
 
 function fromStream(konfigerStream, lazyLoad) {
+    if (!lazyLoad) {
+        lazyLoad = true
+    }
     const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, konfigerStream)
     konfiger.filePath = konfigerStream.filePath
     return konfiger
@@ -31,7 +34,7 @@ function Konfiger(delimeter, seperator, lazyLoad, stream) {
     this.hashcode = 0
     this.stream = stream
     this.loadingEnds = false
-    this.lazyLoad = (lazyLoad ? lazyLoad : false)
+    this.lazyLoad = lazyLoad
     this.konfigerObjects = new Map()
     this.delimeter = delimeter
     this.seperator = seperator
@@ -40,6 +43,7 @@ function Konfiger(delimeter, seperator, lazyLoad, stream) {
     this.stringValue = ""
     this.readIndex = 0
     this.filePath = undefined
+    this.attachedResolveObj = undefined
     
     if (!this.lazyLoad) {
         this.lazyLoader()
@@ -82,18 +86,29 @@ Konfiger.prototype.putString = function(key, value) {
     if (!konfigerUtil.isString(value)) {
         throw new Error("io.github.thecarisma.Konfiger: invalid argument, expecting String found " + konfigerUtil.typeOf(value))
     }
-    if (this.lazyLoad && !this.loadingEnds && this.contains(key)) {
+    if (this.lazyLoad && !this.loadingEnds && this.konfigerObjects.has(key)) {
         var _value = this.getString(key)
         if (_value === value) {
             return
         }
     }
-    if (!this.contains(key)) {
+    if (!this.konfigerObjects.has(key)) {
         if (this.konfigerObjects.size === MAX_CAPACITY) {
             throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity 10,000,000")
         }
     }    
     this.konfigerObjects.set(key, value)
+    if (this.attachedResolveObj) {
+        var findKey
+        if ((this.attachedResolveObj.matchPutKey && !(findKey = this.attachedResolveObj.matchPutKey(key))) || 
+            (!this.attachedResolveObj.matchPutKey)) {
+                
+            findKey = key
+        }
+        if (this.attachedResolveObj[findKey]) {
+            this.attachedResolveObj[findKey] = value
+        }
+    }
     this.changesOccur = true
     if (this.enableCache_) {
         this.shiftCache(key, value)
@@ -145,7 +160,7 @@ Konfiger.prototype.get = function(key, defaultValue) {
             return this.prevCachedObject.cvalue
         }
     }
-    if (!this.contains(key) && this.lazyLoad) {
+    if (!this.konfigerObjects.has(key) && this.lazyLoad) {
         if (!this.loadingEnds) {
             while (this.stream.hasNext()) {
                 var obj = this.stream.next()
@@ -162,9 +177,9 @@ Konfiger.prototype.get = function(key, defaultValue) {
         }
     }
     var value
-    if (defaultValue && !this.contains(key)) {
+    if (defaultValue && !this.konfigerObjects.has(key)) {
         value = ""+defaultValue
-    } else if (this.contains(key)) {
+    } else if (this.konfigerObjects.has(key)) {
         value = this.konfigerObjects.get(key)
         if (this.enableCache_) {
             this.shiftCache(key, value)
@@ -218,21 +233,41 @@ Konfiger.prototype.enableCache = function(enableCache_) {
 }
 
 Konfiger.prototype.contains = function(key) {
-    return this.konfigerObjects.has(key)
+    if (this.konfigerObjects.has(key)) {
+        return true
+    }
+    if (!this.loadingEnds && this.lazyLoad) {
+        while (this.stream.hasNext()) {
+            var obj = this.stream.next()
+            this.konfigerObjects.set(obj[0], obj[1])
+            this.changesOccur = true
+            if (obj[0] === key) {
+                return true
+            }
+        }
+        this.loadingEnds = true
+    }
+    return false
 }
 
 Konfiger.prototype.keys = function(key) {
-    this.toString()
+    if (!this.loadingEnds && this.lazyLoad) {
+        this.toString()
+    }
     return this.konfigerObjects.keys()
 }
 
 Konfiger.prototype.values = function(key) {
-    this.toString()
+    if (!this.loadingEnds && this.lazyLoad) {
+        this.toString()
+    }
     return this.konfigerObjects.values()
 }
 
 Konfiger.prototype.entries = function() {
-    this.toString()
+    if (!this.loadingEnds && this.lazyLoad) {
+        this.toString()
+    }
     return this.konfigerObjects.entries()
 }
 
@@ -245,7 +280,7 @@ Konfiger.prototype.clear = function() {
 Konfiger.prototype.remove = function(keyIndex) {
     if (konfigerUtil.isString(keyIndex)) {
         this.changesOccur = true
-        if (this.contains(keyIndex)) {
+        if (this.konfigerObjects.has(keyIndex)) {
             this.enableCache(false)
             var ret = this.get(keyIndex)
             this.enableCache(this.enableCache_)
@@ -290,17 +325,20 @@ Konfiger.prototype.updateAt = function(index, value) {
         return undefined
         
     } else {
-        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry (Number, String) found " 
-                        + konfigerUtil.typeOf(index))
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry (Number, String) found (" 
+                        + konfigerUtil.typeOf(index) + "," + konfigerUtil.typeOf(value) + ")")
     }
 }
 
 Konfiger.prototype.size = function() {
+    if (!this.loadingEnds && this.lazyLoad) {
+        this.toString()
+    }
     return this.konfigerObjects.size
 }
 
 Konfiger.prototype.isEmpty = function() {
-    return this.konfigerObjects.size === 0
+    return this.size() === 0
 }
 
 Konfiger.prototype.getSeperator = function() {
@@ -423,6 +461,26 @@ Konfiger.prototype.appendFile = function(filePath, delimeter, seperator) {
     }
     this.changesOccur = true
     
+}
+
+Konfiger.prototype.resolve = function(obj) {
+    if (!konfigerUtil.isObject(obj)) {
+        konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, expecting an object found " 
+                                + konfigerUtil.typeOf(obj))
+    }
+	this.attachedResolveObj = obj
+    for (var key in obj) {
+        if (key === "matchGetKey") {
+            continue
+        }
+        var findKey
+        if ((obj.matchGetKey && !(findKey = obj.matchGetKey(key))) || (!obj.matchGetKey)) {
+            findKey = key
+        }
+        if (this.contains(findKey)) {
+            obj[key] = this.get(findKey)
+        }        
+    }
 }
 
 

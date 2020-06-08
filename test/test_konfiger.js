@@ -202,4 +202,13 @@ it('test the single pair commenting in string stream konfiger', () => {
     assert.equal(kon.size(), 2)
 })
 
+it('test contains with lazy load', () => {
+    var ks = KonfigerStream.fileStream('test/test.comment.inf')
+    ks.setCommentPrefix("[")
+    var kon = Konfiger.fromStream(ks, true)
+    assert.equal(kon.contains("File"), true)
+    assert.equal(kon.contains("Project"), true)
+    assert.equal(kon.contains("Author"), true)
+})
+
 
