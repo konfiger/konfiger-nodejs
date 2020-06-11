@@ -18,7 +18,7 @@ ___
     - [Seperator and delimeter](#seperator-and-delimeter)
     - [Read file with Stream](#read-file-with-stream)
     - [Read String with Stream](#read-string-with-stream)
-    - [Skip Comment entries](#Skip-comment-entries)
+    - [Skip Comment entries](#skip-comment-entries)
     - [Object Attachement, Get](#object-attachement-get)
     - [Object Attachement, Put](#object-attachement-put)
     - [Multiline value](#multiline-value)
