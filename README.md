@@ -273,7 +273,7 @@ console.log(properties.project) // konfiger-nodejs
 
 ### Object Attachement, Put
 
-The following snippet reads the value of a javascript object into the konfiger object, the object is then attached to konfiger so anytime the konfiger entry changes it updates the object.
+The following snippet reads the value of a javascript object into the konfiger object, the object is not attached to konfiger unlike resolve function.
 
 ```js
 const { Konfiger } = require("konfiger")
@@ -316,9 +316,9 @@ console.log(ks.next()[1])
 
 This feature of the project allow seamless integration with the konfiger entries by eliminating the need for writing `Konfiger.get*("")` everytime to read a value into a variable or writing lot of `Konfiger.put*()` to add an entry. 
 
-The two function `resolve` and `dissolve` is used to attach an object. resolve function integrate the object such that the entries in konfiger will be assigned to the matching key in the object. See the [resolve](#object-attachement-get) and [dissolve](#object-attachement-put) examples above.
+The two function `resolve` is used to attach an object. resolve function integrate the object such that the entries in konfiger will be assigned to the matching key in the object. See the [resolve](#object-attachement-get) and [dissolve](#object-attachement-put) examples above.
 
-In a case where the object keys are different from the entries keys in the konfiger object the function `matchGetKey` can be attached to the object to match the key when setting the object entries values, and the function `matchPutKey` is called when setting the konfiger entries from the object.
+In a case where the object keys are different from the entries keys in the konfiger object the function `matchGetKey` can be declared in the object to match the key when setting the object entries values, and the function `matchPutKey` is called when setting the konfiger entries from the object.
 
 For the file English.lang
 
@@ -657,7 +657,8 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | isErrorTolerant() | Check if the konfiger object errTolerance is set to true.
 | toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 | resolve(obj)           | Attach an object to konfiger, on attachment the values of the entries in the object will be set to the coresponding value in konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
-| dissolve(obj) | Attach an object to konfiger, on attachement each entry in the object will be put into konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
+| dissolve(obj) | Each string fields in the object will be put into konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry. This does not attach the object.
+| Object detach() | Detach the object attached to konfiger when the resolve function is called. The object is returned.
 
 ## How it works
 

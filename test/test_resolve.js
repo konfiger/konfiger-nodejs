@@ -113,3 +113,30 @@ it('dissolve an object into konfiger', () => {
     assert.equal(kon.get("author"), "Adewale Azeez")
 })
 
+it('detach an object from konfiger', () => {
+    var kStream = KonfigerStream.fileStream('test/test.comment.inf')
+    kStream.setCommentPrefix("[")
+    var kon = Konfiger.fromStream(kStream)
+    kon.resolve(texts)
+    
+    assert.equal(texts.project, "konfiger")
+    assert.equal(texts.Platform, "Cross Platform")
+    assert.equal(texts.file, "test.comment.inf")
+    assert.equal(texts.author, "Adewale Azeez")
+	assert.equal(texts, kon.detach())
+    
+    kon.put("Project", "konfiger-nodejs")
+    kon.put("Platform", "Windows, Linux, Mac, Raspberry")
+    kon.put("author", "Thecarisma")
+    
+    assert.notEqual(texts.project, "konfiger-nodejs")
+    assert.notEqual(texts.Platform.indexOf("Windows") > -1, true)
+    assert.notEqual(texts.Platform.indexOf("Linux") > -1, true)
+    assert.notEqual(texts.Platform.indexOf("Mac") > -1, true)
+    assert.notEqual(texts.Platform.indexOf("Raspberry") > -1, true)
+    assert.notEqual(texts.author, "Thecarisma")
+    
+    kon.put("author", "Adewale")
+    assert.notEqual(texts.author, "Adewale")
+})
+

@@ -490,22 +490,27 @@ Konfiger.prototype.dissolve = function(obj) {
         konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, expecting an object found " 
                                 + konfigerUtil.typeOf(obj))
     }
-	this.attachedResolveObj = obj
-    for (var key in this.attachedResolveObj) {
-        if (konfigerUtil.isFunction(this.attachedResolveObj[key])) {
+    for (var key in obj) {
+        if (konfigerUtil.isFunction(obj[key])) {
             continue
         }
         var findKey
-        if ((this.attachedResolveObj.matchGetKey && !(findKey = this.attachedResolveObj.matchGetKey(key))) || 
-            (!this.attachedResolveObj.matchGetKey)) {
+        if ((obj.matchGetKey && !(findKey = obj.matchGetKey(key))) || 
+            (!obj.matchGetKey)) {
                 
             findKey = key
         }
-        if (this.attachedResolveObj[key]) {
-            this.konfigerObjects.set(findKey, this.attachedResolveObj[key])
+        if (obj[key]) {
+            this.konfigerObjects.set(findKey, obj[key])
         }
       
     }
+}
+
+Konfiger.prototype.detach = function() {
+	var tmpObj = this.attachedResolveObj
+    this.attachedResolveObj = undefined
+	return tmpObj
 }
 
 
