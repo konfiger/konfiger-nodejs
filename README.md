@@ -19,8 +19,8 @@ ___
     - [Read file with Stream](#read-file-with-stream)
     - [Read String with Stream](#read-string-with-stream)
     - [Skip Comment entries](#Skip-comment-entries)
-    - [Object Attachement, Get](#object-attachement-get)
-    - [Object Attachement, Put](#object-attachement-put)
+    - [Resolve Object](#resolve-object)
+    - [Dissolve Object](#dissolve-object)
     - [Multiline value](#multiline-value)
 - [Native Object Attachement](#native-object-attachement)
     - [matchGetKey](#matchgetkey)
@@ -243,7 +243,7 @@ while (kStream.hasNext()) {
 }
 ```
 
-### Object Attachement, Get
+### Resolve Object
 
 The example below attach a javascript object to a konfiger object, whenever the value of the konfiger object changes the attached object entries is also updated.
 
@@ -271,7 +271,7 @@ kon.put("project", "konfiger-nodejs")
 console.log(properties.project) // konfiger-nodejs
 ```
 
-### Object Attachement, Put
+### Dissolve Object
 
 The following snippet reads the value of a javascript object into the konfiger object, the object is not attached to konfiger unlike resolve function.
 
@@ -658,7 +658,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 | resolve(obj)           | Attach an object to konfiger, on attachment the values of the entries in the object will be set to the coresponding value in konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
 | dissolve(obj) | Each string fields in the object will be put into konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry. This does not attach the object.
-| Object detach() | Detach the object attached to konfiger when the resolve function is called. The object is returned.
+| Object detach() | Detach the object attached to konfiger when the resolve function is called. The detached object is returned.
 
 ## How it works
 
