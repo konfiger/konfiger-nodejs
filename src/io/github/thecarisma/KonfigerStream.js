@@ -193,6 +193,7 @@ KonfigerStream.prototype.next = function() {
     var key = ""
     var value = ""
     var parseKey = true
+    var prevPrevChar = null
     var prevChar = null
     var line = 1
     var column = 0
@@ -220,7 +221,7 @@ KonfigerStream.prototype.next = function() {
             if (char_ === '\n') {
                 line++
                 column = 0
-                if (!parseKey && prevChar == this.continuationChar) {
+                if (!parseKey && prevChar == this.continuationChar && prevPrevChar !== '\\') {
                     if (value[value.length-1] == '\r') {
                         value = value.slice(0, -2);
                     } else {
@@ -254,6 +255,7 @@ KonfigerStream.prototype.next = function() {
             } else {
                 value += char_
             }
+			prevPrevChar = (char_ == '\r' ? (prevChar != '\\' ? '\0' : '\\') : prevChar)
             prevChar = (char_ == '\r' ? (prevChar != '\\' ? '\0' : '\\') : char_)
         }
     } else {
@@ -272,7 +274,7 @@ KonfigerStream.prototype.next = function() {
             if (character === '\n') {
                 line++;
                 column = 0
-                if (!parseKey && prevChar == this.continuationChar) {
+                if (!parseKey && prevChar == this.continuationChar && prevPrevChar !== '\\') {
                     if (value[value.length-1] == '\r') {
                         value = value.slice(0, -2);
                     } else {
@@ -305,6 +307,7 @@ KonfigerStream.prototype.next = function() {
             } else {
                 value += character
             }
+            prevPrevChar = (character == '\r' ? (prevChar != '\\' ? '\0' : '\\') : prevChar)
             prevChar = (character == '\r' ? (prevChar != '\\' ? '\0' : '\\') : character)
         }
         ++this.readPosition

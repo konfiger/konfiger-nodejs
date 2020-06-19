@@ -157,6 +157,19 @@ it('test backward slash ending value', () => {
 	assert.equal(count, 3)
 })
 
+it('test escape slash ending', () => {
+    var ks = KonfigerStream.stringStream("external-resource-location = \\\\988.43.13.9\\testing\\public\\sansportal\\rideon\\\r\n" +
+                "boarding-link = https://boarding.thecarisma.com/konfiger\r\n" +
+                "ussd.uri = thecarisma.com\\")
+
+	var count = 0
+	while(ks.hasNext()) {
+		assert.notEqual(ks.next()[1].length, 0)
+		count++
+	}
+	assert.equal(count, 3)
+})
+
 
 
 
