@@ -220,4 +220,17 @@ it('read multiline entry from file stream', () => {
     assert.notEqual(kon.get("Description").endsWith(" in other languages and off the Android platform."), false)
 })
 
+it('check size in lazyLoad and no lazyLoad', () => {
+    var ks = KonfigerStream.fileStream("test/test.contd.conf")
+	var kon = Konfiger.fromStream(ks, false)
+	var ks1 = KonfigerStream.fileStream("test/test.contd.conf")
+	var kon1 = Konfiger.fromStream(ks1, true)
+
+	assert.equal(kon.size() > 0, true)
+	assert.equal(kon1.size() > 0, true)
+	assert.equal(kon.isEmpty(), false)
+	assert.equal(kon1.isEmpty(), false)
+	assert.equal(kon1.size(), kon1.size())
+})
+
 

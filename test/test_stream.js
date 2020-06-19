@@ -144,6 +144,19 @@ ProgrammingLanguages = C, C++, C#, Dart, Elixr, Erlang, Go, +
     }
 })
 
+it('test backward slash ending value', () => {
+    var ks = KonfigerStream.stringStream("uri1 = http://uri1.thecarisma.com/core/api/v1/\r\n" +
+                "uri2 = http://uri2.thecarisma.com/core/api/v2/\r\n" +
+                "ussd.uri = https://ussd.thecarisma.com/")
+
+	var count = 0
+	while(ks.hasNext()) {
+		assert.equal(ks.next()[1].endsWith("/"), true)
+		count++
+	}
+	assert.equal(count, 3)
+})
+
 
 
 

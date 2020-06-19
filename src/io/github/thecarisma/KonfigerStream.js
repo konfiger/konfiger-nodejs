@@ -254,9 +254,7 @@ KonfigerStream.prototype.next = function() {
             } else {
                 value += char_
             }
-            if (char_ != '\r') {
-                prevChar = char_
-            }
+            prevChar = (char_ == '\r' ? (prevChar != '\\' ? '\0' : '\\') : char_)
         }
     } else {
         for (; this.readPosition <= this.streamObj.length; ++this.readPosition) {
@@ -307,9 +305,7 @@ KonfigerStream.prototype.next = function() {
             } else {
                 value += character
             }
-            if (character != '\r') {
-                prevChar = character
-            }
+            prevChar = (character == '\r' ? (prevChar != '\\' ? '\0' : '\\') : character)
         }
         ++this.readPosition
     }

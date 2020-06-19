@@ -22,7 +22,7 @@ function fromString(rawString, lazyLoad, delimeter, seperator) {
 }
 
 function fromStream(konfigerStream, lazyLoad) {
-    if (!lazyLoad) {
+    if (!konfigerUtil.isBoolean(lazyLoad)) {
         lazyLoad = true
     }
     const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, konfigerStream)

@@ -296,7 +296,7 @@ Konfiger stream allow multiline value. If the line ends with `\` the next line w
 
 for the file test.contd.conf
 
-```js
+```
 Description = This project is the closest thing to Android +
               Shared Preference in other languages +
               and off the Android platform.
@@ -322,7 +322,7 @@ In a case where the object keys are different from the entries keys in the konfi
 
 For the file English.lang
 
-```js
+```
 LoginTitle = Login Page
 AgeInstruction = You must me 18 years or above to register
 NewsletterOptin = Signup for our weekly news letter
@@ -409,7 +409,7 @@ var pageProps = {
     }
 }
 
-var kon = Konfiger.fromFile('English.lang')
+var kon = Konfiger.fromString()
 kon.dissolve(pageProps)
 console.log(kon.toString())
 ```
