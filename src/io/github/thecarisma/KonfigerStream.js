@@ -255,8 +255,8 @@ KonfigerStream.prototype.next = function() {
             } else {
                 value += char_
             }
-			prevPrevChar = (char_ == '\r' ? (prevChar != '\\' ? '\0' : '\\') : prevChar)
-            prevChar = (char_ == '\r' ? (prevChar != '\\' ? '\0' : '\\') : char_)
+            prevPrevChar = (char_ == '\r' ? prevPrevChar : prevChar)
+			prevChar = (char_ == '\r' ? (prevChar != '\\' ? '\0' : '\\') : char_)
         }
     } else {
         for (; this.readPosition <= this.streamObj.length; ++this.readPosition) {
@@ -307,8 +307,8 @@ KonfigerStream.prototype.next = function() {
             } else {
                 value += character
             }
-            prevPrevChar = (character == '\r' ? (prevChar != '\\' ? '\0' : '\\') : prevChar)
-            prevChar = (character == '\r' ? (prevChar != '\\' ? '\0' : '\\') : character)
+            prevPrevChar = (character == '\r' ? prevPrevChar : prevChar)
+			prevChar = (character == '\r' ? (prevChar != '\\' ? '\0' : '\\') : character)
         }
         ++this.readPosition
     }
