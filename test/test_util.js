@@ -9,7 +9,7 @@ it('check escape and unescape seperator', () => {
     var t2 = KonfigerUtil.escapeString(actualStr)
     
     assert.notEqual(actualStr, t1)
-    assert.equal(t1, "\\,Hello/¬W\n-\t-\torld")
+    assert.equal(t1, "\\,Hello^¬W\n-\t-\torld")
     assert.notEqual(t1, KonfigerUtil.unEscapeString(t1, ['¬']))
     assert.notEqual(actualStr, KonfigerUtil.unEscapeString(t1))
     assert.equal(KonfigerUtil.unEscapeString(t1, ['¬']), actualStr)

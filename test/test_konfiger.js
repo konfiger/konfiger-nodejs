@@ -134,17 +134,17 @@ it('escaping and unescaping entries and save', () => {
 })
 
 it('test complex and confusing seperator', () => {
-    var konfiger = Konfiger.fromString(`Occupation=Software En/gineergLocation=Ni/geriagState=La/gos`, false, '=', 'g')
+    var konfiger = Konfiger.fromString(`Occupation=Software En^gineergLocation=Ni^geriagState=La^gos`, false, '=', 'g')
     
     assert.equal(konfiger.size(), 3)
-    assert.equal(konfiger.toString().indexOf("/g") > -1, true)
+    assert.equal(konfiger.toString().indexOf("^g") > -1, true)
     for (var entry of konfiger.entries()) {
-        assert.equal(entry[1].indexOf("/g") > -1, false)
+        assert.equal(entry[1].indexOf("^g") > -1, false)
     }
     konfiger.setSeperator('f')
     assert.equal(konfiger.get("Occupation"), "Software Engineer")
     konfiger.setSeperator('\n')
-    assert.equal(konfiger.toString().indexOf("/g") > -1, false)
+    assert.equal(konfiger.toString().indexOf("^g") > -1, false)
     assert.equal(konfiger.size(), 3)
     for (var entry of konfiger.entries()) {
         assert.equal(entry[1].indexOf("\\g") > -1, false)
