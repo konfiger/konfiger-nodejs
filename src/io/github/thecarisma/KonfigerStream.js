@@ -236,7 +236,7 @@ KonfigerStream.prototype.next = function() {
                     continue
                 }
             }
-            if (char_ === this.seperator && prevChar != '/' && !parseKey ) {
+            if (char_ === this.seperator && prevChar != '^' && !parseKey ) {
                 if (value ==="") continue
                 if (parseKey === true && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.KonfigerStream: Invalid entry detected near Line " + line + ":" + column);
@@ -288,7 +288,7 @@ KonfigerStream.prototype.next = function() {
                     continue
                 }
             }
-            if (character === this.seperator && prevChar != '/' && !parseKey ) {
+            if (character === this.seperator && prevChar != '^' && !parseKey ) {
                 if (key === "" && value ==="") continue
                 if (parseKey === true && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);

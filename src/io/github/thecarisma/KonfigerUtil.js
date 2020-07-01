@@ -59,7 +59,7 @@ function escapeString(value, extraEscape) {
 		if (extraEscape) {
 			for (var extra of extraEscape) {
 				if (c === extra) {
-					finalValue += "/"
+					finalValue += "^"
 					break
 				}
 			}
@@ -73,7 +73,7 @@ function unEscapeString(value, extraEscape) {
     var finalValue = ""
     for (var i = 0; i < value.length; ++i) {
         var c = value[i]
-        if (c==='/') {
+        if (c==='^') {
             if (i===value.length - 1) {
                 finalValue += c
                 break
@@ -92,7 +92,7 @@ function unEscapeString(value, extraEscape) {
 					continue
 				}
 			}
-			finalValue += "/" + value[d]
+			finalValue += "^" + value[d]
             continue
         }
         finalValue += c
