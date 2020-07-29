@@ -252,6 +252,7 @@ For the file properties.conf
 ```
 project = konfiger
 author = Adewale Azeez
+islibrary = true
 ```
 
 ```js
@@ -259,7 +260,8 @@ const { Konfiger } = require("konfiger")
 
 var properties = {
     project: "",
-    author: ""
+    author: "",
+    islibrary: false
 }
 
 var kon = Konfiger.fromFile('properties.conf')
@@ -267,6 +269,7 @@ kon.resolve(properties)
 
 console.log(properties.project) // konfiger
 console.log(properties.author) // Adewale Azeez
+console.log(properties.islibrary) // true
 kon.put("project", "konfiger-nodejs")
 console.log(properties.project) // konfiger-nodejs
 ```
@@ -280,7 +283,8 @@ const { Konfiger } = require("konfiger")
 
 var properties = {
     project: "konfiger",
-    author: "Adewale"
+    author: "Adewale",
+    islibrary: true
 }
 
 var kon = Konfiger.fromString('')
@@ -288,6 +292,7 @@ kon.dissolve(properties)
 
 console.log(kon.get("project")) // konfiger
 console.log(kon.get("author")) // Adewale Azeez
+console.log(kon.getBoolean("islibrary")) // islibrary
 ```
 
 ### Multiline value
@@ -320,12 +325,15 @@ The two function `resolve` is used to attach an object. resolve function integra
 
 In a case where the object keys are different from the entries keys in the konfiger object the function `matchGetKey` can be declared in the object to match the key when setting the object entries values, and the function `matchPutKey` is called when setting the konfiger entries from the object.
 
+Konfiger is aware of the type of an object field, if the type of a field is boolean the entry value will be parsed as boolean and assigned to the field.
+
 For the file English.lang
 
 ```
 LoginTitle = Login Page
 AgeInstruction = You must me 18 years or above to register
 NewsletterOptin = Signup for our weekly news letter
+ShouldUpdate = true
 ```
 
 For an object which as the same key as the konfiger entries above there is no need to declare the matchGetKey or matchPutKey in the object. Resolve example
@@ -336,7 +344,8 @@ const { Konfiger } = require("konfiger")
 var pageProps = {
     LoginTitle: "",
     AgeInstruction: "",
-    NewsletterOptin: ""
+    NewsletterOptin: "",
+    ShouldUpdate: false
 }
 
 var kon = Konfiger.fromFile('English.lang')
@@ -352,7 +361,8 @@ const { Konfiger } = require("konfiger")
 var pageProps = {
     LoginTitle: "Login Page",
     AgeInstruction: "You must me 18 years or above to register",
-    NewsletterOptin: "Signup for our weekly news letter"
+    NewsletterOptin: "Signup for our weekly news letter",
+    ShouldUpdate: true
 }
 
 var kon = Konfiger.fromString('')

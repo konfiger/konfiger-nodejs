@@ -43,6 +43,37 @@ var entries = {
     file: "test.comment.inf"
 }
 
+var mixedTypes = {
+    project: "",
+    weAllCake: false,
+    annotatedEntry: false,
+    ageOfEarth: 0,
+    lengthOfRiverNile: 0,
+    pi: 0.0,
+    pie: 0.0,
+    matchGetKey: function(key) {
+        switch (key) {
+            case "annotatedEntry":
+                return "AnnotatedEntry"
+        }
+    },
+    matchPutKey: function(key) {
+        switch (key) {
+            case "AnnotatedEntry":
+                return "annotatedEntry"
+        }
+    }
+}
+
+var mixedTypesEntries = {
+    project: "konfiger",
+    weAllCake: true,
+    ageOfEarth: 121526156252322,
+    lengthOfRiverNile: 45454545,
+    pi: 3.14,
+    pie: 1.1121
+}
+
 it('invalid argument type to Konfiger.resolve', () => {
     var kStream = KonfigerStream.fileStream('test/test.comment.inf')
     kStream.setCommentPrefix("[")
@@ -140,3 +171,63 @@ it('detach an object from konfiger', () => {
     assert.notEqual(texts.author, "Adewale")
 })
 
+it('resolve with matchGetKey function mixedTypes', () => {
+    var kon = Konfiger.fromFile('test/mixed.types')
+    kon.resolve(mixedTypes)
+    
+    assert.strictEqual(mixedTypes.project, "konfiger")
+    assert.notStrictEqual(mixedTypes.weAllCake, "true")
+    assert.strictEqual(mixedTypes.weAllCake, true)
+    assert.strictEqual(mixedTypes.annotatedEntry, true)
+    assert.notStrictEqual(mixedTypes.ageOfEarth, "121526156252322")
+    assert.strictEqual(mixedTypes.ageOfEarth, 121526156252322)
+    assert.notStrictEqual(mixedTypes.lengthOfRiverNile, "45454545")
+    assert.strictEqual(mixedTypes.lengthOfRiverNile, 45454545)
+    assert.notStrictEqual(mixedTypes.pi, "3.14")
+    assert.strictEqual(mixedTypes.pi, 3.14)
+    assert.notStrictEqual(mixedTypes.pie, "1.1121")
+    assert.strictEqual(mixedTypes.pie, 1.1121)
+})
+
+it('dissolve an mixedTypes object into konfiger', () => {
+    var kon = Konfiger.fromFile('test/mixed.types')
+    kon.dissolve(mixedTypesEntries)
+    
+    assert.strictEqual(kon.get("project"), "konfiger")
+    assert.equal(kon.getString("weAllCake"), "true")
+    assert.strictEqual(kon.getBoolean("weAllCake"), true)
+    assert.equal(kon.get("ageOfEarth"), "121526156252322")
+    assert.strictEqual(kon.getLong("ageOfEarth"), 121526156252322)
+    assert.equal(kon.get("lengthOfRiverNile"), "45454545")
+    assert.strictEqual(kon.getInt("lengthOfRiverNile"), 45454545)
+    assert.equal(kon.get("pi"), "3.14")
+    assert.strictEqual(kon.getFloat("pi"), 3.14, 1)
+    assert.equal(kon.get("pie"), "1.1121")
+    assert.strictEqual(kon.getDouble("pie"), 1.1121, 1)
+})
+
+it('resolve with changing values for mixedTypes', () => {
+    var kon = Konfiger.fromFile('test/mixed.types')
+    kon.resolve(mixedTypes)
+    
+    assert.strictEqual(mixedTypes.project, "konfiger")
+    assert.strictEqual(mixedTypes.weAllCake, true)
+    assert.strictEqual(mixedTypes.ageOfEarth, 121526156252322)
+    assert.strictEqual(mixedTypes.lengthOfRiverNile, 45454545)
+    assert.strictEqual(mixedTypes.pi, 3.14, 1)
+    assert.strictEqual(mixedTypes.pie, 1.1121, 1)
+    assert.strictEqual(mixedTypes.annotatedEntry, true)
+
+    kon.put("project", "konfiger-nodejs")
+    kon.put("AnnotatedEntry", false)
+    kon.put("ageOfEarth", 121323)
+    kon.put("pie", 2.1212)
+
+    assert.strictEqual(mixedTypes.project, "konfiger-nodejs")
+    assert.strictEqual(mixedTypes.annotatedEntry, false)
+    assert.strictEqual(mixedTypes.ageOfEarth, 121323)
+    assert.strictEqual(mixedTypes.pie, 2.1212, 1)
+
+    kon.put("AnnotatedEntry", true)
+    assert.strictEqual(mixedTypes.annotatedEntry, true)
+})

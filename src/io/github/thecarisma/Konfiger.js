@@ -60,6 +60,18 @@ function Konfiger(delimeter, seperator, lazyLoad, stream) {
 
 Konfiger.prototype.put = function(key, value) {
     if (konfigerUtil.isString(key)) {
+        if (this.attachedResolveObj) {
+            var findKey
+            if ((this.attachedResolveObj.matchPutKey && !(findKey = this.attachedResolveObj.matchPutKey(key))) || 
+                (!this.attachedResolveObj.matchPutKey)) {
+                    
+                findKey = key
+            }
+            if (!konfigerUtil.isFunction(this.attachedResolveObj[findKey]) && this.attachedResolveObj[findKey] !== undefined ) {
+                this.attachedResolveObj[findKey] = value
+            }
+        }
+    
         if (konfigerUtil.isString(value)) {
             this.putString(key, value)
             
@@ -98,17 +110,6 @@ Konfiger.prototype.putString = function(key, value) {
         }
     }    
     this.konfigerObjects.set(key, value)
-    if (this.attachedResolveObj) {
-        var findKey
-        if ((this.attachedResolveObj.matchPutKey && !(findKey = this.attachedResolveObj.matchPutKey(key))) || 
-            (!this.attachedResolveObj.matchPutKey)) {
-                
-            findKey = key
-        }
-        if (!konfigerUtil.isFunction(this.attachedResolveObj[findKey]) && this.attachedResolveObj[findKey] !== undefined ) {
-            this.attachedResolveObj[findKey] = value
-        }
-    }
     this.changesOccur = true
     if (this.enableCache_) {
         this.shiftCache(key, value)
@@ -480,7 +481,19 @@ Konfiger.prototype.resolve = function(obj) {
             findKey = key
         }
         if (this.contains(findKey)) {
-            this.attachedResolveObj[key] = this.get(findKey)
+            if (konfigerUtil.isString(this.attachedResolveObj[key])) {
+                this.attachedResolveObj[key] = this.get(findKey)
+                
+            } else if (konfigerUtil.isBoolean(this.attachedResolveObj[key])) {
+                this.attachedResolveObj[key] = this.getBoolean(findKey)
+                
+            } else if (konfigerUtil.isFloat(this.attachedResolveObj[key])) {
+                this.attachedResolveObj[key] = this.getFloat(findKey)
+                
+            } else if (konfigerUtil.isNumber(this.attachedResolveObj[key])) {
+                this.attachedResolveObj[key] = this.getLong(findKey)
+                
+            }
         }        
     }
 }
@@ -501,7 +514,7 @@ Konfiger.prototype.dissolve = function(obj) {
             findKey = key
         }
         if (obj[key]) {
-            this.konfigerObjects.set(findKey, obj[key])
+            this.konfigerObjects.set(findKey, ""+obj[key])
         }
       
     }
