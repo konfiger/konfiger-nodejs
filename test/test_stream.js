@@ -123,7 +123,7 @@ it('test string stream key value trimming', () => {
 it('read multiline entry and test continuation char in file stream', () => {
     var ks = KonfigerStream.fileStream("test/test.contd.conf")
     while (ks.hasNext()) {
-        assert.equal(ks.next()[1].indexOf('\n'), -1)
+        assert.equal(ks.next()[1].endsWith('\\'), false)
     }
 })
 
@@ -140,7 +140,7 @@ ProgrammingLanguages = C, C++, C#, Dart, Elixr, Erlang, Go, +
 `)
     ks.setContinuationChar('+')
     while (ks.hasNext()) {
-        assert.equal(ks.next()[1].indexOf('\n'), -1)
+        assert.equal(ks.next()[1].endsWith('\\'), false)
     }
 })
 
