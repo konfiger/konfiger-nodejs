@@ -636,6 +636,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | void putInt(key, value)           | Put a Int into the konfiger, alias for `void putLong(key, value)`.
 | void putFloat(key, value)           | Put a Float into the konfiger, the second parameter must be a Float
 | void putDouble(key, value)           | Put a Double into the konfiger, the second parameter must be a Double
+| void putComment(theComment)           | Put a literal comment into the konfiger, it simply add the comment prefix as key and value to the entries e.g. `kon.putComment("Hello World")` add the entry `//:Hello World`
 | Array keys()           | Get all the keys entries in the konfiger object in iterable array list
 | Array values()           | Get all the values entries in the konfiger object in iterable array list
 | Array[Key, Value] entries()           | Get all the entries in the konfiger in a `[['Key', 'Value'], ...]`

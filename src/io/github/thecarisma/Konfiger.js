@@ -258,7 +258,7 @@ Konfiger.prototype.keys = function(key) {
     return this.konfigerObjects.keys()
 }
 
-Konfiger.prototype.values = function(key) {
+Konfiger.prototype.values = function() {
     if (!this.loadingEnds && this.lazyLoad) {
         this.toString()
     }

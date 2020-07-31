@@ -233,4 +233,11 @@ it('check size in lazyLoad and no lazyLoad', () => {
 	assert.equal(kon1.size(), kon1.size())
 })
 
+it('check putComment in the konfiger object', () => {
+    var kon = Konfiger.fromString("Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020", false, ':', ',')
+    kon.putComment("A comment at the end")
+    
+    assert.equal(kon.toString().indexOf("//:A comment") > -1, true)
+})
+
 
