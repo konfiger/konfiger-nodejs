@@ -14,7 +14,9 @@ const fs = require("fs")
 const MAX_CAPACITY = 10000000
 
 function fromFile(filePath, lazyLoad, delimeter, seperator) {
-    return fromStream(KonfigerStream.fileStream(filePath, delimeter, seperator), lazyLoad)
+    var kon = fromStream(KonfigerStream.fileStream(filePath, delimeter, seperator), lazyLoad)
+    kon.filePath = kon.stream.streamObj
+    return kon
 }
 
 function fromString(rawString, lazyLoad, delimeter, seperator) {
@@ -25,19 +27,17 @@ function fromStream(konfigerStream, lazyLoad) {
     if (!konfigerUtil.isBoolean(lazyLoad)) {
         lazyLoad = true
     }
-    const konfiger = new Konfiger(konfigerStream.delimeter, konfigerStream.seperator, lazyLoad, konfigerStream)
-    konfiger.filePath = konfigerStream.filePath
-    return konfiger
+    return (new Konfiger(konfigerStream, lazyLoad))
 }
 
-function Konfiger(delimeter, seperator, lazyLoad, stream) {
+function Konfiger(stream, lazyLoad) {
     this.hashcode = 0
     this.stream = stream
     this.loadingEnds = false
     this.lazyLoad = lazyLoad
     this.konfigerObjects = new Map()
-    this.delimeter = delimeter
-    this.seperator = seperator
+    this.delimeter = stream.delimeter
+    this.seperator = stream.seperator
     this.caseSensitive = true
     this.changesOccur = true
     this.stringValue = ""
