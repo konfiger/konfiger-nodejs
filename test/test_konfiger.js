@@ -266,6 +266,9 @@ Number=215415245
     assert.equal(kon.get("STRiNg"), "This is a string")
     assert.equal(kon.get("nUMbeR"), "215415245")
     
+    assert.equal(kon.get("string"), "This is a string")
+    assert.equal(kon.get("number"), "215415245")
+    
 })
 
 
