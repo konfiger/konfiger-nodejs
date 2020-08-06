@@ -178,6 +178,14 @@ Konfiger.prototype.get = function(key, defaultValue) {
         }
     }
     var value
+    if (this.caseSensitive === false) {
+        for (entryKey of this.keys()) {
+            if (entryKey.toLowerCase() === key.toLowerCase()) {
+                key = entryKey
+                break
+            }
+        }
+    }
     if (defaultValue && !this.konfigerObjects.has(key)) {
         value = ""+defaultValue
     } else if (this.konfigerObjects.has(key)) {
@@ -372,6 +380,18 @@ Konfiger.prototype.setDelimeter = function(delimeter) {
     }
     this.changesOccur = true
     this.delimeter = delimeter
+}
+
+Konfiger.prototype.isCaseSensitive = function() {
+    return this.caseSensitive
+}
+
+Konfiger.prototype.setCaseSensitivity = function(caseSensitive) {
+    if (!konfigerUtil.isBoolean(caseSensitive)) {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a boolean found " + 
+                        konfigerUtil.typeOf(caseSensitive))
+    }
+    this.caseSensitive = caseSensitive
 }
 
 Konfiger.prototype.hashCode = function() {

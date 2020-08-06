@@ -240,4 +240,32 @@ it('check putComment in the konfiger object', () => {
     assert.equal(kon.toString().indexOf("//:A comment") > -1, true)
 })
 
+it('validate konfiger entries with case sensitivity', () => {
+    var kon = Konfiger.fromString(`
+String=This is a string
+Number=215415245
+`, false)
+
+    kon.setCaseSensitivity(true)
+    assert.equal(kon.isCaseSensitive(), true)
+    assert.throws(function () { 
+        assert.equal(kon.get("STRING"), "This is a string")
+    }, Error)
+    assert.throws(function () { 
+        assert.equal(kon.get("NUMBER"), "215415245")
+    }, Error)
+    
+    kon.setCaseSensitivity(false)
+    assert.equal(kon.isCaseSensitive(), false)
+    assert.equal(kon.get("STRING"), "This is a string")
+    assert.equal(kon.get("NUMBER"), "215415245")
+    
+    assert.equal(kon.get("strING"), "This is a string")
+    assert.equal(kon.get("nuMBer"), "215415245")
+    
+    assert.equal(kon.get("STRiNg"), "This is a string")
+    assert.equal(kon.get("nUMbeR"), "215415245")
+    
+})
+
 

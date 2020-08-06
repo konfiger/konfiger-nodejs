@@ -175,7 +175,7 @@ it('test error tolerancy in string stream', () => {
     
     assert.equal(ks.isErrorTolerant(), true)
 	while(ks.hasNext()) {
-		assert.notEqual(ks.next()[1], null)
+		assert.equal(ks.next()[1].length, 0)
 	}
 })
 
@@ -185,7 +185,7 @@ it('test error tolerancy in file stream', () => {
     assert.equal(ks.isErrorTolerant(), false)
 	while(ks.hasNext()) {
         assert.throws(function () { 
-            ks.next()
+            assert.equal(ks.next()[1].length, 0)
         }, Error, /io.github.thecarisma.KonfigerStream: Invalid entry detected near /)
         break
 	}
