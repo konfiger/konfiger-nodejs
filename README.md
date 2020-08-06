@@ -611,6 +611,8 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | setContinuationChar(contdChar) | Set the character that indicates to the stream to continue reading for the entry value on the next line. The follwoing line leading spaces is trimmed. The default is `\`
 | getContinuationChar() | Get the continuation character used in the stream.
 | void validateFileExistence(filePath)  | Validate the existence of the specified file path if it does not exist an exception is thrown
+| errorTolerance(errTolerance)           | Enable or disable the error tolerancy property of the konfiger, if enabled no exception will be throw even when it suppose to there for it a bad idea but useful in a fail safe environment.
+| isErrorTolerant() | Check if the konfiger object errTolerance is set to true.
 
 ### Konfiger
 
@@ -664,8 +666,6 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | updateAt(index, value)           | Update the value at the specified index with the new string value, throws an error if the index is OutOfRange 
 | contains(key)           | Check if the konfiger contains a key 
 | enableCache(enableCache_)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though). Using `getString` method to fetch vallue **99999999999** times with cache disabled takes over 1hr and with cache enabled takes 20min.
-| errorTolerance(errTolerance)           | Enable or disable the error tolerancy property of the konfiger, if enabled no exception will be throw even when it suppose to there for it a bad idea but useful in a fail safe environment.
-| isErrorTolerant() | Check if the konfiger object errTolerance is set to true.
 | toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 | resolve(obj)           | Attach an object to konfiger, on attachment the values of the entries in the object will be set to the coresponding value in konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
 | dissolve(obj) | Each string fields in the object will be put into konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry. This does not attach the object.
