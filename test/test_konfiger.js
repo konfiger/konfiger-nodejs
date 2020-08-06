@@ -90,7 +90,7 @@ it('validate konfiger default value for non existing key', () => {
 
 it('remove entry and validate size', () => {
     var konfiger = Konfiger.fromString('One=111,Two=222,Three=333', false, '=', ',')
-    konfiger.errorTolerance(true)
+    konfiger.stream.errorTolerance(true)
     
     assert.equal(konfiger.size(), 3)
     assert.notEqual(konfiger.get("Two"), null)

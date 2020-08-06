@@ -117,6 +117,14 @@ KonfigerStream.prototype.setContinuationChar = function(continuationChar) {
     this.continuationChar = continuationChar
 }
 
+KonfigerStream.prototype.errorTolerance = function(errTolerance) {
+    this.errTolerance = errTolerance
+}
+
+KonfigerStream.prototype.isErrorTolerant = function() {
+	return this.errTolerance
+}
+
 KonfigerStream.prototype.hasNext = function() {
     if (!this.doneReading_) {
         var commentSize = this.commentPrefix.length
@@ -209,7 +217,8 @@ KonfigerStream.prototype.next = function() {
             if (num === 0) {
                 if (key !== "") {
                     if (parseKey === true && this.errTolerance === false) {
-                        throw new Error("io.github.thecarisma.KonfigerStream: Invalid entry detected near Line " + line + ":" + column);
+                        throw new Error("io.github.thecarisma.KonfigerStream: Invalid entry detected near Line " + line + ":" + column)
+                        continue
                     }
                 }
                 this.doneReading()
@@ -236,16 +245,17 @@ KonfigerStream.prototype.next = function() {
                     continue
                 }
             }
-            if (char_ === this.seperator && prevChar != '^' && !parseKey ) {
-                if (value ==="") continue
+            if (char_ === this.seperator && prevChar != '^' ) {
                 if (parseKey === true && this.errTolerance === false) {
-                    throw new Error("io.github.thecarisma.KonfigerStream: Invalid entry detected near Line " + line + ":" + column);
+                    throw new Error("io.github.thecarisma.KonfigerStream: Invalid entry detected near Line " + line + ":" + column)
+                    continue
                 }
                 break
             }
             if (char_ === this.delimeter && parseKey) {
                 if (value !== "" && this.errTolerance !== false) {
                     throw new Error("io.github.thecarisma.KonfigerStream: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator")
+                    continue
                 }
                 parseKey = false
                 continue
@@ -263,7 +273,8 @@ KonfigerStream.prototype.next = function() {
             if (this.readPosition === this.streamObj.length) {
                 if (key !== "") {
                     if (parseKey === true && this.errTolerance === false) {
-                        throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
+                        throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column)
+                        continue
                     }
                 }
                 this.doneReading()
@@ -288,16 +299,17 @@ KonfigerStream.prototype.next = function() {
                     continue
                 }
             }
-            if (character === this.seperator && prevChar != '^' && !parseKey ) {
-                if (key === "" && value ==="") continue
+            if (character === this.seperator && prevChar != '^') {
                 if (parseKey === true && this.errTolerance === false) {
-                    throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column);
+                    throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column)
+                    continue
                 }
                 break
             } 
             if (character === this.delimeter && parseKey) {
                 if (value !== "" && this.errTolerance === false) {
-                    throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator");
+                    throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator")
+                    continue
                 }
                 parseKey = false 
                 continue

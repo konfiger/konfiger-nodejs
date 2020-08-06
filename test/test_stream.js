@@ -170,6 +170,31 @@ it('test escape slash ending', () => {
 	assert.equal(count, 3)
 })
 
+it('test error tolerancy in string stream', () => {
+    var ks = KonfigerStream.stringStream("Firt=1st", '-', '$', true)
+    
+    assert.equal(ks.isErrorTolerant(), true)
+	while(ks.hasNext()) {
+		assert.notEqual(ks.next()[1], null)
+	}
+})
+
+it('test error tolerancy in file stream', () => {
+    var ks = KonfigerStream.fileStream("test/test.comment.inf")
+    
+    assert.equal(ks.isErrorTolerant(), false)
+	while(ks.hasNext()) {
+        assert.throws(function () { 
+            ks.next()
+        }, Error, /io.github.thecarisma.KonfigerStream: Invalid entry detected near /)
+        break
+	}
+    ks.errorTolerance(true)
+    assert.equal(ks.isErrorTolerant(), true)
+	while(ks.hasNext()) {
+        assert.notEqual(ks.next()[1], null)
+	}
+})
 
 
 

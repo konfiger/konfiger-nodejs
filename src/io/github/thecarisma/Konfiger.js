@@ -374,14 +374,6 @@ Konfiger.prototype.setDelimeter = function(delimeter) {
     this.delimeter = delimeter
 }
 
-Konfiger.prototype.errorTolerance = function(errTolerance) {
-    this.stream.errTolerance = errTolerance
-}
-
-Konfiger.prototype.isErrorTolerant = function() {
-	return this.stream.errTolerance
-}
-
 Konfiger.prototype.hashCode = function() {
 	if (this.hashcode !== 0) return this.hashcode
 	var i, chr
