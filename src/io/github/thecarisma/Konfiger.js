@@ -163,10 +163,10 @@ Konfiger.prototype.get = function(key, defaultValue) {
     }
     if (!this.konfigerObjects.has(key) && this.lazyLoad) {
         if (!this.loadingEnds) {
+            this.changesOccur = true
             while (this.stream.hasNext()) {
                 var obj = this.stream.next()
                 this.konfigerObjects.set(obj[0], obj[1])
-                this.changesOccur = true
                 if (obj[0] === key) {
                     if (this.enableCache_) {
                         this.shiftCache(key, obj[1])
