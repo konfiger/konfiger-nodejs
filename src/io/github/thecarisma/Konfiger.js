@@ -368,7 +368,7 @@ Konfiger.prototype.setSeperator = function(seperator) {
 		oldSeperator = this.seperator
         this.seperator = seperator
         for (var entry of this.entries()) {
-			this.konfigerObjects.set(entry[0], konfigerUtil.unEscapeString(entry[1], [this.oldSeperator]))
+			this.konfigerObjects.set(entry[0], konfigerUtil.unEscapeString(entry[1], [seperator]))
         }
     }
 }
@@ -401,7 +401,9 @@ Konfiger.prototype.setCaseSensitivity = function(caseSensitive) {
 Konfiger.prototype.hashCode = function() {
 	if (this.hashcode !== 0) return this.hashcode
 	var i, chr
-	if (this.stringValue.length === 0) return this.hashcode
+	if (this.stringValue.length === 0) { 
+        this.stringValue = self.toString()
+    }
 	for (i = 0; i < this.stringValue.length; ++i) {
 		chr   = this.stringValue.charCodeAt(i)
 		this.hashcode  = ((this.hashcode << 5) - this.hashcode) + chr
