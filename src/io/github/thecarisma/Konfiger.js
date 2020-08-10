@@ -105,8 +105,8 @@ Konfiger.prototype.putString = function(key, value) {
         }
     }
     if (!this.konfigerObjects.has(key)) {
-        if (this.konfigerObjects.size === MAX_CAPACITY) {
-            throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity 10,000,000")
+        if (this.konfigerObjects.size >= MAX_CAPACITY) {
+            throw new Error("io.github.thecarisma.Konfiger: Konfiger has reached it maximum capacity " + MAX_CAPACITY)
         }
     }    
     this.konfigerObjects.set(key, value)
@@ -204,7 +204,7 @@ Konfiger.prototype.getString = function(key, defaultValue) {
 
 Konfiger.prototype.getBoolean = function(key, defaultValue) {
     var value = this.get(key, defaultValue)
-    return (value ? value === "true" : false)
+    return (value ? value.toLowerCase() === "true" : false)
 }
 
 Konfiger.prototype.getLong = function(key, defaultValue) {
