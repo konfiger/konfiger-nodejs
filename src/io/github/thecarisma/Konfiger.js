@@ -242,14 +242,18 @@ Konfiger.prototype.enableCache = function(enableCache_) {
 }
 
 Konfiger.prototype.contains = function(key) {
+    if (!konfigerUtil.isString(key)) {
+        throw new Error("io.github.thecarisma.Konfiger: Invalid argument, key must be a string")
+    }
+    
     if (this.konfigerObjects.has(key)) {
         return true
     }
-    if (!this.loadingEnds && this.lazyLoad) {
+    if (!this.loadingEnds && this.lazyLoad === true) {
+        this.changesOccur = true
         while (this.stream.hasNext()) {
             var obj = this.stream.next()
             this.konfigerObjects.set(obj[0], obj[1])
-            this.changesOccur = true
             if (obj[0] === key) {
                 return true
             }
@@ -260,22 +264,22 @@ Konfiger.prototype.contains = function(key) {
 }
 
 Konfiger.prototype.keys = function(key) {
-    if (!this.loadingEnds && this.lazyLoad) {
-        this.toString()
+    if (!this.loadingEnds && this.lazyLoad === true) {
+        this.lazyLoader()
     }
     return this.konfigerObjects.keys()
 }
 
 Konfiger.prototype.values = function() {
-    if (!this.loadingEnds && this.lazyLoad) {
-        this.toString()
+    if (!this.loadingEnds && this.lazyLoad === true) {
+        this.lazyLoader()
     }
     return this.konfigerObjects.values()
 }
 
 Konfiger.prototype.entries = function() {
-    if (!this.loadingEnds && this.lazyLoad) {
-        this.toString()
+    if (!this.loadingEnds && this.lazyLoad === true) {
+        this.lazyLoader()
     }
     return this.konfigerObjects.entries()
 }
@@ -340,8 +344,8 @@ Konfiger.prototype.updateAt = function(index, value) {
 }
 
 Konfiger.prototype.size = function() {
-    if (!this.loadingEnds && this.lazyLoad) {
-        this.toString()
+    if (!this.loadingEnds && this.lazyLoad === true) {
+        this.lazyLoader()
     }
     return this.konfigerObjects.size
 }
@@ -408,7 +412,7 @@ Konfiger.prototype.hashCode = function() {
 
 Konfiger.prototype.toString = function() {
 	if (this.changesOccur) {
-        if (this.lazyLoad) {
+        if (!this.loadingEnds && this.lazyLoad === true) {
             this.lazyLoader()
         }
         this.stringValue = ""
