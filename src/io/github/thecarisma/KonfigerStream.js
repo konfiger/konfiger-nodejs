@@ -118,6 +118,10 @@ KonfigerStream.prototype.setContinuationChar = function(continuationChar) {
 }
 
 KonfigerStream.prototype.errorTolerance = function(errTolerance) {
+    if (!konfigerUtil.isBoolean(errTolerance)) {
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument, expecting a boolean found " + 
+                        konfigerUtil.typeOf(errTolerance))
+    }
     this.errTolerance = errTolerance
 }
 
