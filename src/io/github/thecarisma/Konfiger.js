@@ -294,13 +294,14 @@ Konfiger.prototype.remove = function(keyIndex) {
     if (konfigerUtil.isString(keyIndex)) {
         this.changesOccur = true
         if (this.konfigerObjects.has(keyIndex)) {
+            enableCache_ = this.enableCache_
             this.enableCache(false)
             var ret = this.get(keyIndex)
-            this.enableCache(this.enableCache_)
+            this.enableCache(enableCache_)
             if (this.konfigerObjects.delete(keyIndex)) {
                 return ret
             }
-            return ""
+            return undefined
         }
         
     } else if (konfigerUtil.isNumber(keyIndex)) {
@@ -314,7 +315,7 @@ Konfiger.prototype.remove = function(keyIndex) {
             }
             
         }
-        return ""
+        return undefined
         
     } else {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry key(string) or index(Number) found " 
