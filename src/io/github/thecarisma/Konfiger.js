@@ -332,11 +332,11 @@ Konfiger.prototype.updateAt = function(index, value) {
                 if (i === index) {
                     this.changesOccur = true
                     this.enableCache(this.enableCache_)
-                    return this.konfigerObjects.set(o, value)
+                    this.konfigerObjects.set(o, value)
+                    break
                 }
             }            
         }
-        return undefined
         
     } else {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting the entry (Number, String) found (" 
