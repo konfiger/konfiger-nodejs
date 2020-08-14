@@ -271,4 +271,28 @@ Number=215415245
     
 })
 
+it('check the updateAt method', () => {
+    var kon = Konfiger.fromString("Name:Adewale Azeez,//Project:konfiger,Date:April 24 2020", false, ':', ',')
+    
+    assert.equal(kon.get("Date"), "April 24 2020")
+    assert.equal(kon.get("Name"), "Adewale Azeez")
+    kon.updateAt(1, "12 BC")
+    kon.updateAt(0, "Thecarisma")
+    assert.equal(kon.get("Date"), "12 BC")
+    assert.equal(kon.get("Name"), "Thecarisma")
+})
+
+it('save content and validate saved content', () => {
+    var kon = Konfiger.fromString("Name=Adewale Azeez,Date=April 24 2020,One=111,Two=222,Three=333", false, '=', ',')
+    
+    assert.equal(kon.size(), 5)
+    kon.save('test/konfiger.conf')
+    var kon2 = Konfiger.fromFile('test/konfiger.conf', false, '=', ',')
+    assert.equal(kon.toString(), kon.toString())
+    assert.equal(kon2.size(), 5)
+    
+})
+
+
+
 
