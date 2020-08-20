@@ -544,7 +544,7 @@ Konfiger.prototype.dissolve = function(obj) {
                 
             findKey = key
         }
-        if (obj[key]) {
+        if (findKey && obj[key]) {
             this.konfigerObjects.set(findKey, ""+obj[key])
         }
       
