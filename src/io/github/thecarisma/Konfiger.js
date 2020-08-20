@@ -59,19 +59,7 @@ function Konfiger(stream, lazyLoad) {
 }
 
 Konfiger.prototype.put = function(key, value) {
-    if (konfigerUtil.isString(key)) {
-        if (this.attachedResolveObj) {
-            var findKey
-            if ((this.attachedResolveObj.matchPutKey && !(findKey = this.attachedResolveObj.matchPutKey(key))) || 
-                (!this.attachedResolveObj.matchPutKey)) {
-                    
-                findKey = key
-            }
-            if (!konfigerUtil.isFunction(this.attachedResolveObj[findKey]) && this.attachedResolveObj[findKey] !== undefined ) {
-                this.attachedResolveObj[findKey] = value
-            }
-        }
-    
+    if (konfigerUtil.isString(key)) {    
         if (konfigerUtil.isString(value)) {
             this.putString(key, value)
             
@@ -110,6 +98,30 @@ Konfiger.prototype.putString = function(key, value) {
         }
     }    
     this.konfigerObjects.set(key, value)
+    if (this.attachedResolveObj) {
+        var findKey
+        if ((this.attachedResolveObj.matchPutKey && !(findKey = this.attachedResolveObj.matchPutKey(key))) || 
+            (!this.attachedResolveObj.matchPutKey)) {
+                
+            findKey = key
+        }
+        if (!konfigerUtil.isFunction(this.attachedResolveObj[findKey]) && this.attachedResolveObj[findKey] !== undefined ) {
+            oldValue = this.attachedResolveObj[findKey]
+            if (konfigerUtil.isString(oldValue)) {
+                this.attachedResolveObj[findKey] = value
+                
+            } else if (konfigerUtil.isBoolean(oldValue)) {
+                this.attachedResolveObj[findKey] = (value.toLowerCase() === "true")
+                
+            } else if (konfigerUtil.isFloat(oldValue)) {
+                this.attachedResolveObj[findKey] = parseFloat(value)
+                
+            } else if (konfigerUtil.isNumber(oldValue)) {
+                this.attachedResolveObj[findKey] = Number(value)
+                
+            }
+        }
+    }
     this.changesOccur = true
     if (this.enableCache_) {
         this.shiftCache(key, value)
