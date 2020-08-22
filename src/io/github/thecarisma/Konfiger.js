@@ -551,6 +551,14 @@ Konfiger.prototype.dissolve = function(obj) {
     }
 }
 
+Konfiger.prototype.attach = function(obj) {
+    if (!konfigerUtil.isObject(obj)) {
+        konfigerUtil.throwError("io.github.thecarisma.Konfiger", "invalid argument, expecting an object found " 
+                                + konfigerUtil.typeOf(obj))
+    }
+	this.attachedResolveObj = obj
+}
+
 Konfiger.prototype.detach = function() {
 	var tmpObj = this.attachedResolveObj
     this.attachedResolveObj = undefined

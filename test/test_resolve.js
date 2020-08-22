@@ -231,3 +231,33 @@ it('resolve with changing values for mixedTypes', () => {
     kon.put("AnnotatedEntry", true)
     assert.strictEqual(mixedTypes.annotatedEntry, true)
 })
+
+it('resolve with changing values and map key with attach', () => {
+    var kStream = KonfigerStream.fileStream('test/test.comment.inf')
+    kStream.setCommentPrefix("[")
+    var kon = Konfiger.fromStream(kStream)
+    texts.project = ""
+    texts.Platform = ""
+    texts.file = ""
+    texts.author = ""
+    kon.attach(texts)
+    
+    assert.notEqual(texts.project, "konfiger")
+    assert.notEqual(texts.Platform, "Cross Platform")
+    assert.notEqual(texts.file, "test.comment.inf")
+    assert.notEqual(texts.author, "Adewale Azeez")
+    
+    kon.put("Project", "konfiger-nodejs")
+    kon.put("Platform", "Windows, Linux, Mac, Raspberry")
+    kon.put("author", "Thecarisma")
+    
+    assert.equal(texts.project, "konfiger-nodejs")
+    assert.equal(texts.Platform.indexOf("Windows") > -1, true)
+    assert.equal(texts.Platform.indexOf("Linux") > -1, true)
+    assert.equal(texts.Platform.indexOf("Mac") > -1, true)
+    assert.equal(texts.Platform.indexOf("Raspberry") > -1, true)
+    assert.equal(texts.author, "Thecarisma")
+    
+    kon.put("author", "Adewale")
+    assert.equal(texts.author, "Adewale")
+})
