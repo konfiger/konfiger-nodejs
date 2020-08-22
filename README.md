@@ -319,7 +319,7 @@ console.log(ks.next()[1])
 
 This feature of the project allow seamless integration with the konfiger entries by eliminating the need for writing `Konfiger.get*("")` everytime to read a value into a variable or writing lot of `Konfiger.put*()` to add an entry. 
 
-The two function `resolve` is used to attach an object. resolve function integrate the object such that the entries in konfiger will be assigned to the matching key in the object. See the [resolve](#object-attachement-get) and [dissolve](#object-attachement-put) examples above.
+The two function `resolve` is used to attach an object. resolve function integrate the object such that the entries in konfiger will be assigned to the matching key in the object. See the [resolve](#resolve-object) and [dissolve](#dissolve-object) examples above.
 
 In a case where the object keys are different from the entries keys in the konfiger object the function `matchGetKey` can be declared in the object to match the key when setting the object entries values, and the function `matchPutKey` is called when setting the konfiger entries from the object.
 
@@ -689,7 +689,7 @@ You can open issue or file a request that only address problems in this implemen
 
 ## Support
 
-You can support some of this community as they make big impact in the traing of individual to get started with software engineering and open source contribution.
+You can support some of this community as they make big impact in the training of individual to get started with software engineering and open source contribution.
 
 - [https://www.patreon.com/devcareer](https://www.patreon.com/devcareer)
 
