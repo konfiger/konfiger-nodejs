@@ -671,6 +671,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | String toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 | void resolve(obj)           | Attach an object to konfiger, on attachment the values of the entries in the object will be set to the coresponding value in konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
 | void dissolve(obj) | Each string fields in the object will be put into konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry. This does not attach the object.
+| attach(obj) | Attach an object to konfiger without dissolving it field into konfiger or setting it fields to a matching konfiger entry. Use this if the values in an object is to be left intact but updated if a matching entry in konfiger changes. 
 | Object detach() | Detach the object attached to konfiger when the resolve function is called. The detached object is returned.
 
 ## How it works
