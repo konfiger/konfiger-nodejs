@@ -17,11 +17,11 @@ it('should throw exceptions', () => {
     
     assert.throws(function () { 
         var ks = KonfigerStream.fileStream("./index.js", ',')
-    }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid length of argument, seperator or delimeter parameter is missing")
+    }, Error, "Error: io.github.thecarisma.KonfigerStream: Invalid length of argument, separator or delimiter parameter is missing")
     
     assert.throws(function () { 
         var ks = KonfigerStream.fileStream("./index.js", ',', '==')
-    }, Error, "Error: io.github.thecarisma.KonfigerStream: invalid argument for seperator expecting char found string")
+    }, Error, "Error: io.github.thecarisma.KonfigerStream: invalid argument for separator expecting char found string")
     
     assert.throws(function () { 
         var ks = KonfigerStream.stringStream(30)

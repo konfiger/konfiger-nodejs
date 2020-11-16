@@ -3,7 +3,7 @@ const assert = require('assert')
 const { KonfigerUtil } = require("../index.js")
 
 
-it('check escape and unescape seperator', () => {
+it('check escape and unescape separator', () => {
     var actualStr = '\\,Hello¬W\n-\t-\torld'
     var t1 = KonfigerUtil.escapeString(actualStr, ['¬'])
     var t2 = KonfigerUtil.escapeString(actualStr)

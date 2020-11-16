@@ -13,14 +13,14 @@ const fs = require("fs")
  
 const MAX_CAPACITY = 10000000
 
-function fromFile(filePath, lazyLoad, delimeter, seperator) {
-    var kon = fromStream(KonfigerStream.fileStream(filePath, delimeter, seperator), lazyLoad)
+function fromFile(filePath, lazyLoad, delimiter, separator) {
+    var kon = fromStream(KonfigerStream.fileStream(filePath, delimiter, separator), lazyLoad)
     kon.filePath = kon.stream.streamObj
     return kon
 }
 
-function fromString(rawString, lazyLoad, delimeter, seperator) {
-    return fromStream(KonfigerStream.stringStream(rawString, delimeter, seperator), lazyLoad)
+function fromString(rawString, lazyLoad, delimiter, separator) {
+    return fromStream(KonfigerStream.stringStream(rawString, delimiter, separator), lazyLoad)
 }
 
 function fromStream(konfigerStream, lazyLoad) {
@@ -36,8 +36,8 @@ function Konfiger(stream, lazyLoad) {
     this.loadingEnds = false
     this.lazyLoad = lazyLoad
     this.konfigerObjects = new Map()
-    this.delimeter = stream.delimeter
-    this.seperator = stream.seperator
+    this.delimiter = stream.delimiter
+    this.separator = stream.separator
     this.caseSensitive = true
     this.changesOccur = true
     this.stringValue = ""
@@ -368,35 +368,51 @@ Konfiger.prototype.isEmpty = function() {
 }
 
 Konfiger.prototype.getSeperator = function() {
-    return this.seperator
+    return this.separator
 }
 
-Konfiger.prototype.setSeperator = function(seperator) {
-    if (!konfigerUtil.isChar(seperator)) {
+Konfiger.prototype.setSeperator = function(separator) {
+    this.setSeparator(separator);
+}
+
+Konfiger.prototype.getSeparator = function() {
+    return this.separator
+}
+
+Konfiger.prototype.setSeparator = function(separator) {
+    if (!konfigerUtil.isChar(separator)) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
-                        konfigerUtil.typeOf(seperator))
+                        konfigerUtil.typeOf(separator))
     }
-    if (this.seperator !== seperator) {
+    if (this.separator !== separator) {
         this.changesOccur = true
-		oldSeperator = this.seperator
-        this.seperator = seperator
+		oldSeparator = this.separator
+        this.separator = separator
         for (var entry of this.entries()) {
-			this.konfigerObjects.set(entry[0], konfigerUtil.unEscapeString(entry[1], [seperator]))
+			this.konfigerObjects.set(entry[0], konfigerUtil.unEscapeString(entry[1], [separator]))
         }
     }
 }
 
 Konfiger.prototype.getDelimeter = function() {
-    return this.delimeter
+    return this.delimiter
 }
 
-Konfiger.prototype.setDelimeter = function(delimeter) {
-    if (!konfigerUtil.isChar(delimeter)) {
+Konfiger.prototype.setDelimeter = function(delimiter) {
+    this.setDelimiter(delimiter);
+}
+
+Konfiger.prototype.getDelimiter = function() {
+    return this.delimiter
+}
+
+Konfiger.prototype.setDelimiter = function(delimiter) {
+    if (!konfigerUtil.isChar(delimiter)) {
         throw new Error("io.github.thecarisma.Konfiger: Invalid argument, expecting a character found " + 
-                        konfigerUtil.typeOf(delimeter))
+                        konfigerUtil.typeOf(delimiter))
     }
     this.changesOccur = true
-    this.delimeter = delimeter
+    this.delimiter = delimiter
 }
 
 Konfiger.prototype.isCaseSensitive = function() {
@@ -434,9 +450,9 @@ Konfiger.prototype.toString = function() {
         var index = 0
         for (let entry of this.konfigerObjects.entries()) {
             if (!entry[1]) { continue }
-            this.stringValue += entry[0] + this.delimeter + konfigerUtil.escapeString(entry[1], [this.seperator])
+            this.stringValue += entry[0] + this.delimiter + konfigerUtil.escapeString(entry[1], [this.separator])
             ++index
-            if (index < (this.konfigerObjects.size)) this.stringValue += this.seperator
+            if (index < (this.konfigerObjects.size)) this.stringValue += this.separator
         }
 		this.changesOccur = false
 	}
@@ -468,11 +484,11 @@ Konfiger.prototype.save = function(filePath) {
     }
 }
 
-Konfiger.prototype.appendString = function(rawString, delimeter, seperator) {
+Konfiger.prototype.appendString = function(rawString, delimiter, separator) {
 	if (!rawString) {
         throw new Error("io.github.thecarisma.Konfiger: You must specified the string that contains the entries to append")
     }
-    var stream_ = KonfigerStream.stringStream(rawString, (delimeter ? delimeter : this.delimeter), (seperator ? seperator : this.seperator))
+    var stream_ = KonfigerStream.stringStream(rawString, (delimiter ? delimiter : this.delimiter), (separator ? separator : this.separator))
     while (stream_.hasNext()) {
         var obj = stream_.next()
         this.putString(obj[0], obj[1])
@@ -480,14 +496,14 @@ Konfiger.prototype.appendString = function(rawString, delimeter, seperator) {
     this.changesOccur = true
 }
 
-Konfiger.prototype.appendFile = function(filePath, delimeter, seperator) {
+Konfiger.prototype.appendFile = function(filePath, delimiter, separator) {
 	if (!filePath) {
         throw new Error("io.github.thecarisma.Konfiger: You must specified the file path that contains the entries to append")
     }
     if (!fs.existsSync(filePath)) {
         throw new Error("io.github.thecarisma.Konfiger: The file does not exists " + filePath)
     }  
-    var stream_ = KonfigerStream.fileStream(filePath, (delimeter ? delimeter : this.delimeter), (seperator ? seperator : this.seperator))
+    var stream_ = KonfigerStream.fileStream(filePath, (delimiter ? delimiter : this.delimiter), (separator ? separator : this.separator))
     while (stream_.hasNext()) {
         var obj = stream_.next()
         this.putString(obj[0], obj[1])

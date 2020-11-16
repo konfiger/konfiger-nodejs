@@ -9,18 +9,18 @@
 const konfigerUtil = require("./KonfigerUtil.js")
 const fs = require("fs")
 
-function fileStream(filePath, delimeter, seperator, errTolerance) {
-    return new KonfigerStream(filePath, delimeter, seperator, errTolerance, true)
+function fileStream(filePath, delimiter, separator, errTolerance) {
+    return new KonfigerStream(filePath, delimiter, separator, errTolerance, true)
 }
 
-function stringStream(rawString, delimeter, seperator, errTolerance) {
-    return new KonfigerStream(rawString, delimeter, seperator, errTolerance, false)
+function stringStream(rawString, delimiter, separator, errTolerance) {
+    return new KonfigerStream(rawString, delimiter, separator, errTolerance, false)
 }
  
-function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
+function KonfigerStream(streamObj, delimiter, separator, errTolerance, isFile) {
 	this.streamObj = streamObj
-	this.delimeter = (delimeter ? delimeter : '=')
-	this.seperator = (seperator ? seperator : '\n')
+	this.delimiter = (delimiter ? delimiter : '=')
+	this.separator = (separator ? separator : '\n')
 	this.errTolerance = (errTolerance === true ? errTolerance : false)
     this.isFile = isFile
     this.trimingKey = true
@@ -42,14 +42,14 @@ function KonfigerStream(streamObj, delimeter, seperator, errTolerance, isFile) {
         throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for errTolerance expecting boolean found " 
                         + konfigerUtil.typeOf(errTolerance))
     }
-    if (delimeter && !seperator) {
-        throw new Error("io.github.thecarisma.KonfigerStream: Invalid length of argument, seperator or delimeter parameter is missing")
+    if (delimiter && !separator) {
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid length of argument, separator or delimiter parameter is missing")
     }
-    if (!konfigerUtil.isChar(this.delimeter)) { 
-        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for delimeter expecting char found " + konfigerUtil.typeOf(delimeter)) 
+    if (!konfigerUtil.isChar(this.delimiter)) { 
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for delimiter expecting char found " + konfigerUtil.typeOf(delimiter)) 
     }
-    if (!konfigerUtil.isChar(this.seperator)) { 
-        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for seperator expecting char found " + konfigerUtil.typeOf(seperator)) 
+    if (!konfigerUtil.isChar(this.separator)) { 
+        throw new Error("io.github.thecarisma.KonfigerStream: Invalid argument for separator expecting char found " + konfigerUtil.typeOf(separator)) 
     }  
     
     this.readPosition = 0
@@ -152,7 +152,7 @@ KonfigerStream.prototype.hasNext = function() {
                     this.isFirst |= 1
                     if (subCount === commentSize) {
                         ++this.readPosition
-                        while (num !== 0 && this.buffer.toString('utf-8') !== this.seperator) {
+                        while (num !== 0 && this.buffer.toString('utf-8') !== this.separator) {
                             ++this.readPosition
                             num = fs.readSync(fd, this.buffer, 0, 1, this.readPosition)
                         }
@@ -177,7 +177,7 @@ KonfigerStream.prototype.hasNext = function() {
                 this.isFirst |= 1
                 if (subCount === commentSize) {
                     ++this.readPosition
-                    while (this.readPosition < this.streamObj.length && this.streamObj[this.readPosition] !== this.seperator) {
+                    while (this.readPosition < this.streamObj.length && this.streamObj[this.readPosition] !== this.separator) {
                         ++this.readPosition
                     }
                     ++this.readPosition
@@ -249,14 +249,14 @@ KonfigerStream.prototype.next = function() {
                     continue
                 }
             }
-            if (char_ === this.seperator && prevChar != '^' ) {
+            if (char_ === this.separator && prevChar != '^' ) {
                 if (parseKey === true && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.KonfigerStream: Invalid entry detected near Line " + line + ":" + column)
                     continue
                 }
                 break
             }
-            if (char_ === this.delimeter && parseKey) {
+            if (char_ === this.delimiter && parseKey) {
                 if (value !== "" && this.errTolerance !== false) {
                     throw new Error("io.github.thecarisma.KonfigerStream: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator")
                     continue
@@ -303,14 +303,14 @@ KonfigerStream.prototype.next = function() {
                     continue
                 }
             }
-            if (character === this.seperator && prevChar != '^') {
+            if (character === this.separator && prevChar != '^') {
                 if (parseKey === true && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.Konfiger: Invalid entry detected near Line " + line + ":" + column)
                     continue
                 }
                 break
             } 
-            if (character === this.delimeter && parseKey) {
+            if (character === this.delimiter && parseKey) {
                 if (value !== "" && this.errTolerance === false) {
                     throw new Error("io.github.thecarisma.Konfiger: The input is imporperly sepreated near Line " + line + ":" + column+". Check the separator")
                     continue
@@ -331,7 +331,7 @@ KonfigerStream.prototype.next = function() {
     
     return [ 
                 (this.trimingKey ? key.trim() : key), 
-                (this.trimingValue ? konfigerUtil.unEscapeString(value, [this.seperator]).trim() : konfigerUtil.unEscapeString(value, [this.seperator]) )
+                (this.trimingValue ? konfigerUtil.unEscapeString(value, [this.separator]).trim() : konfigerUtil.unEscapeString(value, [this.separator]) )
            ]
 }
 

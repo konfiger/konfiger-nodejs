@@ -1,4 +1,4 @@
-# {::nomarkdown}<p style="text-align: center;" align="center"><img src="https://github.com/konfiger/konfiger.github.io/raw/master/icons/konfiger-nodejs.png" alt="konfiger-nodejs" style="width:180px;height:160px;" width="180" height="160" /><br /> konfiger-nodejs</p>{:/}
+# {::nomarkdown}<p style="text-align: center;" align="center"><img src="https://github.com/konfiger/konfiger.github.io/raw/main/icons/konfiger-nodejs.png" alt="konfiger-nodejs" style="width:180px;height:160px;" width="180" height="160" /><br /> konfiger-nodejs</p>{:/}
 
 <p style="text-align: center;" align="center">Light weight package to manage key value based configuration and data files.</p>
 
@@ -15,7 +15,7 @@ ___
     - [Write to disk](#write-to-disk)
     - [Get Types](#get-types)
     - [Lazy Loading](#lazy-loading)
-    - [Seperator and delimeter](#seperator-and-delimeter)
+    - [Separator and delimiter](#separator-and-delimiter)
     - [Read file with Stream](#read-file-with-stream)
     - [Read String with Stream](#read-string-with-stream)
     - [Skip Comment entries](#Skip-comment-entries)
@@ -172,23 +172,23 @@ console.log(konfiger.toString())
 console.log(konfiger.size())
 ```
 
-### Seperator and delimeter
+### Separator and delimiter
 
-Initailize a konfiger object with default seperator and delimeter then change the seperator and selimeter at runtime
+Initailize a konfiger object with default separator and delimiter then change the separator and selimeter at runtime
 
 ```js
 const { Konfiger } = require("konfiger")
 
 let konfiger = Konfiger.fromFile('test/konfiger.conf', false)
-konfiger.setDelimeter('?')
-konfiger.setSeperator(',')
+konfiger.setDelimiter('?')
+konfiger.setSeparator(',')
 
 console.log(konfiger.toString())
 ```
 
 ### Read file with Stream
 
-Read a key value file using the progressive [KonfigerStream](https://github.com/konfiger/konfiger-nodejs/blob/master/src/io/github/thecarisma/KonfigerStream.js), each scan returns the current key value array `[ 'key', 'value']`
+Read a key value file using the progressive [KonfigerStream](https://github.com/konfiger/konfiger-nodejs/blob/main/src/io/github/thecarisma/KonfigerStream.js), each scan returns the current key value array `[ 'key', 'value']`
 
 ```js
 const { KonfigerStream } = require("konfiger")
@@ -202,7 +202,7 @@ while (kStream.hasNext()) {
 
 ### Read String with Stream
 
-Read a key value string using the progressive [KonfigerStream](https://github.com/konfiger/konfiger-nodejs/blob/master/src/io/github/thecarisma/KonfigerStream.js), each scan returns the current key value array `[ 'key', 'value']`
+Read a key value string using the progressive [KonfigerStream](https://github.com/konfiger/konfiger-nodejs/blob/main/src/io/github/thecarisma/KonfigerStream.js), each scan returns the current key value array `[ 'key', 'value']`
 
 ```js
 const { KonfigerStream } = require("konfiger")
@@ -465,7 +465,7 @@ If your entry keys is the same as the object keys you don't need to declare the 
 
 ### Initialization
 
-The main Konfiger contructor is not exported from the package, the two functions are exported for initialization, `fromString` and `fromFile`. The fromString function creates a Konfiger object from a string with valid key value entry or from empty string, the fromFile function creates the Konfiger object from a file, the two functions accept a cumpulsory second parameter `lazyLoad` which indicates whether to read all the entry from the file or string suring initialization. The lazyLoad parameter is useful for progressively read entries from a large file. The two initializing functions also take 2 extra optional parameters `delimeter` and `seperator`. If the third and fourth parameter is not specified the default is used, delimeter = `=`, seperator = `\n`. If the file or string has different delimeter and seperator always send the third and fourth parameter.
+The main Konfiger contructor is not exported from the package, the two functions are exported for initialization, `fromString` and `fromFile`. The fromString function creates a Konfiger object from a string with valid key value entry or from empty string, the fromFile function creates the Konfiger object from a file, the two functions accept a cumpulsory second parameter `lazyLoad` which indicates whether to read all the entry from the file or string suring initialization. The lazyLoad parameter is useful for progressively read entries from a large file. The two initializing functions also take 2 extra optional parameters `delimiter` and `separator`. If the third and fourth parameter is not specified the default is used, delimiter = `=`, separator = `\n`. If the file or string has different delimiter and separator always send the third and fourth parameter.
 
 The following initializer progressively read the file when needed
 
@@ -497,7 +497,7 @@ Twos=2222222222222
 `, false)
 ```
 
-Initialize a string which have custom delimeter and seperator
+Initialize a string which have custom delimiter and separator
 
 ```js
 let konfiger = Konfiger.fromString(`Ones:11111111111,Twos:2222222222222`, 
@@ -596,8 +596,8 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 
 | Function        | Description         
 | --------------- | ------------- 
-| KonfigerStream fileStream(filePath, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
-| KonfigerStream stringStream(rawString, delimeter, seperator, errTolerance)  | Initialize a new KonfigerStream object from a string. It throws en exception if the rawString is not a string or if the delimeter or seperator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
+| KonfigerStream fileStream(filePath, delimiter, separator, errTolerance)  | Initialize a new KonfigerStream object from the filePath. It throws en exception if the filePath does not exist or if the delimiter or separator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
+| KonfigerStream stringStream(rawString, delimiter, separator, errTolerance)  | Initialize a new KonfigerStream object from a string. It throws en exception if the rawString is not a string or if the delimiter or separator is not a single character. The last parameter is boolean if true the stream is error tolerant and does not throw any exception on invalid entry, only the first parameter is cumpulsory.
 | Boolean hasNext()  | Check if the KonfigerStream still has a key value entry, returns true if there is still entry, returns false if there is no more entry in the KonfigerStream
 | Array next()  | Get the next Key Value array from the KonfigerStream is it still has an entry. Throws an error if there is no more entry. Always use `hasNext()` to check if there is still an entry in the stream.
 | Boolean isTrimingKey() | Check if the stream is configured to trim key, true by default
@@ -624,10 +624,10 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 
 | Function        | Description         
 | --------------- | ------------- 
-| Konfiger fromFile(filePath, lazyLoad)           | Create the konfiger object from a file, the first parameter(string) is the file path, the second parameter(boolean) indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used. This creates the konfiger object from call to `fromStream(konfigerStream, lazyLoad)` with the konfigerStream initialized with the filePath parameter. The new Konfiger object is returned.
-| Konfiger fromFile(filePath, lazyLoad, delimeter, seperator)           | Create the konfiger object from a file, the first(string) parameter is the file path, the second parameter(boolean) indicates whether to read all the entry in the file in the constructor or when needed, the third param(char) is the delimeter and the fourth param(char) is the seperator. This creates the konfiger object from call to `fromStream(konfigerStream, lazyLoad)` with the konfigerStream initialized with the filePath parameter. The new Konfiger object is returned.
-| Konfiger fromString(rawString, lazyLoad)           | Create the konfiger object from a string, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the default delimeter(`=`) and seperator(`\n`) will be used. The new Konfiger object is returned.
-| Konfiger fromString(rawString, lazyLoad, delimeter, seperator)           | Create the konfiger object from a string, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the third param is the delimeter and the fourth param is the seperator. The new Konfiger object is returned.
+| Konfiger fromFile(filePath, lazyLoad)           | Create the konfiger object from a file, the first parameter(string) is the file path, the second parameter(boolean) indicates whether to read all the entry in the file in the constructor or when needed, the default delimiter(`=`) and separator(`\n`) will be used. This creates the konfiger object from call to `fromStream(konfigerStream, lazyLoad)` with the konfigerStream initialized with the filePath parameter. The new Konfiger object is returned.
+| Konfiger fromFile(filePath, lazyLoad, delimiter, separator)           | Create the konfiger object from a file, the first(string) parameter is the file path, the second parameter(boolean) indicates whether to read all the entry in the file in the constructor or when needed, the third param(char) is the delimiter and the fourth param(char) is the separator. This creates the konfiger object from call to `fromStream(konfigerStream, lazyLoad)` with the konfigerStream initialized with the filePath parameter. The new Konfiger object is returned.
+| Konfiger fromString(rawString, lazyLoad)           | Create the konfiger object from a string, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the default delimiter(`=`) and separator(`\n`) will be used. The new Konfiger object is returned.
+| Konfiger fromString(rawString, lazyLoad, delimiter, separator)           | Create the konfiger object from a string, the first parameter is the String(can be empty), the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed, the third param is the delimiter and the fourth param is the separator. The new Konfiger object is returned.
 | Konfiger fromStream(KonfigerStream, Boolean)           | Create the konfiger object from a KonfigerStream object, the second boolean parameter indicates whether to read all the entry in the file in the constructor or when needed this make data loading progressive as data is only loaded from the file when put or get until the Stream reaches EOF. The new Konfiger object is returned.
 | void put(key, value)           | Put any object into the konfiger. if the second parameter is a Javascript Object, `JSON.stringify` will be used to get the string value of the object else the appropriate put* method will be called. e.g `put('Name', 'Adewale')` will result in the call `putString('Name', 'Adewale')`.
 | void putString(key, value)           | Put a String into the konfiger, the second parameter must be a string.
@@ -649,15 +649,15 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | Double getDouble(key, defaultValue)   | Get a value as Double, the second(Double) parameter is optional if it is specified it is returned if the key does not exist, if the second parameter is not specified `0.0` will be returned. When trying to cast the value to Double if an error occur an exception will be thrown except if error tolerance is set to true then `0.0` will be returned. use `errorTolerance(Boolean)` to set the konfiger object error tolerancy.
 | void remove(keyIndex)           | Remove a key value entry at a particular index. Returns the value of the entry that was removed.
 | String remove(keyIndex)           | Remove a key value entry using the entry Key. Returns the value of the entry that was removed.
-| void appendString(rawString)          | Append new data to the konfiger from a string, the new string delimeter and seperator must be the same with the current konfigure delimeter and seperator, if it not the same use the `setDelimeter` and `setSeperator` to change the konfiger seperator and delimeter to the new file seperator and delimeter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
-| void appendFile(filePath)          | Read new datas from the file path and append, the new file delimeter and seperator must be the same with the current konfigure delimeter and seperator, if it not the same use the `setDelimeter` and `setSeperator` to change the konfiger seperator and delimeter to the new file seperator and delimeter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
-| void appendString(rawString, delimeter, separator)          | Append new data to the konfiger from a string. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
-| void appendFile(filePath, delimeter, separator)          | Read new datas from the file path and append. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
+| void appendString(rawString)          | Append new data to the konfiger from a string, the new string delimiter and separator must be the same with the current konfigure delimiter and separator, if it not the same use the `setDelimiter` and `setSeparator` to change the konfiger separator and delimiter to the new file separator and delimiter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
+| void appendFile(filePath)          | Read new datas from the file path and append, the new file delimiter and separator must be the same with the current konfigure delimiter and separator, if it not the same use the `setDelimiter` and `setSeparator` to change the konfiger separator and delimiter to the new file separator and delimiter. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
+| void appendString(rawString, delimiter, separator)          | Append new data to the konfiger from a string. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
+| void appendFile(filePath, delimiter, separator)          | Read new datas from the file path and append. If the Konfiger is initialized with lazy loading all the data will be loaded before the entries from the new string is added.
 | void save(filePath?)         | Save the konfiger datas into a file. The argument filePath is optional if specified the entries is writtent to the filePath else the filePath used to initialize the Konfiger object is used and if the Konfiger is initialized `fromString` and the filePath is not specified an exception is thrown. This does not clear the already added entries.
-| Char getSeperator()           | Get seperator char that seperate the key value entry, default is `\n`.
-| Char getDelimeter()           | Get delimeter char that seperated the key from it value, default is `=`.
-| void setSeperator(seperator)           | Change seperator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function. If the new seperator is different from the old one all the entries values will be re parsed to get the new proper values, this process can take time if the entries is much.
-| void setDelimeter(delimeter)           | Change delimeter char that seperated the key from object, note that the file is not updates, to change the file call the `save()` function 
+| Char getSeparator()           | Get separator char that seperate the key value entry, default is `\n`.
+| Char getDelimiter()           | Get delimiter char that seperated the key from it value, default is `=`.
+| void setSeparator(separator)           | Change separator char that seperate the datas, note that the file is not updates, to change the file call the `save()` function. If the new separator is different from the old one all the entries values will be re parsed to get the new proper values, this process can take time if the entries is much.
+| void setDelimiter(delimiter)           | Change delimiter char that seperated the key from object, note that the file is not updates, to change the file call the `save()` function 
 | void setCaseSensitivity(caseSensitive) | change the case sensitivity of the konfiger object, if true `get("Key")` and `get("key")` will return different value, if false same value will be returned.
 | Boolean isCaseSensitive() | Return true if the konfiger object is case sensitive and false if it not case sensitive
 | Number size()           | Get the total size of key value entries in the konfiger
@@ -666,7 +666,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | void updateAt(index, value)           | Update the value at the specified index with the new string value, throws an error if the index is OutOfRange 
 | Boolean contains(key)           | Check if the konfiger contains a key 
 | void enableCache(enableCache_)           | Enable or disable caching, caching speeds up data search but can take up space in memory (very small though). Using `getString` method to fetch vallue **99999999999** times with cache disabled takes over 1hr and with cache enabled takes 20min.
-| String toString()           | All the kofiger datas are parsed into valid string with regards to the delimeter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
+| String toString()           | All the kofiger datas are parsed into valid string with regards to the delimiter and seprator, the result of this method is what get written to file in the `save` method. The result is cached and calling the method while the no entry is added, deleted or updated just return the last result instead of parsing the entries again.
 | void resolve(obj)           | Attach an object to konfiger, on attachment the values of the entries in the object will be set to the coresponding value in konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry and the function `matchPutKey` to check which value to fetch from the object to put into konfiger.
 | void dissolve(obj) | Each string fields in the object will be put into konfiger. The object can have the `matchGetKey` function which is called with a key in konfiger to get the value to map to the entry. This does not attach the object.
 | attach(obj) | Attach an object to konfiger without dissolving it field into konfiger or setting it fields to a matching konfiger entry. Use this if the values in an object is to be left intact but updated if a matching entry in konfiger changes. 
@@ -677,13 +677,13 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 Konfiger stream progressively load the key value entry from a file or string when needed, it uses two method `hasNext` which check if there is still an entry in the stream and `next` for the current key value entry in the stream. 
  
 In Konfiger the key value pair is stored in a `map`, all search updating and removal is done on the `konfigerObjects` in the class. The string sent as first parameter if parsed into valid key value using the separator and delimiter fields and if loaded from file it content is parsed into valid key value pair. The `toString` method also parse the `konfigerObjects` content into a valid string with regards to the 
-separator and delimeter. The value is properly escaped and unescaped.
+separator and delimiter. The value is properly escaped and unescaped.
 
 The `save` function write the current `Konfiger` to the file, if the file does not exist it is created if it can. Everything is written in memory and is disposed on app exit hence it important to call the `save` function when nessasary.
 
 ## Contributing
 
-Before you begin contribution please read the contribution guide at [CONTRIBUTING GUIDE](https://github.com/konfiger/konfiger.github.io/blob/master/CONTRIBUTING.MD)
+Before you begin contribution please read the contribution guide at [CONTRIBUTING GUIDE](https://github.com/konfiger/konfiger.github.io/blob/main/CONTRIBUTING.MD)
 
 You can open issue or file a request that only address problems in this implementation on this repo, if the issue address the concepts of the package then create an issue or rfc [here](https://github.com/konfiger/konfiger.github.io/)
 

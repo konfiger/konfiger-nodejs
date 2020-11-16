@@ -102,16 +102,16 @@ it('remove entry and validate size', () => {
     assert.equal(konfiger.get("Three"), "333")
 })
 
-it('set get delimeter and seperator', () => {
+it('set get delimiter and separator', () => {
     var konfiger = Konfiger.fromFile('test/test.config.ini', true)
     
-    assert.equal(konfiger.getSeperator(), "\n")
-    assert.equal(konfiger.getDelimeter(), "=")
+    assert.equal(konfiger.getSeparator(), "\n")
+    assert.equal(konfiger.getDelimiter(), "=")
     assert.equal(konfiger.toString().split("\n").length > 2, true)
-    konfiger.setSeperator('-')
-    konfiger.setDelimeter('+')
-    assert.equal(konfiger.getSeperator(), "-")
-    assert.equal(konfiger.getDelimeter(), "+")
+    konfiger.setSeparator('-')
+    konfiger.setDelimiter('+')
+    assert.equal(konfiger.getSeparator(), "-")
+    assert.equal(konfiger.getDelimiter(), "+")
     assert.equal(konfiger.toString().split("\n").length, 1)
 })
 
@@ -133,7 +133,7 @@ it('escaping and unescaping entries and save', () => {
     assert.equal(konfiger1.toString(), newKonfiger1.toString())
 })
 
-it('test complex and confusing seperator', () => {
+it('test complex and confusing separator', () => {
     var konfiger = Konfiger.fromString(`Occupation=Software En^gineergLocation=Ni^geriagState=La^gos`, false, '=', 'g')
     
     assert.equal(konfiger.size(), 3)
@@ -141,9 +141,9 @@ it('test complex and confusing seperator', () => {
     for (var entry of konfiger.entries()) {
         assert.equal(entry[1].indexOf("^g") > -1, false)
     }
-    konfiger.setSeperator('f')
+    konfiger.setSeparator('f')
     assert.equal(konfiger.get("Occupation"), "Software Engineer")
-    konfiger.setSeperator('\n')
+    konfiger.setSeparator('\n')
     assert.equal(konfiger.toString().indexOf("^g") > -1, false)
     assert.equal(konfiger.size(), 3)
     for (var entry of konfiger.entries()) {
