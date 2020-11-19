@@ -89,8 +89,8 @@ it('validate konfiger default value for non existing key', () => {
 })
 
 it('remove entry and validate size', () => {
-    var konfiger = Konfiger.fromString('One=111,Two=222,Three=333', false, '=', ',')
-    konfiger.stream.errorTolerance(true)
+    var konfiger = Konfiger.fromString('One=111,Two=222,Three=333', true, '=', ',');
+    konfiger.stream.errorTolerance(true);
     
     assert.equal(konfiger.size(), 3)
     assert.notEqual(konfiger.get("Two"), null)
@@ -100,6 +100,38 @@ it('remove entry and validate size', () => {
     assert.equal(konfiger.remove(0), "111")
     assert.equal(konfiger.size(), 1)
     assert.equal(konfiger.get("Three"), "333")
+})
+
+it('test lazySize()', () => {
+    var konfiger = Konfiger.fromString('One=111,Two=222,Three=333', true, '=', ',');
+    
+    assert.strictEqual(konfiger.lazySize(), 0);
+    assert.notStrictEqual(konfiger.lazySize(), 3);
+    assert.strictEqual(konfiger.get("One"), "111");
+    assert.strictEqual(konfiger.lazySize(), 1);
+    assert.strictEqual(konfiger.get("Two"), "222");
+    assert.strictEqual(konfiger.lazySize(), 2);
+    assert.strictEqual(konfiger.get("Three"), "333");
+    assert.strictEqual(konfiger.lazySize(), 3);
+    assert.strictEqual(konfiger.lazySize(), konfiger.size());
+})
+
+it('test remove entry and lazySize()', () => {
+    var konfiger = Konfiger.fromString('One=111,Two=222,Three=333', true, '=', ',');
+    
+    assert.strictEqual(konfiger.lazySize(), 0);
+    assert.notStrictEqual(konfiger.lazySize(), 3);
+    assert.notStrictEqual(konfiger.get("Two"), undefined);
+    assert.strictEqual(konfiger.lazySize(), 2);
+    assert.strictEqual(konfiger.remove("Two"), "222");
+    assert.notStrictEqual(konfiger.lazySize(), 2);
+    assert.strictEqual(konfiger.lazySize(), 1);
+    assert.strictEqual(konfiger.get("Two"), undefined);
+    assert.strictEqual(konfiger.lazySize(), 2);
+    assert.strictEqual(konfiger.remove(0), "111");
+    assert.strictEqual(konfiger.lazySize(), 1);
+    assert.strictEqual(konfiger.get("Three"), "333");
+    assert.strictEqual(konfiger.lazySize(), 1);
 })
 
 it('set get delimiter and separator', () => {

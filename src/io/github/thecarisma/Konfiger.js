@@ -358,19 +358,29 @@ Konfiger.prototype.updateAt = function(index, value) {
 
 Konfiger.prototype.size = function() {
     if (!this.loadingEnds && this.lazyLoad === true) {
-        this.lazyLoader()
+        this.lazyLoader();
     }
-    return this.konfigerObjects.size
+    return this.konfigerObjects.size;
+}
+
+Konfiger.prototype.lazySize = function() {
+    return this.konfigerObjects.size;
 }
 
 Konfiger.prototype.isEmpty = function() {
     return this.size() === 0
 }
 
+/**
+ * @deprecated use {@link Konfiger#getSeparator} instead
+ */
 Konfiger.prototype.getSeperator = function() {
     return this.separator
 }
 
+/**
+ * @deprecated use {@link Konfiger#setSeparator} instead
+ */
 Konfiger.prototype.setSeperator = function(separator) {
     this.setSeparator(separator);
 }
@@ -394,12 +404,18 @@ Konfiger.prototype.setSeparator = function(separator) {
     }
 }
 
-Konfiger.prototype.getDelimeter = function() {
-    return this.delimiter
+/**
+* @deprecated use {@link Konfiger#setDelimiter} instead
+*/
+Konfiger.prototype.setDelimeter = function(delimiter) {
+   this.setDelimiter(delimiter);
 }
 
-Konfiger.prototype.setDelimeter = function(delimiter) {
-    this.setDelimiter(delimiter);
+/**
+* @deprecated use {@link Konfiger#getDelimiter} instead
+*/
+Konfiger.prototype.getDelimeter = function() {
+   return this.delimiter
 }
 
 Konfiger.prototype.getDelimiter = function() {

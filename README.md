@@ -154,22 +154,23 @@ const { Konfiger } = require("konfiger")
 
 let konfiger = Konfiger.fromFile('test/konfiger.conf', //the file pth
                                 true //lazyLoad true
-                                )
+                                );
 //at this point nothing is read from the file
 
 //the size of konfiger is 0 even if the file contains over 1000 entries
 
 //the key 'Twos' is at the second line in the file, therefore two entry has 
 //been read to get the value.
-console.log(konfiger.get("Twos"))
+console.log(konfiger.get("Twos"));
 
 //the size becomes 2,
+console.log(konfiger.lazySize());
 
 //to read all the entries simply call the toString() method
-console.log(konfiger.toString())
+console.log(konfiger.toString());
 
 //now the size is equal to the entry
-console.log(konfiger.size())
+console.log(konfiger.size());
 ```
 
 ### Separator and delimiter
@@ -661,6 +662,7 @@ Even though JavaScript is weakly type the package does type checking to ensure w
 | void setCaseSensitivity(caseSensitive) | change the case sensitivity of the konfiger object, if true `get("Key")` and `get("key")` will return different value, if false same value will be returned.
 | Boolean isCaseSensitive() | Return true if the konfiger object is case sensitive and false if it not case sensitive
 | Number size()           | Get the total size of key value entries in the konfiger
+| Number lazySize()           | Get the lazy total number of entry that has been loaded into konfiger.
 | void clear()           | clear all the key value entries in the konfiger. This does not update the file call the `save` method to update the file
 | Boolean isEmpty()           | Check if the konfiger does not have an key value entry.
 | void updateAt(index, value)           | Update the value at the specified index with the new string value, throws an error if the index is OutOfRange 
